@@ -16,6 +16,7 @@ services:
     container_name: studentmanager_postgres
     environment:
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=student-manager
     ports:
       - "5432:5432"
     networks:
