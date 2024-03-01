@@ -4,6 +4,8 @@ import com.academy.edge.studentmanager.enums.GroupType;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Set;
+
 
 @Entity
 @Data
@@ -22,4 +24,9 @@ public class Group {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private GroupType type;
+
+
+    @ManyToMany(mappedBy = "memberGroups")
+    Set<Student> members;
+
 }
