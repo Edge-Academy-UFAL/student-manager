@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.sql.Date;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -36,4 +37,15 @@ public class Student extends User{
 
     @Column()
     Date entryDate;
+
+    // FIXME: Validar se isso é a maneira certa de se fazer
+    @ManyToMany
+    @JoinTable(
+            name = "student_group_association",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id"))
+    Set<Group> memberGroups;
+
+
 }
+
