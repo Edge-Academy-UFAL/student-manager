@@ -45,9 +45,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentResponseDTO getStudentById(String uuid) {
+    public StudentResponseDTO getStudentByEmail(String email) {
         Student student = studentRepository
-                .findById(uuid)
+                .findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
         return modelMapper.map(student, StudentResponseDTO.class);
     }
@@ -67,7 +67,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void deleteStudent(String uuid) {
-        this.studentRepository.findById(uuid).ifPresent(this.studentRepository::delete);
+    public void deleteStudent(String email) {
+        this.studentRepository.deleteByEmail(email);
     }
 }

@@ -2,12 +2,11 @@ package com.academy.edge.studentmanager.dtos;
 
 import com.academy.edge.studentmanager.enums.Course;
 import jakarta.validation.constraints.*;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor()
 public class StudentCreateDTO {
     @NotBlank(message = "Nome é obrigatório")
     private String name;

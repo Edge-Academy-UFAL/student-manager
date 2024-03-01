@@ -10,12 +10,12 @@ import java.util.List;
 public interface StudentService {
     List<StudentResponseDTO> getStudents();
 
-    StudentResponseDTO getStudentById(String uuid);
+    StudentResponseDTO getStudentByEmail(String email);
 
     StudentResponseDTO insertStudent(StudentCreateDTO studentCreateDTO);
 
     //TODO: update student
     //void updateStudent(String uuid, );
 
-    void deleteStudent(String uuid);
+    void deleteStudent(String email);
 }

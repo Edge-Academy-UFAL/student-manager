@@ -26,10 +26,10 @@ public class StudentController {
         return new ResponseEntity<>(studentService.getStudents(), HttpStatus.OK);
     }
 
-    @GetMapping({"/{uuid}"})
-    @PreAuthorize("hasAnyRole('ADMIN','INSTRUCTOR') or #uuid == authentication.principal.getId()")
-    public ResponseEntity<StudentResponseDTO> getStudent(@PathVariable String uuid){
-        return new ResponseEntity<>(studentService.getStudentById(uuid), HttpStatus.OK);
+    @GetMapping({"/{email}"})
+    @PreAuthorize("hasAnyRole('ADMIN','INSTRUCTOR') or authentication.name == #email")
+    public ResponseEntity<StudentResponseDTO> getStudent(@PathVariable String email){
+        return new ResponseEntity<>(studentService.getStudentByEmail(email), HttpStatus.OK);
     }
 
     @PostMapping()
@@ -37,10 +37,10 @@ public class StudentController {
         return new ResponseEntity<>(studentService.insertStudent(studentCreateDTO), HttpStatus.CREATED);
     }
 
-    @DeleteMapping({"/{uuid}"})
-    @PreAuthorize("hasAnyRole('ADMIN') || #uuid == authentication.principal.getId()")
-    public ResponseEntity<Void> deleteStudent(@PathVariable String uuid){
-        studentService.deleteStudent(uuid);
+    @DeleteMapping({"/{email}"})
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<Void> deleteStudent(@PathVariable String email){
+        studentService.deleteStudent(email);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

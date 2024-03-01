@@ -26,9 +26,9 @@ public class InstructorServiceImpl implements InstructorService {
     }
 
     @Override
-    public InstructorResponseDTO getInstructorById(String uuid) {
+    public InstructorResponseDTO getInstructorByEmail(String email) {
         Instructor instructor = instructorRepository
-                .findById(uuid)
+                .findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Instructor not found"));
         return modelMapper.map(instructor, InstructorResponseDTO.class);
     }
