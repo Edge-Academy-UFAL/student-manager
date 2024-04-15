@@ -50,8 +50,6 @@ public class StudentCreateDTO {
     @Pattern(regexp = "\\d{4}\\.[1-2]", message = "Informe um periodo válido")
     private String entryPeriod;
 
-    private String photo;
-
     @NotBlank(message = "Código de ativação é obrigatório")
     private String activationCode;
 }
