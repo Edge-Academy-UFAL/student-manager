@@ -20,12 +20,15 @@ public class S3Config {
     @Value("${aws.secret.key}")
     private String awsSecretKey;
 
+    @Value("${aws.url}")
+    private String awsUrl;
+
     @Bean
     public AmazonS3 s3client(){
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsAccessKey,awsSecretKey);
         var awsS3Config = AmazonS3ClientBuilder.standard()
+                .withEndpointConfiguration(new AmazonS3ClientBuilder.EndpointConfiguration(awsUrl, Regions.US_EAST_1.getName()))
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                .withRegion(Regions.US_EAST_2)
                 .build();
         return awsS3Config;
     }
