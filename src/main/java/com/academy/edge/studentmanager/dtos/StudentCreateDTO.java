@@ -38,8 +38,7 @@ public class StudentCreateDTO {
     @Pattern(regexp = "\\d{2}9\\d{8}", message = "Informe um número de telefone válido")
     private String phone;
 
-    @NotNull
-    @Pattern(regexp = "\\d{2}9\\d{8}", message = "Informe um número de telefone secundário válido")
+    @Pattern(regexp = "(\\d{2}9\\d{8})|($)", message = "Informe um número de telefone secundário válido")
     private String secondaryPhone;
 
     @NotNull(message = "Insira o periodo")
