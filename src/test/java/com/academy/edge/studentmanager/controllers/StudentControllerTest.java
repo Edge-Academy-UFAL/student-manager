@@ -96,7 +96,7 @@ public class StudentControllerTest {
     void itShouldCreateAStudent() throws Exception{
         ObjectMapper mapper = new ObjectMapper();
         StudentCreateDTO studentCreateDTO = new StudentCreateDTO("John Doe", "2024-04-14","john@email.com", "Edge12345678@", Course.COMPUTER_SCIENCE,
-                                                        "98765432", "82988887777", "", 5, "2022.1", null, "4CT1V4T3");
+                                                        "98765432", "82988887777", "", 5, "2022.1", "4CT1V4T3");
         String jsonStudentDTO = mapper.writeValueAsString(studentCreateDTO);
         mockMvc.perform(post("/api/v1/students")
                         .contentType(MediaType.APPLICATION_JSON)
