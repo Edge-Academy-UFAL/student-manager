@@ -2,7 +2,6 @@ package com.academy.edge.studentmanager.services.impl;
 
 import com.academy.edge.studentmanager.dtos.StudentCreateDTO;
 import com.academy.edge.studentmanager.dtos.StudentResponseDTO;
-import com.academy.edge.studentmanager.enums.StudentStatus;
 import com.academy.edge.studentmanager.models.Student;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
 import com.academy.edge.studentmanager.services.InvitationService;
@@ -70,7 +69,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudent(String email) {
         Student student = studentRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
-        student.setStudentStatus(StudentStatus.DISABLE);
+        student.setDeleted(true);
         studentRepository.save(student);
     }
 }

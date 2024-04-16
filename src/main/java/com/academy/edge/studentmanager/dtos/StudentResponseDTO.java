@@ -5,15 +5,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentResponseDTO {
     private String id;
     private String name;
-    private String about;
     private String photoUrl;
-    private String linkedIn;
+    private Date birthDate;
     private Course course;
+    private String registration;
+    private String phone;
+    private String secondaryPhone;
     private String period;
+    private String entryPeriod;
+    private String dtype;
+    private String email;
+    private Date entryDate;
+
 }
