@@ -37,7 +37,6 @@ services:
       - "4572:4572"
     volumes:
       - "./localstack:/persisted-data"
-
 networks:
   postgres-network:
     driver: bridge
