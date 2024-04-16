@@ -37,19 +37,13 @@ public class User implements UserDetails {
     @Column(nullable = false)
     String name;
 
-    @Column()
-    String about;
-
     @Column(nullable = false)
     String email;
 
     @Column(nullable = false)
     String password;
 
-    @Column()
-    String linkedIn;
-
-    @Column()
+    @Column
     String photoUrl;
 
     @CreationTimestamp
@@ -61,6 +55,9 @@ public class User implements UserDetails {
 
     @Column(nullable = false, columnDefinition = "boolean default false")
     boolean deleted = false;
+
+    @Column(insertable = false, updatable = false)
+    String dtype;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

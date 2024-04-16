@@ -18,12 +18,16 @@ public class JWTUtil {
 
 
     public String generateToken(UserDetails userDetails) {
+        int oneDay = 1000 * 60 * 60 * 24;
+
         return JWT.create()
                 .withSubject("User details")
                 .withClaim("username", userDetails.getUsername())
                 .withIssuedAt(new Date())
                 .withIssuer("com.academy.edge.studentmanager")
+                .withExpiresAt(new Date(System.currentTimeMillis() + oneDay))
                 .sign(Algorithm.HMAC256(jwtSecret));
+
     }
 
     public String validateTokenAndRetrieveUsername(String token) {

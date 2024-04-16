@@ -13,6 +13,10 @@ import java.sql.Date;
 @Table(name = "students")
 @PrimaryKeyJoinColumn(name="id")
 public class Student extends User{
+
+    @Column
+    private Date birthDate;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     Course course;
@@ -21,13 +25,16 @@ public class Student extends User{
     String registration;
 
     @Column(nullable = false)
-    int period = 1;
+    private String phone;
 
     @Column()
-    String phone;
+    private String secondaryPhone;
 
-    @Column(precision = 2)
-    float coefficient;
+    @Column(nullable = false)
+    int period = 1;
+
+    @Column(nullable = false)
+    private String entryPeriod;
 
     @Column()
     Date entryDate;
