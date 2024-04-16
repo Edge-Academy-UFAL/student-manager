@@ -3,8 +3,7 @@ package com.academy.edge.studentmanager.models;
 import com.academy.edge.studentmanager.enums.InstructorSpecialization;
 import com.academy.edge.studentmanager.enums.Role;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -16,6 +15,7 @@ import java.util.Collections;
 @Data
 @Table(name = "instructors")
 @PrimaryKeyJoinColumn(name="id")
+@NoArgsConstructor
 public class Instructor extends User{
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

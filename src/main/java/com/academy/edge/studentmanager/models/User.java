@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,6 +27,7 @@ import java.util.Collections;
 @Table(name = "users", indexes = {
         @Index(name = "idx_email", columnList = "email", unique = true)
 })
+@SQLRestriction("deleted=false")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -35,19 +37,13 @@ public class User implements UserDetails {
     @Column(nullable = false)
     String name;
 
-    @Column()
-    String about;
-
     @Column(nullable = false)
     String email;
 
     @Column(nullable = false)
     String password;
 
-    @Column()
-    String linkedIn;
-
-    @Column()
+    @Column
     String photoUrl;
 
     @CreationTimestamp
@@ -56,6 +52,12 @@ public class User implements UserDetails {
 
     @UpdateTimestamp
     Timestamp updatedAt;
+
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    boolean deleted = false;
+
+    @Column(insertable = false, updatable = false)
+    String dtype;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
