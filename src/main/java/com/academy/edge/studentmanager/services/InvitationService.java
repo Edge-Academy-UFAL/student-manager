@@ -5,7 +5,7 @@ import com.academy.edge.studentmanager.dtos.InvitationResponseDTO;
 import java.util.List;
 
 public interface InvitationService {
-    InvitationResponseDTO sendInvitation(List<String> emails);
+    InvitationResponseDTO sendInvitation(List<String> emails, int studentGroup, String entryDate);
 
     Boolean isInvitationValid(String invitationId, String email);
 
