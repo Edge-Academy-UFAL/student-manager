@@ -28,4 +28,8 @@ public class S3ServiceImpl implements S3Service {
     public S3Object getFile(String keyName){
         return s3client.getObject(bucketName, keyName);
     }
+
+    public void deleteFile(String photoUrl) {
+        s3client.deleteObject(bucketName, photoUrl);
+    }
 }

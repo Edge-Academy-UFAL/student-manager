@@ -5,9 +5,11 @@ import com.academy.edge.studentmanager.dtos.StudentResponseDTO;
 import com.academy.edge.studentmanager.services.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,9 +34,10 @@ public class StudentController {
         return new ResponseEntity<>(studentService.getStudentByEmail(email), HttpStatus.OK);
     }
 
-    @PostMapping()
-    public ResponseEntity<StudentResponseDTO> saveStudent(@Valid @RequestBody StudentCreateDTO studentCreateDTO){
-        return new ResponseEntity<>(studentService.insertStudent(studentCreateDTO), HttpStatus.CREATED);
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<StudentResponseDTO> saveStudent(@ModelAttribute @Valid StudentCreateDTO studentCreateDTO,
+                                                          @RequestParam("file") MultipartFile file){
+        return new ResponseEntity<>(studentService.insertStudent(studentCreateDTO, file), HttpStatus.CREATED);
     }
 
     @DeleteMapping({"/{email}"})
