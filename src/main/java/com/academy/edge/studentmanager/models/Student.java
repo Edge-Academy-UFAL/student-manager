@@ -37,5 +37,8 @@ public class Student extends User{
     private String entryPeriod;
 
     @Column()
-    Date entryDate;
+    private int studentGroup;
+
+    @Column()
+    private Date entryDate;
 }

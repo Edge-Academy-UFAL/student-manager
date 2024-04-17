@@ -24,5 +24,5 @@ public class StudentResponseDTO {
     private String dtype;
     private String email;
     private Date entryDate;
-
+    private int studentGroup;
 }

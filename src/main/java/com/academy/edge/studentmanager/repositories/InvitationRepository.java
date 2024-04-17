@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InvitationRepository extends CrudRepository<Invitation, String> {
     Invitation findByCodeAndEmail(String invitationId, String email);
+
+    Invitation findByEmail(String email);
 }

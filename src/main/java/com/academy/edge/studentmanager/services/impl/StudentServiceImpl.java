@@ -2,7 +2,9 @@ package com.academy.edge.studentmanager.services.impl;
 
 import com.academy.edge.studentmanager.dtos.StudentCreateDTO;
 import com.academy.edge.studentmanager.dtos.StudentResponseDTO;
+import com.academy.edge.studentmanager.models.Invitation;
 import com.academy.edge.studentmanager.models.Student;
+import com.academy.edge.studentmanager.repositories.InvitationRepository;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
 import com.academy.edge.studentmanager.services.InvitationService;
 import com.academy.edge.studentmanager.services.StudentService;
@@ -15,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -23,6 +26,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class StudentServiceImpl implements StudentService {
     final StudentRepository studentRepository;
 
+    final InvitationRepository invitationRepository;
+
     final ModelMapper modelMapper;
 
     final PasswordEncoder passwordEncoder;
@@ -30,8 +35,9 @@ public class StudentServiceImpl implements StudentService {
     final InvitationService invitationService;
 
     @Autowired
-    public StudentServiceImpl(StudentRepository studentRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, InvitationService invitationService) {
+    public StudentServiceImpl(StudentRepository studentRepository, InvitationRepository invitationRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, InvitationService invitationService) {
         this.studentRepository = studentRepository;
+        this.invitationRepository = invitationRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.invitationService = invitationService;
@@ -59,7 +65,11 @@ public class StudentServiceImpl implements StudentService {
             throw new ResponseStatusException(FORBIDDEN, "Invalid invitation code");
         }
 
+        Invitation invitation = invitationRepository.findByEmail(studentCreateDTO.getEmail());
+
         Student student = modelMapper.map(studentCreateDTO, Student.class);
+        student.setStudentGroup(invitation.getStudentGroup());
+        student.setEntryDate(invitation.getEntryDate());
         student.setPassword(passwordEncoder.encode(studentCreateDTO.getPassword()));
         student = studentRepository.save(student);
         invitationService.deleteInvitation(studentCreateDTO.getActivationCode(), studentCreateDTO.getEmail());
