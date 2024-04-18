@@ -19,7 +19,7 @@ public class StudentResponseDTO {
     private String registration;
     private String phone;
     private String secondaryPhone;
-    private String period;
+    private int period;
     private String entryPeriod;
     private String dtype;
     private String email;

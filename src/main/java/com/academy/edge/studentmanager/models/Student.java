@@ -31,7 +31,7 @@ public class Student extends User{
     private String secondaryPhone;
 
     @Column(nullable = false)
-    int period = 1;
+    private int period;
 
     @Column(nullable = false)
     private String entryPeriod;

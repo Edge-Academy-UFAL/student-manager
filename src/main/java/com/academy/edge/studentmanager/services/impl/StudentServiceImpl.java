@@ -17,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -61,15 +60,15 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public StudentResponseDTO insertStudent(StudentCreateDTO studentCreateDTO) {
-        if (!invitationService.isInvitationValid(studentCreateDTO.getActivationCode(), studentCreateDTO.getEmail())) {
-            throw new ResponseStatusException(FORBIDDEN, "Invalid invitation code");
+        Invitation invitation = invitationService.isInvitationValid(studentCreateDTO.getActivationCode(), studentCreateDTO.getEmail());
+
+        if(invitation == null){
+            throw new ResponseStatusException(FORBIDDEN, "Invitation not found");
         }
 
-        Invitation invitation = invitationRepository.findByEmail(studentCreateDTO.getEmail());
-
         Student student = modelMapper.map(studentCreateDTO, Student.class);
-        student.setStudentGroup(invitation.getStudentGroup());
         student.setEntryDate(invitation.getEntryDate());
+        student.setStudentGroup(invitation.getStudentGroup());
         student.setPassword(passwordEncoder.encode(studentCreateDTO.getPassword()));
         student = studentRepository.save(student);
         invitationService.deleteInvitation(studentCreateDTO.getActivationCode(), studentCreateDTO.getEmail());

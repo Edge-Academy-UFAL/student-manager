@@ -24,9 +24,8 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public Boolean isInvitationValid(String invitationId, String email) {
-        Invitation invitation = invitationRepository.findByCodeAndEmail(invitationId, email);
-        return invitation != null;
+    public Invitation isInvitationValid(String invitationId, String email) {
+        return invitationRepository.findByCodeAndEmail(invitationId, email);
     }
 
     @Override
