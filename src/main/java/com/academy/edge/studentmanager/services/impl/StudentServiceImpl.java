@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
@@ -32,6 +33,8 @@ public class StudentServiceImpl implements StudentService {
     final InvitationService invitationService;
 
     final S3Service s3Service;
+
+    private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/jpg");
 
     @Autowired
     public StudentServiceImpl(StudentRepository studentRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, InvitationService invitationService, S3Service s3Service) {
@@ -61,10 +64,8 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     public StudentResponseDTO insertStudent(StudentCreateDTO studentCreateDTO, MultipartFile file) {
 
-        if(!file.getContentType().equals("image/jpeg")
-                && !file.getContentType().equals("image/png")
-                && !file.getContentType().equals("image/jpeg")){
-            throw  new ResponseStatusException(BAD_REQUEST, "File is not a PNG file");
+        if(!contentTypes.contains(file.getContentType())){
+            throw  new ResponseStatusException(BAD_REQUEST, "File is not a image file");
         }
         if (!invitationService.isInvitationValid(studentCreateDTO.getActivationCode(), studentCreateDTO.getEmail())) {
             throw new ResponseStatusException(FORBIDDEN, "Invalid invitation code");
@@ -74,12 +75,12 @@ public class StudentServiceImpl implements StudentService {
         student.setPhotoUrl(student.getRegistration()+"_"+file.getOriginalFilename());
         try {
             studentRepository.save(student);
+            invitationService.deleteInvitation(studentCreateDTO.getActivationCode(), studentCreateDTO.getEmail());
             s3Service.uploadFile(student.getPhotoUrl(), file);
         } catch (IOException e) {
             s3Service.deleteFile(student.getPhotoUrl());
             throw new RuntimeException(e);
         }
-        invitationService.deleteInvitation(studentCreateDTO.getActivationCode(), studentCreateDTO.getEmail());
         return modelMapper.map(student, StudentResponseDTO.class);
     }
 
