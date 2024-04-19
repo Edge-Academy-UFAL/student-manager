@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
@@ -20,4 +21,10 @@ public class Invitation {
     @CreationTimestamp
     @Column()
     Timestamp createdAt;
+
+    @Column(nullable = false)
+    private int studentGroup;
+
+    @Column(nullable = false)
+    private Date entryDate;
 }

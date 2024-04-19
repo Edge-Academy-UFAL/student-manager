@@ -25,4 +25,9 @@ public class Instructor extends User{
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+Role.INSTRUCTOR.name()));
     }
+
+    @Override
+    public String getDtype() {
+        return "Instructor";
+    }
 }

@@ -2,7 +2,9 @@ package com.academy.edge.studentmanager.services.impl;
 
 import com.academy.edge.studentmanager.dtos.StudentCreateDTO;
 import com.academy.edge.studentmanager.dtos.StudentResponseDTO;
+import com.academy.edge.studentmanager.models.Invitation;
 import com.academy.edge.studentmanager.models.Student;
+import com.academy.edge.studentmanager.repositories.InvitationRepository;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
 import com.academy.edge.studentmanager.services.InvitationService;
 import com.academy.edge.studentmanager.services.S3Service;
@@ -67,12 +69,19 @@ public class StudentServiceImpl implements StudentService {
         if(!contentTypes.contains(file.getContentType())){
             throw  new ResponseStatusException(BAD_REQUEST, "File is not a image file");
         }
-        if (!invitationService.isInvitationValid(studentCreateDTO.getActivationCode(), studentCreateDTO.getEmail())) {
+
+        Invitation invitation = invitationService.isInvitationValid(studentCreateDTO.getActivationCode(), studentCreateDTO.getEmail());
+
+        if(invitation == null){
             throw new ResponseStatusException(FORBIDDEN, "Invalid invitation code");
         }
+  
         Student student = modelMapper.map(studentCreateDTO, Student.class);
+        student.setEntryDate(invitation.getEntryDate());
+        student.setStudentGroup(invitation.getStudentGroup());
         student.setPassword(passwordEncoder.encode(studentCreateDTO.getPassword()));
         student.setPhotoUrl(student.getRegistration()+"_"+file.getOriginalFilename());
+      
         try {
             studentRepository.save(student);
             invitationService.deleteInvitation(studentCreateDTO.getActivationCode(), studentCreateDTO.getEmail());
