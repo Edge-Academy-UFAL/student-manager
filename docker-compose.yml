@@ -38,23 +38,6 @@ services:
     networks:
       - studentmanager-network
 
-  mc:
-    image: minio/mc
-    container_name: studentmanager_mc
-    depends_on:
-      - minio
-    entrypoint: >
-      /bin/sh -c "
-      sleep 5;
-      /usr/bin/mc alias set myminio http://minio:9000 admin admin123;
-      if ! /usr/bin/mc ls myminio/studentmanager-bucket > /dev/null 2>&1; then
-        /usr/bin/mc mb myminio/studentmanager-bucket;
-      fi;
-      exit 0;
-      "
-    networks:
-      - studentmanager-network
-
   app:
     image: gradle:8.5-jdk17-alpine
     container_name: studentmanager_app
@@ -78,7 +61,6 @@ services:
     depends_on:
       - postgres
       - minio
-      - mc
     networks:
       - studentmanager-network
 
