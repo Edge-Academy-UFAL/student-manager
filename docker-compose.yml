@@ -1,5 +1,8 @@
+version: "3.8"
+
 services:
   pgadmin4:
+    platform: linux/amd64
     image: dpage/pgadmin4
     container_name: studentmanager_pgadmin
     environment:
@@ -11,6 +14,7 @@ services:
       - studentmanager-network
 
   postgres:
+    platform: linux/amd64
     image: postgres:14-alpine
     container_name: studentmanager_postgres
     environment:
@@ -18,12 +22,13 @@ services:
       - POSTGRES_DB=student-manager
     ports:
       - "5432:5432"
-    networks:
-      - studentmanager-network
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
+    networks:
+      - studentmanager-network
 
   minio:
+    platform: linux/amd64
     image: minio/minio:latest
     container_name: studentmanager_minio
     environment:
@@ -43,7 +48,7 @@ services:
     container_name: studentmanager_app
     working_dir: /app
     volumes:
-      - .:/app
+      - ./server:/app
     ports:
       - "8080:8080"
     command: [ "gradle", "bootRun" ]
@@ -63,6 +68,24 @@ services:
       - minio
     networks:
       - studentmanager-network
+
+  client:
+    platform: linux/amd64
+    image: node:20-alpine
+    container_name: studentmanager_client
+    working_dir: /app
+    volumes:
+      - ./client:/app
+    ports:
+      - "3000:3000"
+    command: sh -c "npm install && npm run dev"
+    environment:
+      - WATCHPACK_POLLING=true
+    networks:
+      - studentmanager-network
+    depends_on:
+      - app
+
 
 networks:
   studentmanager-network:
