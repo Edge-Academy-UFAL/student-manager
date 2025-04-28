@@ -1,10 +1,7 @@
-import { GeistMono } from 'geist/font/mono'
 import type { Metadata } from 'next'
-import { Providers } from './providers'
-
 import { Toaster } from '@/components/ui/toaster'
+import {ClientComponents} from '@/components/client-components'
 import './globals.css'
-import { ProtectRoute } from '../components/auth/ProtectAuth'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -17,15 +14,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={GeistMono.className}>
-        <Providers>
-          <ProtectRoute>
-            <main>{children}</main>
-          </ProtectRoute>
-        </Providers>
-        <Toaster />
-      </body>
-    </html>
+    <html lang="en" suppressHydrationWarning>
+    <body>
+      <ClientComponents>{children}</ClientComponents>
+      <Toaster />
+    </body>
+  </html>
   )
 }
