@@ -8,7 +8,7 @@ export const ProtectRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth()
 
   const route = usePathname()
-
+console.log(!isAuthenticated && !route.startsWith('/register'))
   if (!isAuthenticated && !route.startsWith('/register')) {
     return <LoginPage />
   }

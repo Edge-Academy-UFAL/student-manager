@@ -425,7 +425,7 @@ const SignUpForm = ({ id }: { id: string }) => {
             <img
               src={URL.createObjectURL(selectedImage)}
               alt="Selected"
-              className="rounded-xl w-[100px] h-[100px] shadow-sm object-cover"
+              className="rounded-xl w-[100px] h-[100px] shadow-xs object-cover"
             />
           ) : (
             <div className="inline-flex items-center justify-between h-[100px] w-[100px]">

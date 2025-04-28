@@ -18,10 +18,10 @@ export default function Home() {
                 <h1 className="text-4xl font-bold tracking-tighter leading-tighter sm:text-5xl md:tracking-tight">
                   Gerenciador de Alunos Edge Academy
                 </h1>
-                <p className="max-w-screen-md text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                <p className="max-w-(--breakpoint-md) text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
                   A plataforma que simplifica a gestão dos alunos do{' '}
                   <span
-                    className="bg-gradient-to-tr from-blue-300 to-green-500 text-transparent bg-clip-text font-extrabold hover:cursor-pointer
+                    className="bg-linear-to-tr from-blue-300 to-green-500 text-transparent bg-clip-text font-extrabold hover:cursor-pointer
                  hover:decoration-2 decoration-foreground hover:underline"
                   >
                     Edge Academy.
@@ -32,7 +32,7 @@ export default function Home() {
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
                 <Link
-                  className="inline-flex h-10 items-center justify-center rounded-md bg-gradient-to-r from-[#00cdac] to-[#8ac926] px-8 text-sm font-medium text-white shadow  hover:opacity-90 disabled:pointer-events-none disabled:opacity-50 dark:hover:opacity-110  dark:opacity-90 dark:focus-visible:ring-gray-300 transition duration-300 ease-in-out delay-150 bg-blue-500 hover:-translate-y-[0.15rem]"
+                  className="inline-flex h-10 items-center justify-center rounded-md bg-linear-to-r from-[#00cdac] to-[#8ac926] px-8 text-sm font-medium text-white shadow-sm  hover:opacity-90 disabled:pointer-events-none disabled:opacity-50 dark:hover:opacity-110  dark:opacity-90 dark:focus-visible:ring-gray-300 transition duration-300 ease-in-out delay-150 bg-blue-500 hover:-translate-y-[0.15rem]"
                   href="/alunos"
                 >
                   Veja agora os alunos
@@ -40,7 +40,7 @@ export default function Home() {
                 <Link
                   className="inline-flex h-10 items-center justify-center rounded-md border border-gray-200
                   bg-white px-8 text-sm font-medium shadow-sm transition-colors hover:bg-gray-100 hover:text-gray-900
-                   focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50
+                   focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50
                     dark:border-gray-800 dark:bg-background dark:hover:bg-muted dark:hover:text-gray-50 dark:focus-visible:ring-gray-300"
                   href="#"
                 >
