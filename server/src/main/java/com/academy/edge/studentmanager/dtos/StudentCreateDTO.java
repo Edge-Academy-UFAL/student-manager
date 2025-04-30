@@ -5,13 +5,12 @@ import com.academy.edge.studentmanager.validators.ValidBirthdate;
 import com.academy.edge.studentmanager.models.Student;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
 import java.time.LocalDate;
 
-
-@Getter
-@AllArgsConstructor()
+@Data
+@AllArgsConstructor
 public class StudentCreateDTO {
     @NotBlank(message = "Nome é obrigatório")
     private String name;

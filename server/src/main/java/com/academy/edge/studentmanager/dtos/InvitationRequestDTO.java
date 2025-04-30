@@ -3,12 +3,14 @@ package com.academy.edge.studentmanager.dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class InvitationRequestDTO {
 
     @NotNull
