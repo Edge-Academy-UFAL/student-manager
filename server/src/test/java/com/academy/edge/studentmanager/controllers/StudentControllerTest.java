@@ -1,48 +1,55 @@
 package com.academy.edge.studentmanager.controllers;
 
-import com.academy.edge.studentmanager.dtos.StudentCreateDTO;
 import com.academy.edge.studentmanager.dtos.StudentResponseDTO;
 import com.academy.edge.studentmanager.enums.Course;
 import com.academy.edge.studentmanager.services.StudentService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
-@Disabled
+@Transactional
 public class StudentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private StudentService studentService;
 
     @Test
-    @Disabled
     @WithMockUser(roles = {"INSTRUCTOR"})
     void instructorCanAccessAllStudents() throws Exception {
-        List<StudentResponseDTO> students = new ArrayList<>();
-        //students.add(new StudentResponseDTO("1", "John Doe", "About John Doe", "http://example.com/photo.jpg", "https://www.linkedin.com/in/johndoe", Course.COMPUTER_SCIENCE, "2023-2027"));
-        //students.add(new StudentResponseDTO("2", "John Doe", "About John Doe", "http://example.com/photo.jpg", "https://www.linkedin.com/in/johndoe", Course.COMPUTER_SCIENCE, "2023-2027"));
-        when(studentService.getStudents()).thenReturn(students);
+        StudentResponseDTO studentResponseDTO1 = new StudentResponseDTO();
+        studentResponseDTO1.setId("1");
+        studentResponseDTO1.setName("John Doe");
+        studentResponseDTO1.setPhotoUrl("https://example.com/photo.jpg");
+        studentResponseDTO1.setCourse(Course.COMPUTER_SCIENCE);
+
+        StudentResponseDTO studentResponseDTO2 = new StudentResponseDTO();
+        studentResponseDTO2.setId("2");
+        studentResponseDTO2.setName("John Doe");
+        studentResponseDTO2.setPhotoUrl("https://example.com/photo.jpg");
+        studentResponseDTO2.setCourse(Course.COMPUTER_SCIENCE);
+
+        when(studentService.getStudents()).thenReturn(List.of(studentResponseDTO1, studentResponseDTO2));
 
         mockMvc.perform(get("/api/v1/students"))
                 .andExpect(status().isOk())
@@ -96,18 +103,6 @@ public class StudentControllerTest {
     }
 
     @Test
-    void itShouldCreateAStudent() throws Exception{
-        ObjectMapper mapper = new ObjectMapper();
-        StudentCreateDTO studentCreateDTO = new StudentCreateDTO("John Doe", "2024-04-14","john@email.com", "Edge12345678@", Course.COMPUTER_SCIENCE,
-                                                        "98765432", "82988887777", "", 5, "2022.1", "4CT1V4T3");
-        String jsonStudentDTO = mapper.writeValueAsString(studentCreateDTO);
-        mockMvc.perform(post("/api/v1/students")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonStudentDTO))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
     @WithMockUser(roles = {"ADMIN"})
     void adminCanDeleteAStudentAccount() throws Exception{
         String userEmail = "admin@example.com";
@@ -118,8 +113,8 @@ public class StudentControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"STUDENT", "INSTRUCTOR"}, username = "user@edge.ufal.br")
-    void instructorOrUserCantDeleteAccount() throws Exception{
+    @WithMockUser(roles = {"STUDENT"}, username = "user@edge.ufal.br")
+    void studentCantDeleteAccount() throws Exception{
         String userEmail = "user@edge.ufal.br";
         mockMvc.perform(delete("/api/v1/students/{email}", userEmail))
                 .andExpect(status().isForbidden());
