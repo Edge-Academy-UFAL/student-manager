@@ -7,9 +7,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface InvitationService {
-    InvitationResponseDTO sendInvitation(List<String> emails, int studentGroup, LocalDate entryDate);
+    InvitationResponseDTO sendInvitations(List<String> emails, int studentGroup, LocalDate entryDate);
 
-    Invitation isInvitationValid(String invitationId, String email);
+    Invitation getValidInvitation(String invitationId, String email);
 
-    void deleteInvitation(String invitationId, String email);
+    void deleteInvitation(Invitation invitation);
 }

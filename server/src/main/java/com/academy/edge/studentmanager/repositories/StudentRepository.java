@@ -11,4 +11,6 @@ public interface StudentRepository extends CrudRepository<Student, String> {
     Optional<Student> findByEmail(String email);
 
     void deleteByEmail(String email);
+
+    boolean existsByEmail(String email);
 }

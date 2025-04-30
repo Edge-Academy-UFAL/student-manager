@@ -73,12 +73,8 @@ public class StudentServiceImpl implements StudentService {
             throw  new ResponseStatusException(BAD_REQUEST, "File is not a image file");
         }
 
-        Invitation invitation = invitationService.isInvitationValid(studentCreateDTO.getActivationCode(), studentCreateDTO.getEmail());
+        Invitation invitation = invitationService.getValidInvitation(studentCreateDTO.getActivationCode(), studentCreateDTO.getEmail());
 
-        if(invitation == null){
-            throw new ResponseStatusException(FORBIDDEN, "Invalid invitation code");
-        }
-  
         Student student = modelMapper.map(studentCreateDTO, Student.class);
         student.setName(student.getName().trim());
         student.setEntryDate(invitation.getEntryDate());
@@ -88,7 +84,7 @@ public class StudentServiceImpl implements StudentService {
       
         try {
             studentRepository.save(student);
-            invitationService.deleteInvitation(studentCreateDTO.getActivationCode(), studentCreateDTO.getEmail());
+            invitationService.deleteInvitation(invitation);
             s3Service.uploadFile(student.getPhotoUrl(), file);
         } catch (IOException e) {
             s3Service.deleteFile(student.getPhotoUrl());

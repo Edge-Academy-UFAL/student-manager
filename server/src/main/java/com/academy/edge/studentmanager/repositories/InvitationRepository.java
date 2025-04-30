@@ -4,7 +4,9 @@ import com.academy.edge.studentmanager.models.Invitation;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface InvitationRepository extends CrudRepository<Invitation, String> {
-    Invitation findByCodeAndEmail(String invitationId, String email);
+    Optional<Invitation> findByCodeAndEmail(String invitationId, String email);
 }

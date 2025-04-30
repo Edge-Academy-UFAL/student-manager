@@ -1,12 +1,14 @@
 package com.academy.edge.studentmanager.dtos;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Data
+@AllArgsConstructor
 public class InvitationResponseDTO {
-    private List<String> successfulEmails= new ArrayList<>();
-    private List<String> failedEmails = new ArrayList<>();
+    private List<String> successfulEmails;
+    private Map<String, String> failedEmails;
 }
