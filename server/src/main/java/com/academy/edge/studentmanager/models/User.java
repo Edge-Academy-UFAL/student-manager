@@ -39,7 +39,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     String email;
 
     @Column(nullable = false)
@@ -56,6 +56,7 @@ public class User implements UserDetails {
     Instant createdAt;
 
     @UpdateTimestamp
+    @Column
     Instant updatedAt;
 
     @Column(nullable = false, columnDefinition = "boolean default false")

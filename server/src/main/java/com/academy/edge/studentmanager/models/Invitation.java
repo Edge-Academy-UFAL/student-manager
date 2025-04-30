@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Table(name = "invitations")
 public class Invitation {
     @Id
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
