@@ -37,7 +37,7 @@ public class StudentController {
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<StudentResponseDTO> saveStudent(@ModelAttribute @Valid StudentCreateDTO studentCreateDTO,
-                                                          @RequestParam("file") MultipartFile file){
+                                                          @RequestParam("photo") MultipartFile file){
         return new ResponseEntity<>(studentService.insertStudent(studentCreateDTO, file), HttpStatus.CREATED);
     }
 
@@ -60,7 +60,7 @@ public class StudentController {
     @PutMapping({"/{email}/photo"})
     @PreAuthorize("hasAnyRole('ADMIN','INSTRUCTOR') or authentication.name == #email")
     public ResponseEntity<StudentResponseDTO> updateStudentPhotoByEmail(@PathVariable String email,
-                                                                        @RequestParam("file") MultipartFile file) {
+                                                                        @RequestParam("photo") MultipartFile file) {
         StudentResponseDTO studentResponseDTO = studentService.updateStudentPhoto(email, file);
 
         return new ResponseEntity<>(studentResponseDTO, HttpStatus.OK);
@@ -70,7 +70,7 @@ public class StudentController {
     @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR') or authentication.name == #email")
     public ResponseEntity<StudentResponseDTO> updateStudentAcademicRecordByEmail(
             @PathVariable String email,
-            @RequestParam("file") MultipartFile file) {
+            @RequestParam("photo") MultipartFile file) {
         StudentResponseDTO studentResponseDTO = studentService.updateStudentAcademicRecord(email, file);
 
         return new ResponseEntity<>(studentResponseDTO, HttpStatus.OK);

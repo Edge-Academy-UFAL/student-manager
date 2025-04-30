@@ -27,17 +27,28 @@ import { MonthSelect, YearSelect } from '@/components/custom-select'
 import { LoadingSpinner } from './loading-spinner'
 import { getCookie } from 'cookies-next'
 
-interface fromData {
+interface FormData {
   studentGroup: string
   admissionMonth: string
   admissionYear: string
   emails: string
 }
 
+interface ValidatedEmail {
+  email: string
+  isValid: boolean
+}
+
 interface BackendResponse {
   failedEmails: Array<string>
   successfulEmails: Array<string>
 }
+
+type DialogState =
+  | { page: DialogPage.Input }
+  | { page: DialogPage.EmailConfirmation }
+  | { page: DialogPage.BackendResponse; data: BackendResponsePageState }
+  | { page: DialogPage.Loading; data: LoadingPageState }
 
 enum DialogPage {
   Input,
@@ -46,16 +57,27 @@ enum DialogPage {
   Loading,
 }
 
+type BackendResponsePageState =
+  | { typeOfResponse: BackendResponseType.Success }
+  | {
+      typeOfResponse: BackendResponseType.InvitationSendingError
+      invalidEmails: Array<string>
+    }
+  | { typeOfResponse: BackendResponseType.AnotherError; responseCode: number }
+
 enum BackendResponseType {
   Success,
   InvitationSendingError,
   AnotherError,
 }
 
-function validateEmails(
-  emails: string,
-): Array<{ email: string; isValid: boolean }> {
-  const emailArray = emails.split(',').map((email): string => email.trim())
+interface LoadingPageState {
+  title: string
+  message: string
+}
+
+function validateEmails(emails: string): Array<ValidatedEmail> {
+  const emailArray = emails.split(',').map((email) => email.trim())
   const emailValidation = []
   for (const email of emailArray) {
     let isValid = true
@@ -73,27 +95,18 @@ function validateEmails(
   return emailValidation
 }
 
-function formDataIsValid(formData: fromData): boolean {
-  if (
+function formDataIsValid(formData: FormData): boolean {
+  return !(
     formData.emails.trim() === '' ||
     formData.admissionMonth === '' ||
     formData.admissionYear === '' ||
     formData.studentGroup === '' ||
     isNaN(Number(formData.studentGroup)) ||
     Number(formData.studentGroup) <= 0
-  ) {
-    return false
-  }
-  return true
+  )
 }
 
-function InputDialogContent(props: {
-  formData: fromData
-  error: boolean
-  handleFormDataChange: (field: string, value: string) => void
-  handleSubmit: () => void
-  handleFinalize: () => void
-}) {
+function InputDialogContent(props: InputDialogContentProps) {
   const labelColor = props.error ? 'text-red-500' : ''
   const inputColor = props.error ? 'border-red-500' : ''
 
@@ -198,13 +211,19 @@ function InputDialogContent(props: {
   )
 }
 
-function EmailConfirmationDialogContent(props: {
-  validatedEmails: Array<{ email: string; isValid: boolean }>
-  handleConfirm: () => void
-  handleTryAgain: () => void
-}) {
+interface InputDialogContentProps {
+  formData: FormData
+  error: boolean
+  handleFormDataChange: (field: string, value: string) => void
+  handleSubmit: () => void
+  handleFinalize: () => void
+}
+
+function EmailConfirmationDialogContent(
+  props: EmailConfirmationDialogContentProps
+) {
   const invalidEmailCount = props.validatedEmails.filter(
-    (email) => !email.isValid,
+    (email) => !email.isValid
   ).length
   return (
     <>
@@ -250,16 +269,15 @@ function EmailConfirmationDialogContent(props: {
   )
 }
 
-function BackendResponseDialogContent(props: {
-  handleFinalize: () => void
+interface EmailConfirmationDialogContentProps {
+  validatedEmails: Array<ValidatedEmail>
+  handleConfirm: () => void
   handleTryAgain: () => void
-  handleTryAgainWithInvalidEmails: (
-    invalidEmails: Array<string> | undefined,
-  ) => void
-  typeOfResponse: BackendResponseType
-  responseCode?: string
-  invalidEmails?: Array<string>
-}) {
+}
+
+function BackendResponseDialogContent(
+  props: BackendResponseDialogContentProps
+) {
   // When a backend problem occours
   if (props.typeOfResponse === BackendResponseType.AnotherError) {
     return (
@@ -314,7 +332,7 @@ function BackendResponseDialogContent(props: {
         <div className="grid gap-4 pb-1 pt-4">
           <Label htmlFor="student-emails">E-mails inválidos</Label>
           <ScrollArea className="h-36 w-full rounded-md">
-            {props.invalidEmails?.map((email, index) => (
+            {props.invalidEmails.map((email, index) => (
               <Badge className="w-full" key={index} variant="destructive">
                 {email}
               </Badge>
@@ -336,7 +354,7 @@ function BackendResponseDialogContent(props: {
               props.handleTryAgainWithInvalidEmails(props.invalidEmails)
             }
           >
-            Voltar ao início
+            Tentar novamente
           </Button>
         </DialogFooter>
       </>
@@ -368,7 +386,13 @@ function BackendResponseDialogContent(props: {
   }
 }
 
-function LoadingDialogContent(props: { title: string; message: string }) {
+type BackendResponseDialogContentProps = BackendResponsePageState & {
+  handleFinalize: () => void
+  handleTryAgain: () => void
+  handleTryAgainWithInvalidEmails: (invalidEmails: Array<string>) => void
+}
+
+function LoadingDialogContent(props: LoadingDialogContentProps) {
   return (
     <>
       <DialogHeader>
@@ -383,33 +407,23 @@ function LoadingDialogContent(props: { title: string; message: string }) {
   )
 }
 
+type LoadingDialogContentProps = LoadingPageState
+
 export function StudentRegistrationDialog() {
-  const [formData, setFormData] = useState<fromData>({
+  const [formData, setFormData] = useState<FormData>({
     studentGroup: '',
     admissionMonth: '',
     admissionYear: '',
     emails: '',
   })
   const [showDialog, setShowDialog] = useState<boolean>(false)
-  const [validatedEmails, setValidatedEmails] = useState<
-    Array<{ email: string; isValid: boolean }>
-  >([])
+  const [validatedEmails, setValidatedEmails] = useState<Array<ValidatedEmail>>(
+    []
+  )
   const [error, setError] = useState<boolean>(false)
-  const [dialogState, _setDialogState] = useState<{
-    page: DialogPage
-    data: Record<string, unknown>
-  }>({
+  const [dialogState, setDialogState] = useState<DialogState>({
     page: DialogPage.Input,
-    data: {},
   })
-
-  function setDialogState(page: DialogPage, data?: Record<string, unknown>) {
-    if (data) {
-      _setDialogState({ page, data })
-    } else {
-      _setDialogState({ page, data: {} })
-    }
-  }
 
   function handleDialogOpen(): void {
     // This is necessary to remove error indicators when re-opening the dialog.
@@ -438,33 +452,31 @@ export function StudentRegistrationDialog() {
     }
 
     setValidatedEmails(validateEmails(formData.emails))
-    setDialogState(DialogPage.EmailConfirmation)
+    setDialogState({ page: DialogPage.EmailConfirmation })
   }
 
   function handleTryAgain() {
     setError(false)
     setValidatedEmails([])
-    setDialogState(DialogPage.Input)
+    setDialogState({ page: DialogPage.Input })
   }
 
-  function handleTryAgainWithInvalidEmails(
-    invalidEmails: Array<string> | undefined,
-  ) {
-    if (!invalidEmails) {
-      invalidEmails = []
-    }
+  function handleTryAgainWithInvalidEmails(invalidEmails: Array<string>) {
     setError(false)
     handleFormDataChange('emails', invalidEmails.join(', '))
     setValidatedEmails([])
-    setDialogState(DialogPage.Input)
+    setDialogState({ page: DialogPage.Input })
   }
 
   async function handleConfirm() {
     // Set loading state
-    setDialogState(DialogPage.Loading, {
-      title: 'Enviando convites.',
-      message:
-        'Os convites estão sendo enviados para os alunos. Por favor, aguarde.',
+    setDialogState({
+      page: DialogPage.Loading,
+      data: {
+        title: 'Enviando convites.',
+        message:
+          'Os convites estão sendo enviados para os alunos. Por favor, aguarde.',
+      },
     })
 
     // prepare data
@@ -485,22 +497,31 @@ export function StudentRegistrationDialog() {
 
     // Validate response and show appropriate response dialog
     if (res.ok) {
-      const data: BackendResponse = (await res.json()) as BackendResponse
+      const data: BackendResponse = await res.json()
 
       if (data.failedEmails.length === 0) {
-        setDialogState(DialogPage.BackendResponse, {
-          typeOfResponse: BackendResponseType.Success,
+        setDialogState({
+          page: DialogPage.BackendResponse,
+          data: {
+            typeOfResponse: BackendResponseType.Success,
+          },
         })
       } else {
-        setDialogState(DialogPage.BackendResponse, {
-          typeOfResponse: BackendResponseType.InvitationSendingError,
-          invalidEmails: data.failedEmails,
+        setDialogState({
+          page: DialogPage.BackendResponse,
+          data: {
+            typeOfResponse: BackendResponseType.InvitationSendingError,
+            invalidEmails: data.failedEmails,
+          },
         })
       }
     } else {
-      setDialogState(DialogPage.BackendResponse, {
-        typeOfResponse: BackendResponseType.AnotherError,
-        responseCode: res.status,
+      setDialogState({
+        page: DialogPage.BackendResponse,
+        data: {
+          typeOfResponse: BackendResponseType.AnotherError,
+          responseCode: res.status,
+        },
       })
     }
   }
@@ -521,7 +542,7 @@ export function StudentRegistrationDialog() {
         admissionYear: '',
         emails: '',
       })
-      setDialogState(DialogPage.Input)
+      setDialogState({ page: DialogPage.Input })
     }, 100)
   }
 
@@ -555,17 +576,11 @@ export function StudentRegistrationDialog() {
             handleFinalize={handleFinalize}
             handleTryAgain={handleTryAgain}
             handleTryAgainWithInvalidEmails={handleTryAgainWithInvalidEmails}
-            {...(dialogState.data as {
-              typeOfResponse: BackendResponseType
-              responseCode: string
-              invalidEmails: Array<string>
-            })}
+            {...dialogState.data}
           />
         )}
         {dialogState.page === DialogPage.Loading && (
-          <LoadingDialogContent
-            {...(dialogState.data as { title: string; message: string })}
-          />
+          <LoadingDialogContent {...dialogState.data} />
         )}
       </DialogContent>
     </Dialog>

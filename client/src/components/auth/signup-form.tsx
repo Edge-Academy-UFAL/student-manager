@@ -80,7 +80,7 @@ const SignUpForm = ({ id }: { id: string }) => {
     formData.append('name', dataToSend.name)
     formData.append('birthDate', dataToSend.birthdate)
     formData.append('course', dataToSend.course)
-    formData.append('file', data.image[0])
+    formData.append('photo', data.image[0])
     formData.append('registration', dataToSend.registration)
     formData.append('phone', dataToSend.phone)
     formData.append('secondaryPhone', dataToSend.secondaryPhone)
