@@ -13,7 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -53,10 +53,10 @@ public class User implements UserDetails {
 
     @CreationTimestamp
     @Column(updatable = false)
-    Timestamp createdAt;
+    Instant createdAt;
 
     @UpdateTimestamp
-    Timestamp updatedAt;
+    Instant updatedAt;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
     boolean deleted = false;

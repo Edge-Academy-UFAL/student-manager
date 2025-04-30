@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.time.Instant;
 
 @Component
 public class JWTUtil {
@@ -24,9 +24,9 @@ public class JWTUtil {
         return JWT.create()
                 .withSubject("User details")
                 .withClaim("username", userDetails.getUsername())
-                .withIssuedAt(new Date())
+                .withIssuedAt(Instant.now())
                 .withIssuer("com.academy.edge.studentmanager")
-                .withExpiresAt(new Date(System.currentTimeMillis() + oneDay))
+                .withExpiresAt(Instant.now().plusMillis(oneDay))
                 .sign(Algorithm.HMAC256(jwtSecret));
 
     }

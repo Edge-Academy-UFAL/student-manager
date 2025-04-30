@@ -7,6 +7,8 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 
 @Getter
 @AllArgsConstructor()
@@ -16,7 +18,7 @@ public class StudentCreateDTO {
 
     @NotNull(message = "Insira uma data de nascimento")
     @ValidBirthdate(message = "Informe uma data de nascimento válida")
-    private String birthDate;
+    private LocalDate birthDate;
 
     @NotBlank(message = "Insira um email")
     @Email(message = "Email inválido")

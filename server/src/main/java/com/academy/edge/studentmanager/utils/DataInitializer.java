@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 @Component
@@ -55,8 +54,8 @@ public class DataInitializer implements CommandLineRunner {
 //            student.setPeriod(3);
 //            student.setEntryPeriod("2022.1");
 //            student.setStudentGroup(1);
-//            student.setEntryDate(Date.valueOf(LocalDate.now()));
-//            student.setBirthDate(Date.valueOf(LocalDate.now()));
+//            student.setEntryDate(LocalDate.now());
+//            student.setBirthDate(LocalDate.now());
 //            studentRepository.save(student);
 //        }
 
@@ -66,7 +65,7 @@ public class DataInitializer implements CommandLineRunner {
 
             invitation.setEmail(String.format("test%d@edge.ufal.br", i));
             invitation.setStudentGroup(1);
-            invitation.setEntryDate(Date.valueOf("2001-01-01"));
+            invitation.setEntryDate(LocalDate.of(2001, 1, 1));
             invitation.setCode(String.valueOf(i));
 
             invitationRepository.save(invitation);

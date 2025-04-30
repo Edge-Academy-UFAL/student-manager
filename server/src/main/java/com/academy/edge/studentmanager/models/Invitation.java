@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -20,11 +20,11 @@ public class Invitation {
 
     @CreationTimestamp
     @Column()
-    Timestamp createdAt;
+    Instant createdAt;
 
     @Column(nullable = false)
     private int studentGroup;
 
     @Column(nullable = false)
-    private Date entryDate;
+    private LocalDate entryDate;
 }

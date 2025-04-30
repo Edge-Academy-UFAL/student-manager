@@ -9,7 +9,7 @@ import org.hibernate.annotations.Formula;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -23,7 +23,7 @@ public class Student extends User{
     public static final int MAX_NUM_DEGREE_SEMESTER_COMPUTER_ENGINEERING = 15;
 
     @Column
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -51,7 +51,7 @@ public class Student extends User{
     private String academicRecordUrl;
 
     @Column(nullable = false)
-    private Date entryDate;
+    private LocalDate entryDate;
 
     /* This formula calculates the IRA based in a weighted average of the Student grades
         and the workload of the subjects of this grades

@@ -9,7 +9,7 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -36,7 +36,7 @@ public class InvitationServiceImpl implements InvitationService {
 
     @Override
     @Transactional
-    public InvitationResponseDTO sendInvitation(List<String> emails, int studentGroup, String entryDate) {
+    public InvitationResponseDTO sendInvitation(List<String> emails, int studentGroup, LocalDate entryDate) {
         InvitationResponseDTO result = new InvitationResponseDTO();
         emails.forEach(email -> {
 
@@ -46,7 +46,7 @@ public class InvitationServiceImpl implements InvitationService {
                 Invitation invitation = new Invitation();
                 invitation.setEmail(email);
                 invitation.setStudentGroup(studentGroup);
-                invitation.setEntryDate(Date.valueOf(entryDate));
+                invitation.setEntryDate(entryDate);
                 invitation.setCode(code);
 
                 invitationRepository.save(invitation);

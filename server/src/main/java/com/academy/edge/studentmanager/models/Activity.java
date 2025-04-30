@@ -3,7 +3,7 @@ package com.academy.edge.studentmanager.models;
 import com.academy.edge.studentmanager.enums.ActivityType;
 import jakarta.persistence.*;
 import lombok.Data;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -34,10 +34,10 @@ public class Activity {
     private int workShift;
 
     @Column(nullable = false)
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column
-    private Date conclusionDate;
+    private LocalDate conclusionDate;
 
     @Column(nullable = false)
     private boolean onGoing;
