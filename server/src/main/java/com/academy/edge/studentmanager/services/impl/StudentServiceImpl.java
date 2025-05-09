@@ -99,4 +99,11 @@ public class StudentServiceImpl implements StudentService {
         student.setDeleted(true);
         studentRepository.save(student);
     }
+    @Override
+    public void terminateStudent(String email, String terminationReason) {
+        Student student = studentRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
+        student.setTerminationReason(terminationReason);
+        student.setDeleted(true);
+        studentRepository.save(student);
+    }
 }

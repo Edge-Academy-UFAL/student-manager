@@ -2,6 +2,7 @@ package com.academy.edge.studentmanager.services;
 
 import com.academy.edge.studentmanager.dtos.StudentCreateDTO;
 import com.academy.edge.studentmanager.dtos.StudentResponseDTO;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,4 +20,6 @@ public interface StudentService {
     //void updateStudent(String uuid, );
 
     void deleteStudent(String email);
+
+    void terminateStudent(String email, String terminationReason);
 }
