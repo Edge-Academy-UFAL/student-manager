@@ -51,4 +51,7 @@ public class Student extends User{
     public boolean isEnabled(){
         return false;
     }
+
+    @Column(name = "terminationReason")
+    private String terminationReason;
 }

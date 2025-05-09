@@ -10,13 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import com.academy.edge.studentmanager.dtos.TerminateStudentDTO;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/students")
 public class StudentController {
-    final StudentService studentService;
+    private final StudentService studentService;
 
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
@@ -46,4 +47,14 @@ public class StudentController {
         studentService.deleteStudent(email);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    @PatchMapping("/{email}/terminate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> terminateStudent(
+            @PathVariable String email,
+            @RequestBody @Valid TerminateStudentDTO dto) {
+        studentService.terminateStudent(email, dto.getTerminationReason());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
 }
