@@ -20,12 +20,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Badge } from '@/components/ui/badge'
-import { PlusIcon, ExclamationTriangleIcon } from '@radix-ui/react-icons'
+import { cn } from '@/lib/utils'
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { useState } from 'react'
 import { MonthSelect, YearSelect } from '@/components/custom-select'
 import { LoadingSpinner } from './loading-spinner'
 import { getCookie } from 'cookies-next'
+import { Check, UserPlus, X } from 'lucide-react'
 
 interface FormData {
   studentGroup: string
@@ -40,7 +41,7 @@ interface ValidatedEmail {
 }
 
 interface BackendResponse {
-  failedEmails: Array<string>
+  failedEmails: Record<string, string>
   successfulEmails: Array<string>
 }
 
@@ -61,7 +62,7 @@ type BackendResponsePageState =
   | { typeOfResponse: BackendResponseType.Success }
   | {
       typeOfResponse: BackendResponseType.InvitationSendingError
-      invalidEmails: Array<string>
+      invalidEmails: Record<string, string>
     }
   | { typeOfResponse: BackendResponseType.AnotherError; responseCode: number }
 
@@ -237,15 +238,18 @@ function EmailConfirmationDialogContent(
       </DialogHeader>
       <div className="grid gap-4 py-4">
         <Label htmlFor="student-emails">E-mails</Label>
-        <ScrollArea className="h-24 w-full rounded-md ">
+        <ScrollArea className="h-48 w-full rounded-md border px-1.5 py-1.5">
           {props.validatedEmails.map((email, index) => (
-            <Badge
+            <div
               key={index}
-              className="w-full"
-              variant={email.isValid ? 'outline' : 'destructive'}
+              className={cn(
+                'w-full inline-flex items-center text-sm font-medium gap-1',
+                !email.isValid && 'text-destructive'
+              )}
             >
+              {email.isValid ? <Check size={18} /> : <X size={18} />}
               {email.email}
-            </Badge>
+            </div>
           ))}
         </ScrollArea>
       </div>
@@ -330,12 +334,21 @@ function BackendResponseDialogContent(
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 pb-1 pt-4">
-          <Label htmlFor="student-emails">E-mails inválidos</Label>
-          <ScrollArea className="h-36 w-full rounded-md">
-            {props.invalidEmails.map((email, index) => (
-              <Badge className="w-full" key={index} variant="destructive">
-                {email}
-              </Badge>
+          <Label htmlFor="student-emails">E-mails com falha</Label>
+          <ScrollArea className="h-48 w-full rounded-md border px-1.5 py-1.5">
+            {Object.entries(props.invalidEmails).map((pair, index) => (
+              <TooltipProvider key={index} delayDuration={200}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="w-full inline-flex items-center text-sm font-medium gap-1 text-destructive">
+                      <X size={18} /> {pair[0]}
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" sideOffset={10}>
+                    <p className="bg-red-600 py-2 px-4 rounded">{pair[1]}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             ))}
           </ScrollArea>
         </div>
@@ -351,7 +364,9 @@ function BackendResponseDialogContent(
             type="button"
             variant="default"
             onClick={() =>
-              props.handleTryAgainWithInvalidEmails(props.invalidEmails)
+              props.handleTryAgainWithInvalidEmails(
+                Object.keys(props.invalidEmails)
+              )
             }
           >
             Tentar novamente
@@ -499,7 +514,7 @@ export function StudentRegistrationDialog() {
     if (res.ok) {
       const data: BackendResponse = await res.json()
 
-      if (data.failedEmails.length === 0) {
+      if (Object.keys(data.failedEmails).length === 0) {
         setDialogState({
           page: DialogPage.BackendResponse,
           data: {
@@ -550,7 +565,7 @@ export function StudentRegistrationDialog() {
     <Dialog open={showDialog} onOpenChange={onShowDialogChange}>
       <DialogTrigger asChild>
         <Button variant="default" onClick={handleDialogOpen}>
-          <PlusIcon />
+          <UserPlus size={18} />
           <span className="ml-2">Adicionar alunos</span>
         </Button>
       </DialogTrigger>
