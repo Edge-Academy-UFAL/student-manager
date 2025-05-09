@@ -71,4 +71,12 @@ public class Student extends User{
     public String getDtype() {
         return "Student";
     }
+
+    @Override
+    public boolean isEnabled(){
+        return false;
+    }
+
+    @Column(name = "terminationReason")
+    private String terminationReason;
 }
