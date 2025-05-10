@@ -54,14 +54,12 @@ import { useForm } from 'react-hook-form'
 
 import { RegisterSchema } from '@/lib/schemas'
 import { formatSignUpData } from '@/lib/functions/formatSignUpData'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
-const SignUpForm = ({ id }: { id: string }) => {
+const SignUpForm = ({ id, email }: { id: string; email: string }) => {
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(RegisterSchema),
   })
-
-  const email = useSearchParams().get('email')
 
   const { toast } = useToast()
   const { push } = useRouter()
