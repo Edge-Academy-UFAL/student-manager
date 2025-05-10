@@ -1,6 +1,6 @@
 package com.academy.edge.studentmanager.services.impl;
 
-import com.academy.edge.studentmanager.dtos.InvitationResponseDTO;
+import com.academy.edge.studentmanager.dtos.InvitationSendResponseDTO;
 import com.academy.edge.studentmanager.models.Invitation;
 import com.academy.edge.studentmanager.repositories.InvitationRepository;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
@@ -46,8 +46,8 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public Invitation getValidInvitation(String invitationId, String email) {
-        return invitationRepository.findByCodeAndEmail(invitationId, email)
+    public Invitation getValidInvitation(String invitationId) {
+        return invitationRepository.findByCode(invitationId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid invitation code"));
     }
 
@@ -58,7 +58,7 @@ public class InvitationServiceImpl implements InvitationService {
 
     @Override
     @Transactional
-    public InvitationResponseDTO sendInvitations(List<String> emails, int studentGroup, LocalDate entryDate) {
+    public InvitationSendResponseDTO sendInvitations(List<String> emails, int studentGroup, LocalDate entryDate) {
         var uniqueEmails = new LinkedHashSet<>(emails);
         var successfulEmails = new ArrayList<String>();
         var failedEmails = new HashMap<String, String>();
@@ -78,7 +78,7 @@ public class InvitationServiceImpl implements InvitationService {
 
             try {
                 invitationRepository.save(invitation);
-                emailService.sendEmail(email, "Bem vindo ao Academy!", this.constructHtmlMessageText(code, email));
+                emailService.sendEmail(email, "Bem vindo ao Academy!", this.constructHtmlMessageText(code));
                 successfulEmails.add(email);
             } catch (Exception e) {
                 log.error("Failed to send invitation email", e);
@@ -86,11 +86,11 @@ public class InvitationServiceImpl implements InvitationService {
             }
         }
 
-        return new InvitationResponseDTO(successfulEmails, failedEmails);
+        return new InvitationSendResponseDTO(successfulEmails, failedEmails);
     }
 
-    private String constructHtmlMessageText(String code, String email) {
-        var siteUrl = "https://edge.academy.com/register/" + code + "?email=" + email;
-        return this.invitationEmailTemplate.replace("[[URL]]", siteUrl);
+    private String constructHtmlMessageText(String code) {
+        var registerUrl = "https://edge.academy.com/register/" + code;
+        return this.invitationEmailTemplate.replace("[[URL]]", registerUrl);
     }
 }

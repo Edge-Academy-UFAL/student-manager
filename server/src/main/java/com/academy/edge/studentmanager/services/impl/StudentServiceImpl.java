@@ -73,7 +73,11 @@ public class StudentServiceImpl implements StudentService {
             throw  new ResponseStatusException(BAD_REQUEST, "File is not a image file");
         }
 
-        Invitation invitation = invitationService.getValidInvitation(studentCreateDTO.getActivationCode(), studentCreateDTO.getEmail());
+        Invitation invitation = invitationService.getValidInvitation(studentCreateDTO.getActivationCode());
+
+        if (!invitation.getEmail().equals(studentCreateDTO.getEmail())) {
+            throw new ResponseStatusException(UNAUTHORIZED, "Invalid email for invitation");
+        }
 
         Student student = modelMapper.map(studentCreateDTO, Student.class);
         student.setName(student.getName().trim());
@@ -81,7 +85,7 @@ public class StudentServiceImpl implements StudentService {
         student.setStudentGroup(invitation.getStudentGroup());
         student.setPassword(passwordEncoder.encode(studentCreateDTO.getPassword()));
         student.setPhotoUrl(student.getRegistration()+"_"+file.getOriginalFilename());
-      
+
         try {
             studentRepository.save(student);
             invitationService.deleteInvitation(invitation);

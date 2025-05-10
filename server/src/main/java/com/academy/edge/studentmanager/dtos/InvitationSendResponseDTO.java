@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Data
 @AllArgsConstructor
-public class InvitationResponseDTO {
+public class InvitationSendResponseDTO {
     private List<String> successfulEmails;
     private Map<String, String> failedEmails;
 }

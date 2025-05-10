@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface InvitationRepository extends CrudRepository<Invitation, String> {
-    Optional<Invitation> findByCodeAndEmail(String invitationId, String email);
+    Optional<Invitation> findByCode(String invitationId);
 }
