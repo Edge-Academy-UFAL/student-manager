@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import Credentials from 'next-auth/providers/credentials';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
@@ -11,7 +11,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     maxAge: 60 * 60 * 24, // one Day
   },
   providers: [
-    CredentialsProvider({
+    Credentials({
       name: 'Sign in',
       credentials: {
         email: {
@@ -55,21 +55,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    session: ({ session, token }) => {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.id,
-          authToken: token.authToken,
-          name: token.name,
-          email: token.email,
-          photoUrl: token.photoUrl,
-          dtype: token.dtype,
-        },
-      };
-    },
-    jwt: ({ token, trigger, user, session }) => {
+    jwt: async ({ token, trigger, user, session }) => {
       // This is necessary to update de session (and therefore, the header)
       // when the user uploads a new profile picture
       // More on https://next-auth.js.org/getting-started/client#updating-the-session
@@ -93,16 +79,23 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
       return token;
     },
-    authorized: ({ req, token }) => {
-      if (
-        !token &&
-        !req.nextUrl.pathname.startsWith('/login') &&
-        !req.nextUrl.pathname.startsWith('/register')
-      ) {
-        return false;
+    session: async ({ session, token }) => {
+      if (typeof token.id !== 'string' || typeof token.authToken !== 'string') {
+        throw new Error('Invalid token data');
       }
 
-      return true;
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          authToken: token.authToken,
+          name: token.name,
+          email: token.email,
+          photoUrl: token.photoUrl,
+          dtype: token.dtype,
+        },
+      };
     },
   },
 });
