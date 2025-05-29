@@ -10,5 +10,5 @@ import java.util.Map;
 @AllArgsConstructor
 public class InvitationSendResponseDTO {
     private List<String> successfulEmails;
-    private Map<String, String> failedEmails;
+    private Map<String, InvitationErrorDTO> failedEmails;
 }

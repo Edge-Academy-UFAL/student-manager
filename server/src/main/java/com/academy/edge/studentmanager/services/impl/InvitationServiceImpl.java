@@ -1,6 +1,8 @@
 package com.academy.edge.studentmanager.services.impl;
 
+import com.academy.edge.studentmanager.dtos.InvitationErrorDTO;
 import com.academy.edge.studentmanager.dtos.InvitationSendResponseDTO;
+import com.academy.edge.studentmanager.enums.InvitationErrorType;
 import com.academy.edge.studentmanager.models.Invitation;
 import com.academy.edge.studentmanager.repositories.InvitationRepository;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
@@ -61,11 +63,11 @@ public class InvitationServiceImpl implements InvitationService {
     public InvitationSendResponseDTO sendInvitations(List<String> emails, int studentGroup, LocalDate entryDate) {
         var uniqueEmails = new LinkedHashSet<>(emails);
         var successfulEmails = new ArrayList<String>();
-        var failedEmails = new HashMap<String, String>();
+        var failedEmails = new HashMap<String, InvitationErrorDTO>();
 
         for (var email : uniqueEmails) {
             if (studentRepository.existsByEmail(email)) {
-                failedEmails.put(email, "Email já cadastrado");
+                failedEmails.put(email, new InvitationErrorDTO(InvitationErrorType.ALREADY_REGISTERED, null));
                 continue;
             }
 
@@ -82,7 +84,7 @@ public class InvitationServiceImpl implements InvitationService {
                 successfulEmails.add(email);
             } catch (Exception e) {
                 log.error("Failed to send invitation email", e);
-                failedEmails.put(email, "Não foi possível enviar o convite: " + e.getMessage());
+                failedEmails.put(email, new InvitationErrorDTO(InvitationErrorType.SMTP_ERROR, e.getMessage()));
             }
         }
 
