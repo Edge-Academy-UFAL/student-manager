@@ -17,11 +17,14 @@ export async function middleware(request: NextRequest) {
   if (
     session?.user?.dtype === 'Student' &&
     !request.nextUrl.pathname.startsWith(
-      `/alunos/${getUsername(session.user.email)}/`,
+      `/students/${getUsername(session.user.email)}/`,
     )
   ) {
     return NextResponse.redirect(
-      new URL(`/alunos/${getUsername(session.user.email)}/dados`, request.url),
+      new URL(
+        `/students/${getUsername(session.user.email)}/profile`,
+        request.url,
+      ),
     );
   }
 
