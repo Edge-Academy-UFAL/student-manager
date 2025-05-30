@@ -1,13 +1,11 @@
 import LoginAccount from '@/features/login/login';
 import { DotBackground } from '@/shared/components/background';
 
-const LoginPage = () => {
+export default function LoginPage() {
   return (
-    <div>
+    <main>
       <DotBackground />
       <LoginAccount />
-    </div>
+    </main>
   );
-};
-
-export default LoginPage;
+}

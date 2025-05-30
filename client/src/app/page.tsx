@@ -1,11 +1,11 @@
-import { DotBackground } from '@/shared/components/background';
-// import Header from '@/components/header/header';
 import Link from 'next/link';
+import { DotBackground } from '@/shared/components/background';
+import Navbar from '@/features/navbar/header';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div>
-      {/* <Header /> */}
+    <main>
+      <Navbar />
       <section className="flex h-[calc(100vh-100px)] w-full items-center justify-center py-12 md:py-24 lg:py-32">
         <DotBackground />
         <div className="container px-4 md:px-6">
@@ -55,6 +55,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </div>
+    </main>
   );
 }

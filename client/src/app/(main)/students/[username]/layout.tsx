@@ -42,10 +42,10 @@ const StudentLayout = async ({
     throw new Error('Erro ao buscar os dados');
   }
   return (
-    <div>
+    <>
       <StudentPageHeader student={studentData} />
       <main className="p-5">{children}</main>
-    </div>
+    </>
   );
 };
 
