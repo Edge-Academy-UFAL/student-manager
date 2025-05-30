@@ -1,7 +1,6 @@
 import StudentProfile from '@/features/student-profile/ui/profile-page';
 import { auth } from '@/shared/lib/auth';
 import { orderActivities } from '@/features/student-profile/lib/utils';
-import { Activity } from '@/features/student-profile/models';
 
 interface StudentProfilePageProps {
   params: { username: string };
@@ -58,11 +57,10 @@ const StudentProfilePage = async ({ params }: StudentProfilePageProps) => {
     session?.user.authToken ?? '',
   );
 
-  // const studentActivitiesData = await fetchStudentActivities(
-  //   email,
-  //   session?.user.authToken ?? '',
-  // );
-  const studentActivitiesData: Activity[] = [];
+  const studentActivitiesData = await fetchStudentActivities(
+    email,
+    session?.user.authToken ?? '',
+  );
 
   if (!studentProfileData) {
     throw new Error('Erro ao buscar os dados');
