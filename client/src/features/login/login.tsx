@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 
-export default function LoginAccount() {
+export default function LoginPageComponent() {
   const { status } = useSession();
   const router = useRouter();
 

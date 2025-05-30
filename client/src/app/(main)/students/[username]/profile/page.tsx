@@ -1,6 +1,6 @@
-import StudentProfile from '@/features/student-profile/ui/profile-page';
+import StudentProfile from '@/features/student-profile/components/profile-page';
 import { auth } from '@/shared/lib/auth';
-import { orderActivities } from '@/features/student-profile/lib/utils';
+import { orderActivities } from '@/features/student-profile/utils';
 
 interface StudentProfilePageProps {
   params: { username: string };

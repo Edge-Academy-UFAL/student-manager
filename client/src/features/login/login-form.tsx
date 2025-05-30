@@ -17,7 +17,7 @@ import { toast } from 'sonner';
 
 import { signIn, useSession } from 'next-auth/react';
 
-import { LoginFormSchema } from './schema';
+import { LoginFormSchema } from './schemas';
 
 export function LoginForm() {
   const form = useForm<LoginFormSchema>({

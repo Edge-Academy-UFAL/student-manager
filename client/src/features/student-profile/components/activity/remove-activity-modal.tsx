@@ -18,7 +18,7 @@ import { Trash } from 'lucide-react';
 
 import { LoadingSpinner } from '@/shared/components/custom/loading-spinner';
 
-import { removeActivity } from '@/features/student-profile/lib/request/remove-activity-req';
+import { removeActivity } from '@/features/student-profile/api/remove-activity-req';
 
 import { toast } from 'sonner';
 

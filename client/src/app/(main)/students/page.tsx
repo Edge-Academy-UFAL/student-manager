@@ -1,4 +1,4 @@
-import StudentsDataTable from '@/features/students/ui/students-table';
+import StudentsDataTable from '@/features/students/components/students-table';
 import { auth } from '@/shared/lib/auth';
 
 const StudentSearchPage = async () => {

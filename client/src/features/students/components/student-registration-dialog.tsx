@@ -23,7 +23,10 @@ import { ScrollArea } from '@/shared/components/ui/scroll-area';
 import { Badge } from '@/shared/components/ui/badge';
 import { PlusIcon, ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
-import { MonthSelect, YearSelect } from '@/features/students/ui/custom-select';
+import {
+  MonthSelect,
+  YearSelect,
+} from '@/features/students/components/custom-select';
 import { LoadingSpinner } from '@/shared/components/custom/loading-spinner';
 import { useSession } from 'next-auth/react';
 

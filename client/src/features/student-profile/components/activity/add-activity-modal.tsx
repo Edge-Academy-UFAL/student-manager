@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Switch } from '@/shared/components/ui/switch';
 import { Input } from '@/shared/components/ui/input';
@@ -16,20 +16,18 @@ import {
 } from '@/shared/components/ui/select';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
+  DialogTrigger,
+  DialogClose,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogDescription,
 } from '@/shared/components/ui/dialog';
 
-import { CalendarIcon, FilePenLine } from 'lucide-react';
+import { CalendarIcon, Plus } from 'lucide-react';
 
-import { editActivity } from '@/features/student-profile/lib/request/edit-activity-req';
-
-import { Activity } from '@/features/student-profile/models';
+import { addActivity } from '@/features/student-profile/api/add-activity-req';
 
 import {
   Popover,
@@ -37,60 +35,50 @@ import {
   PopoverTrigger,
 } from '@/shared/components/ui/popover';
 
-import { CalendarWithDropdowns } from '@/features/student-profile/ui/calendar-with-dropdowns';
+import { CalendarWithDropdowns } from '@/features/student-profile/components/calendar-with-dropdowns';
 import { ptBR } from 'date-fns/locale';
-import {
-  cn,
-  formatDateToReadableBRFormat,
-  createDateOnCurrentTimezone,
-  formatDateToYYYYMMDD,
-} from '@/shared/lib/utils';
+import { cn, formatDateToReadableBRFormat } from '@/shared/lib/utils';
 
 import { toast } from 'sonner';
 import { ACTIVITY_TYPES } from '@/features/student-profile/models';
 
-const EditActivityModal = ({
-  name,
-  activityType,
-  description,
-  startDate,
-  conclusionDate,
-  workShift,
-  paid,
-  onGoing,
-  activityId,
-}: Activity) => {
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+const AddActivityModal = () => {
+  const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
-  const [activityName, setActivityName] = useState(name || '');
-  const [activityDescription, setActivityDescription] = useState(
-    description || '',
-  );
-  const [activityWorkShift, setActivityWorkShift] = useState(workShift || '');
-  const [type, setType] = useState(activityType || '');
-  const [activityStartDate, setActivityStartDate] = useState(startDate || '');
-  const [activityEndDate, setActivityEndDate] = useState<string | null>(
-    conclusionDate || null,
-  );
+  const [name, setName] = React.useState('');
+  const [description, setDescription] = React.useState('');
+  const [workShift, setWorkShift] = React.useState('');
+  const [type, setType] = React.useState('');
+  const [startDate, setStartDate] = React.useState('');
+  const [endDate, setEndDate] = React.useState<string | null>(null);
 
-  const [activityStatusInProgress, setActivityStatusInProgress] = useState(
-    onGoing || false,
-  );
-  const [activityStatusPaid, setActivityStatusPaid] = useState(paid || false);
+  const [inProgress, setInProgress] = React.useState(false);
+  const [statusPaid, setStatusPaid] = React.useState(false);
 
-  const [nameError, setNameError] = useState('');
-  const [descriptionError, setDescriptionError] = useState('');
-  const [workShiftError, setWorkShiftError] = useState('');
-  const [typeError, setTypeError] = useState('');
-  const [startDateError, setStartDateError] = useState('');
-  const [endDateError, setEndDateError] = useState('');
+  const [nameError, setNameError] = React.useState('');
+  const [descriptionError, setDescriptionError] = React.useState('');
+  const [workShiftError, setWorkShiftError] = React.useState('');
+  const [typeError, setTypeError] = React.useState('');
+  const [startDateError, setStartDateError] = React.useState('');
+  const [endDateError, setEndDateError] = React.useState('');
+
+  const resetFields = () => {
+    setName('');
+    setDescription('');
+    setWorkShift('');
+    setType('');
+    setStartDate('');
+    setEndDate('');
+    setInProgress(false);
+    setStatusPaid(false);
+  };
 
   const validate = () => {
     let isValid = true;
 
-    // Validalção do nome
-    if (activityName.trim() === '') {
+    // Validação do nome
+    if (name.trim() === '') {
       setNameError('Campo obrigatório');
       isValid = false;
     } else {
@@ -98,7 +86,7 @@ const EditActivityModal = ({
     }
 
     // Validação da descrição
-    if (activityDescription.trim() === '') {
+    if (description.trim() === '') {
       setDescriptionError('Campo obrigatório');
       isValid = false;
     } else {
@@ -106,7 +94,7 @@ const EditActivityModal = ({
     }
 
     // Validação da dedicação semanal
-    if (activityWorkShift.toString().trim() === '') {
+    if (workShift.trim() === '') {
       setWorkShiftError('Campo obrigatório');
       isValid = false;
     } else {
@@ -114,9 +102,7 @@ const EditActivityModal = ({
     }
 
     // Validação do tipo
-    if (
-      !ACTIVITY_TYPES.map((activity) => activity.code).includes(type.toString())
-    ) {
+    if (!ACTIVITY_TYPES.map((activity) => activity.code).includes(type)) {
       setTypeError('Campo obrigatório');
       isValid = false;
     } else {
@@ -132,44 +118,43 @@ const EditActivityModal = ({
     }
 
     // Validação da data de término
-    if (!activityStatusInProgress && activityEndDate === null) {
+    if (!inProgress && endDate === null) {
       setEndDateError('Campo obrigatório');
       isValid = false;
     } else {
       setEndDateError('');
     }
-
     return isValid;
   };
-
   const handleSubmit = async () => {
     if (!validate()) {
       return;
     }
 
     const data = {
-      name: activityName,
-      activityId,
+      name,
+      description,
+      workShift: Number(workShift),
       activityType: type,
-      description: activityDescription,
-      startDate: activityStartDate,
-      conclusionDate: activityEndDate ? activityEndDate.slice(0, 10) : null,
-      workShift: Number(activityWorkShift),
-      paid: activityStatusPaid,
-      onGoing: activityStatusInProgress,
+      startDate: startDate.slice(0, 10),
+      conclusionDate: endDate ? endDate.slice(0, 10) : null,
+      onGoing: inProgress,
+      isPaid: statusPaid,
     };
 
     setLoading(true);
 
-    const res = await editActivity(data);
+    const res = await addActivity(data);
 
     if (res) {
       await new Promise((resolve) => setTimeout(resolve, 500));
+
       // setar todos os estados para o valor inicial
       setOpen(false);
-      toast('Atividade editada com sucesso!');
+      resetFields();
+      toast('Atividade adicionada com sucesso!');
     } else {
-      toast.error('Erro ao editar atividade.', {
+      toast.error('Erro ao adicionar atividade', {
         description: 'Tente novamente mais tarde.',
       });
     }
@@ -179,12 +164,9 @@ const EditActivityModal = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <span className="flex items-center gap-1">
-          <FilePenLine
-            size={15}
-            className="hover:text-muted-foreground hover:cursor-pointer"
-          />
-        </span>
+        <Button variant="secondary">
+          <Plus />
+        </Button>
       </DialogTrigger>
       <DialogContent className="p-0">
         <div
@@ -193,12 +175,12 @@ const EditActivityModal = ({
         >
           <DialogHeader>
             <DialogTitle className="mb-4 text-xl font-semibold">
-              Editar uma atividade extra
+              Adicionar uma atividade extra
             </DialogTitle>
             <DialogDescription className="text-foreground mb-6 text-sm">
-              Edite a atividade <span className="font-bold">{name} </span>
-              utilizando o formulário abaixo. Evite deixar informações
-              desatualizadas.
+              Adicione aqui uma atividade extra que você realizou ou está
+              realizando. Atividades extras podem incluir Pesquisa, Monitoria,
+              Estágio, Extensão ou outras atividades similares.
             </DialogDescription>
           </DialogHeader>
           <form>
@@ -209,14 +191,9 @@ const EditActivityModal = ({
               >
                 Tipo da atividade*
               </label>
-              <Select
-                onValueChange={(
-                  value: 'RESEARCH' | 'TUTORING' | 'INTERNSHIP' | 'OTHERS',
-                ) => setType(value)}
-                defaultValue={type}
-              >
+              <Select onValueChange={(value) => setType(value)}>
                 <SelectTrigger className="w-full" id="activity-type">
-                  <SelectValue placeholder="Selecione o tipo da atividade" />
+                  <SelectValue placeholder="Selecione a atividade" />
                 </SelectTrigger>
                 <SelectContent position="popper">
                   <SelectGroup>
@@ -250,8 +227,8 @@ const EditActivityModal = ({
               <Input
                 id="activity-name"
                 placeholder=""
-                value={activityName}
-                onChange={(e) => setActivityName(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
               {nameError && (
                 <span className="text-sm text-red-500">{nameError}</span>
@@ -267,8 +244,8 @@ const EditActivityModal = ({
               <Textarea
                 id="description"
                 placeholder="Escreva uma descrição detalhada da atividade."
-                value={activityDescription}
-                onChange={(e) => setActivityDescription(e.target.value)}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
               {descriptionError && (
                 <span className="text-sm text-red-500">{descriptionError}</span>
@@ -285,8 +262,8 @@ const EditActivityModal = ({
                 id="weekly-dedication"
                 placeholder="20"
                 type="number"
-                value={activityWorkShift}
-                onChange={(e) => setActivityWorkShift(e.target.value)}
+                value={workShift}
+                onChange={(e) => setWorkShift(e.target.value)}
               />
               {workShiftError && (
                 <span className="text-sm text-red-500">{workShiftError}</span>
@@ -306,13 +283,11 @@ const EditActivityModal = ({
                       variant={'outline'}
                       className={cn(
                         'w-full pl-3 text-left font-normal',
-                        !activityStartDate && 'text-muted-foreground',
+                        !startDate && 'text-muted-foreground',
                       )}
                     >
-                      {activityStartDate ? (
-                        formatDateToReadableBRFormat(
-                          new Date(activityStartDate),
-                        )
+                      {startDate ? (
+                        formatDateToReadableBRFormat(new Date(startDate))
                       ) : (
                         <span>Selecione um data</span>
                       )}
@@ -322,12 +297,12 @@ const EditActivityModal = ({
                   <PopoverContent className="w-auto p-0" align="start">
                     <CalendarWithDropdowns
                       locale={ptBR}
-                      defaultMonth={new Date(activityStartDate)}
-                      mode="single"
-                      selected={createDateOnCurrentTimezone(activityStartDate)}
-                      onSelect={(e) =>
-                        setActivityStartDate(e ? formatDateToYYYYMMDD(e) : '')
+                      defaultMonth={
+                        startDate ? new Date(startDate) : new Date()
                       }
+                      mode="single"
+                      selected={new Date(startDate || '')}
+                      onSelect={(e) => setStartDate(e?.toISOString() || '')}
                       disabled={(date) =>
                         date > new Date() || date < new Date('2000-01-01')
                       }
@@ -354,12 +329,12 @@ const EditActivityModal = ({
                       variant={'outline'}
                       className={cn(
                         'w-full pl-3 text-left font-normal',
-                        !activityEndDate && 'text-muted-foreground',
+                        !endDate && 'text-muted-foreground',
                       )}
-                      disabled={activityStatusInProgress}
+                      disabled={inProgress}
                     >
-                      {activityEndDate ? (
-                        formatDateToReadableBRFormat(new Date(activityEndDate))
+                      {endDate ? (
+                        formatDateToReadableBRFormat(new Date(endDate))
                       ) : (
                         <span>Selecione um data</span>
                       )}
@@ -369,14 +344,10 @@ const EditActivityModal = ({
                   <PopoverContent className="w-auto p-0" align="start">
                     <CalendarWithDropdowns
                       locale={ptBR}
-                      defaultMonth={
-                        activityEndDate ? new Date(activityEndDate) : new Date()
-                      }
+                      defaultMonth={endDate ? new Date(endDate) : new Date()}
                       mode="single"
-                      selected={createDateOnCurrentTimezone(activityEndDate)}
-                      onSelect={(e) =>
-                        setActivityEndDate(e ? formatDateToYYYYMMDD(e) : '')
-                      }
+                      selected={new Date(endDate || '')}
+                      onSelect={(e) => setEndDate(e?.toISOString() || '')}
                       disabled={(date) =>
                         date > new Date() || date < new Date('2000-01-01')
                       }
@@ -395,10 +366,10 @@ const EditActivityModal = ({
               <div className="mb-2 flex items-center">
                 <Switch
                   id="status-in-progress"
-                  checked={activityStatusInProgress}
+                  checked={inProgress}
                   onCheckedChange={(checked) => {
-                    setActivityStatusInProgress(checked);
-                    setActivityEndDate(null);
+                    setInProgress(checked);
+                    setEndDate(null);
                   }}
                 />
                 <Label className="ml-2 text-sm" htmlFor="status-in-progress">
@@ -408,9 +379,9 @@ const EditActivityModal = ({
               <div className="flex items-center">
                 <Switch
                   id="status-paid"
-                  checked={activityStatusPaid}
+                  checked={statusPaid}
                   onCheckedChange={(checked) => {
-                    setActivityStatusPaid(checked);
+                    setStatusPaid(checked);
                   }}
                 />
                 <Label className="ml-2 text-sm" htmlFor="status-paid">
@@ -426,7 +397,7 @@ const EditActivityModal = ({
                   </Button>
                 </DialogClose>
                 <Button onClick={handleSubmit} type="button" disabled={loading}>
-                  Editar
+                  Adicionar
                 </Button>
               </div>
             </DialogFooter>
@@ -437,4 +408,4 @@ const EditActivityModal = ({
   );
 };
 
-export default EditActivityModal;
+export default AddActivityModal;

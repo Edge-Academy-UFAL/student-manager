@@ -41,7 +41,7 @@ import {
   PopoverTrigger,
 } from '@/shared/components/ui/popover';
 
-import { CalendarWithDropdowns } from '@/features/student-profile/ui/calendar-with-dropdowns';
+import { CalendarWithDropdowns } from '@/features/student-profile/components/calendar-with-dropdowns';
 import { ptBR } from 'date-fns/locale';
 import {
   cn,
@@ -59,7 +59,7 @@ import { StudentInfo } from '@/features/student-profile/models';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { ScrollArea } from '@/shared/components/ui/scroll-area';
 
-import { editInfo } from '@/features/student-profile/lib/request/edit-info-req';
+import { editInfo } from '@/features/student-profile/api/edit-info-req';
 
 import { PhoneInput } from '@/shared/components/ui/phone-input';
 import { Value, parsePhoneNumber } from 'react-phone-number-input';

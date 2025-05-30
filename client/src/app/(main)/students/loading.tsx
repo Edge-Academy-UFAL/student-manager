@@ -1,12 +1,10 @@
 import React from 'react';
-import { DataTableSkeleton } from '@/features/students/ui/table-skeleton';
+import { DataTableSkeleton } from '@/features/students/components/table-skeleton';
 
-const Loading = () => {
+export default function Loading() {
   return (
     <div>
       <DataTableSkeleton columnCount={4} filterableColumnCount={2} />
     </div>
   );
-};
-
-export default Loading;
+}

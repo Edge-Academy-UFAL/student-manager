@@ -6,7 +6,7 @@ import { Student } from '@/shared/models';
 import { usePathname } from 'next/navigation';
 import { Fragment } from 'react';
 import { getUsername } from '@/shared/lib/utils';
-import AvatarEditable from '@/features/student/avatar-editable';
+import AvatarEditable from '@/features/student-header/avatar-editable';
 interface SubpageData {
   name: string;
   route: string;

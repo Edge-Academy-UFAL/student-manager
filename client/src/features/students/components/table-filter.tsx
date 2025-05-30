@@ -33,7 +33,7 @@ import MultipleSelector, {
 import {
   FilterOptionSelect,
   NumberFilteringOption,
-} from '@/features/students/ui/custom-select';
+} from '@/features/students/components/custom-select';
 
 import { Filter } from 'lucide-react';
 

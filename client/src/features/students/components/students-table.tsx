@@ -42,15 +42,15 @@ import {
   TableRow,
 } from '@/shared/components/ui/table';
 
-import { DeleteStudent } from '@/features/students/ui/delete-student';
+import { DeleteStudent } from '@/features/students/components/delete-student';
 import { getUsername } from '@/shared/lib/utils';
 import { enumToStringCourse } from '@/shared/lib/utils';
 
-import { StudentRegistrationDialog } from '@/features/students/ui/student-registration-dialog';
+import { StudentRegistrationDialog } from '@/features/students/components/student-registration-dialog';
 import {
   TableFiltersDropdown,
   tableGlobalFilterFn,
-} from '@/features/students/ui/table-filter';
+} from '@/features/students/components/table-filter';
 import Link from 'next/link';
 import { Student } from '@/features/students/models';
 

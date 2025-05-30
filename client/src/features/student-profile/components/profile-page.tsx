@@ -8,11 +8,11 @@ import {
   enumToStringCourse,
   formatDateToReadableBRFormat,
 } from '@/shared/lib/utils';
-import { StudentInfoEditDialog } from '@/features/student-profile/ui/student-info-edit-dialog';
+import { StudentInfoEditDialog } from '@/features/student-profile/components/student-info-edit-dialog';
 
-import ActivityCard from '@/features/student-profile/ui/activity/activity-card';
-import InfoBox from '@/features/student-profile/ui/info-box';
-import AddActivityModal from '@/features/student-profile/ui/activity/add-activity-modal';
+import ActivityCard from '@/features/student-profile/components/activity/activity-card';
+import InfoBox from '@/features/student-profile/components/info-box';
+import AddActivityModal from '@/features/student-profile/components/activity/add-activity-modal';
 
 import { Activity, StudentInfo } from '@/features/student-profile/models';
 

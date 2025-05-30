@@ -1,4 +1,4 @@
-import StudentPageHeader from '@/features/student/student-page-header';
+import StudentPageHeader from '@/features/student-header/student-page-header';
 import { auth } from '@/shared/lib/auth';
 
 const getData = async (email: string) => {

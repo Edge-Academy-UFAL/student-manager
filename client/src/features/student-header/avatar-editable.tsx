@@ -23,8 +23,8 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 
 import { getUsername } from '@/shared/lib/utils';
-import { getNameInitials } from '@/features/student/lib/utils';
-import { revalidateUserPage } from '@/shared/actions';
+import { getNameInitials } from '@/features/student-header/utils';
+import { revalidateUserPage } from '@/shared/lib/actions';
 
 const AvatarEditable = ({
   photoUrlProps,
