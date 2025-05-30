@@ -37,7 +37,8 @@ const StudentLayout = async ({
   children: React.ReactNode;
   params: { username: string };
 }>) => {
-  const studentData = await getData(`${params.username}@edge.ufal.br`);
+  const { username } = await params;
+  const studentData = await getData(`${username}@edge.ufal.br`);
   if (!studentData) {
     throw new Error('Erro ao buscar os dados');
   }

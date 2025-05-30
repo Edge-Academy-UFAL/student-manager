@@ -49,7 +49,8 @@ const fetchStudentData = async (email: string, token: string) => {
 };
 
 const StudentProfilePage = async ({ params }: StudentProfilePageProps) => {
-  const email = `${params.username}@edge.ufal.br`;
+  const { username } = await params;
+  const email = `${username}@edge.ufal.br`;
   const session = await auth();
 
   const studentProfileData = await fetchStudentData(
@@ -73,7 +74,7 @@ const StudentProfilePage = async ({ params }: StudentProfilePageProps) => {
   return (
     <div className="flex justify-center">
       <StudentProfile
-        username={params.username}
+        username={username}
         studentInfo={studentProfileData}
         activities={studentActivitiesData}
       />
