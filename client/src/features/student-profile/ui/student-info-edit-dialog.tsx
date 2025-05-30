@@ -219,7 +219,7 @@ const EditInfoDialogContent = ({
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Selecione o seu curso" />
                       </SelectTrigger>
                     </FormControl>
@@ -313,7 +313,7 @@ const EditInfoDialogContent = ({
                     value={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         {/* Reset the placeholder when invalid semester is selected */}
                         {field.value ? (
                           <SelectValue placeholder="Selecione o seu período" />

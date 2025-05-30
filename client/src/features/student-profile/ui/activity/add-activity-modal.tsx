@@ -20,6 +20,9 @@ import {
   DialogFooter,
   DialogTrigger,
   DialogClose,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
 } from '@/shared/components/ui/dialog';
 
 import { CalendarIcon, Plus } from 'lucide-react';
@@ -170,14 +173,16 @@ const AddActivityModal = () => {
           key="1"
           className="bg-background mx-auto max-w-lg rounded-lg border p-6 shadow"
         >
-          <h3 className="mb-4 text-xl font-semibold">
-            Adicionar uma atividade extra
-          </h3>
-          <p className="text-foreground mb-6 text-sm">
-            Adicione aqui uma atividade extra que você realizou ou está
-            realizando. Atividades extras podem incluir Pesquisa, Monitoria,
-            Estágio, Extensão ou outras atividades similares.
-          </p>
+          <DialogHeader>
+            <DialogTitle className="mb-4 text-xl font-semibold">
+              Adicionar uma atividade extra
+            </DialogTitle>
+            <DialogDescription className="text-foreground mb-6 text-sm">
+              Adicione aqui uma atividade extra que você realizou ou está
+              realizando. Atividades extras podem incluir Pesquisa, Monitoria,
+              Estágio, Extensão ou outras atividades similares.
+            </DialogDescription>
+          </DialogHeader>
           <form>
             <div className="mb-4">
               <label
@@ -187,7 +192,7 @@ const AddActivityModal = () => {
                 Tipo da atividade*
               </label>
               <Select onValueChange={(value) => setType(value)}>
-                <SelectTrigger id="activity-type">
+                <SelectTrigger className="w-full" id="activity-type">
                   <SelectValue placeholder="Selecione a atividade" />
                 </SelectTrigger>
                 <SelectContent position="popper">

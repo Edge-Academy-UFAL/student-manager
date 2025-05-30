@@ -36,7 +36,7 @@ function MonthSelect(props: {
 
   return (
     <Select onValueChange={props.onChange}>
-      <SelectTrigger className={`${inputColor}`}>
+      <SelectTrigger className={`w-full ${inputColor}`}>
         <SelectValue
           placeholder={props.value ? months[Number(props.value) - 1] : 'Mês'}
         />
@@ -73,7 +73,7 @@ function YearSelect(props: {
 
   return (
     <Select onValueChange={props.onChange}>
-      <SelectTrigger className={`${inputColor}`}>
+      <SelectTrigger className={`w-full ${inputColor}`}>
         <SelectValue placeholder={props.value ? props.value : 'Ano'} />
       </SelectTrigger>
       <SelectContent>
@@ -103,7 +103,7 @@ function FilterOptionSelect(props: {
       disabled={props.disabled || false}
     >
       <FormControl>
-        <SelectTrigger>
+        <SelectTrigger className="w-full">
           <SelectValue />
         </SelectTrigger>
       </FormControl>

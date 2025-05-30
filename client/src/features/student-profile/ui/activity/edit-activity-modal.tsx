@@ -18,7 +18,10 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from '@/shared/components/ui/dialog';
 
@@ -188,14 +191,16 @@ const EditActivityModal = ({
           key="1"
           className="bg-background mx-auto max-w-lg rounded-lg border p-6 shadow"
         >
-          <h3 className="mb-4 text-xl font-semibold">
-            Editar uma atividade extra
-          </h3>
-          <p className="text-foreground mb-6 text-sm">
-            Edite a atividade <span className="font-bold">{name} </span>
-            utilizando o formulário abaixo. Evite deixar informações
-            desatualizadas.
-          </p>
+          <DialogHeader>
+            <DialogTitle className="mb-4 text-xl font-semibold">
+              Editar uma atividade extra
+            </DialogTitle>
+            <DialogDescription className="text-foreground mb-6 text-sm">
+              Edite a atividade <span className="font-bold">{name} </span>
+              utilizando o formulário abaixo. Evite deixar informações
+              desatualizadas.
+            </DialogDescription>
+          </DialogHeader>
           <form>
             <div className="mb-4">
               <label
@@ -210,7 +215,7 @@ const EditActivityModal = ({
                 ) => setType(value)}
                 defaultValue={type}
               >
-                <SelectTrigger id="activity-type">
+                <SelectTrigger className="w-full" id="activity-type">
                   <SelectValue placeholder="Selecione o tipo da atividade" />
                 </SelectTrigger>
                 <SelectContent position="popper">
