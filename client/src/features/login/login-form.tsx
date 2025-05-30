@@ -22,6 +22,10 @@ import { LoginFormSchema } from './schema';
 export function LoginForm() {
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(LoginFormSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
   const { status } = useSession();
   const router = useRouter();
