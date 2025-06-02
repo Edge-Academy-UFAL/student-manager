@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Work_Sans, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/shared/components/ui/sonner';
 import { Providers } from '@/shared/components/providers/providers';
 import { auth } from '@/shared/lib/auth';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const workSans = Work_Sans({
+  variable: '--font-work-sans',
   subsets: ['latin'],
 });
 
@@ -29,7 +29,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${workSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers session={session}>{children}</Providers>
         <Toaster />
