@@ -47,7 +47,7 @@ public class InvitationServiceImpl implements InvitationService {
         this.studentRepository = studentRepository;
         this.applicationProperties = applicationProperties;
 
-        var resource = resourceLoader.getResource("classpath:templates/invitation-email.html");
+        var resource = resourceLoader.getResource("classpath:emails/student-invitation.html");
         this.invitationEmailTemplate = resource.getContentAsString(StandardCharsets.UTF_8);
     }
 
