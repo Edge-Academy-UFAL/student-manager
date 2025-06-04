@@ -1,5 +1,6 @@
 package com.academy.edge.studentmanager.controllers;
 
+import com.academy.edge.studentmanager.configs.ApplicationProperties;
 import com.academy.edge.studentmanager.dtos.InvitationRequestDTO;
 import com.academy.edge.studentmanager.dtos.StudentCreateDTO;
 import com.academy.edge.studentmanager.enums.Course;
@@ -62,6 +63,9 @@ public class InvitationControllerTest {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private ApplicationProperties applicationProperties;
+
     @RegisterExtension
     static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP_IMAP).withConfiguration(
             GreenMailConfiguration.aConfig().withUser("academy@edge.ufal.br", "test", "test"));
@@ -85,7 +89,7 @@ public class InvitationControllerTest {
 
         var firstMessage = receivedMessages[0];
         assertThat(firstMessage.getAllRecipients()).containsExactly(new InternetAddress(emails.get(0)));
-        assertThat((String)firstMessage.getContent()).contains("https://edge.academy.com/register");
+        assertThat((String)firstMessage.getContent()).contains(this.applicationProperties.frontendUrl() + "/register/");
     }
 
     @Test

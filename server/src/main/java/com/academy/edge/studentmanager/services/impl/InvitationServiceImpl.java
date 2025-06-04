@@ -1,5 +1,6 @@
 package com.academy.edge.studentmanager.services.impl;
 
+import com.academy.edge.studentmanager.configs.ApplicationProperties;
 import com.academy.edge.studentmanager.dtos.InvitationErrorDTO;
 import com.academy.edge.studentmanager.dtos.InvitationSendResponseDTO;
 import com.academy.edge.studentmanager.enums.InvitationErrorType;
@@ -31,17 +32,20 @@ public class InvitationServiceImpl implements InvitationService {
     private final InvitationRepository invitationRepository;
     private final StudentRepository studentRepository;
     private final EmailService emailService;
+    private final ApplicationProperties applicationProperties;
     private final String invitationEmailTemplate;
 
     public InvitationServiceImpl(
             EmailService emailService,
             StudentRepository studentRepository,
             InvitationRepository invitationRepository,
+            ApplicationProperties applicationProperties,
             ResourceLoader resourceLoader
     ) throws IOException {
         this.emailService = emailService;
         this.invitationRepository = invitationRepository;
         this.studentRepository = studentRepository;
+        this.applicationProperties = applicationProperties;
 
         var resource = resourceLoader.getResource("classpath:templates/invitation-email.html");
         this.invitationEmailTemplate = resource.getContentAsString(StandardCharsets.UTF_8);
@@ -92,7 +96,7 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     private String constructHtmlMessageText(String code) {
-        var registerUrl = "https://edge.academy.com/register/" + code;
+        var registerUrl = this.applicationProperties.frontendUrl() + "/register/" + code;
         return this.invitationEmailTemplate.replace("[[URL]]", registerUrl);
     }
 }
