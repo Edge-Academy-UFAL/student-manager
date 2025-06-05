@@ -1,0 +1,42 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+'use server';
+
+import { auth } from '@/shared/lib/auth';
+import { revalidateTag } from 'next/cache';
+
+export const editInfo = async (data: any) => {
+  'use server';
+
+  const session = await auth();
+  const token = session?.user.authToken;
+  const email = session?.user.email;
+
+  try {
+    const res = await fetch(
+      `${process.env.backendRoute}/api/v1/students/${email}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        method: 'PUT',
+        body: JSON.stringify(data),
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error('Erro ao editar os dados');
+    }
+
+    revalidateTag('user-data');
+
+    return {
+      status: res.status,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      status: 500,
+    };
+  }
+};
