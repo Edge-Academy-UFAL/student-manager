@@ -38,12 +38,12 @@ services:
     networks:
       - studentmanager-network
 
-  app:
+  server:
     image: gradle:8.5-jdk17-alpine
-    container_name: studentmanager_app
+    container_name: studentmanager_server
     working_dir: /app
     volumes:
-      - .:/app
+      - ./server:/app
     ports:
       - "8080:8080"
     command: [ "gradle", "bootRun" ]
