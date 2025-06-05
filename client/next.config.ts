@@ -1,4 +1,7 @@
 import type { NextConfig } from 'next';
+import { loadEnvConfig } from '@next/env'
+
+loadEnvConfig('..')
 
 /** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {

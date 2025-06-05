@@ -63,6 +63,20 @@ services:
       - minio
     networks:
       - studentmanager-network
+  client:
+    container_name: studentmanager_client
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+    env_file:
+      - .env
+    networks:
+      - studentmanager-network
 
 networks:
   studentmanager-network:
