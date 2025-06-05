@@ -6,7 +6,7 @@ const StudentSearchPage = async () => {
 
   const getData = async () => {
     try {
-      const res = await fetch(`${process.env.backendRoute}/api/v1/students`, {
+      const res = await fetch(`${process.env.SERVER_URL}/api/v1/students`, {
         headers: {
           Authorization: `Bearer ${session?.user.authToken}`,
         },

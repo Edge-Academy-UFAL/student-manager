@@ -27,7 +27,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         }
 
         const res = await fetch(
-          `${process.env.backendRoute}/api/v1/auth/login`,
+          `${process.env.SERVER_URL}/api/v1/auth/login`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -38,7 +38,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         if (res.status === 200) {
           const data = await res.json();
           const user = await fetch(
-            `${process.env.backendRoute}/api/v1/auth/me`,
+            `${process.env.SERVER_URL}/api/v1/auth/me`,
             {
               headers: {
                 Authorization: `Bearer ${data.token}`,

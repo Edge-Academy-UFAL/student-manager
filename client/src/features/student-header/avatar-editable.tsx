@@ -53,7 +53,7 @@ const AvatarEditable = ({
     formData.append('file', selectedImage as Blob);
 
     const response = await fetch(
-      `${process.env.backendRoute}/api/v1/students/${data?.user?.email}/photo`,
+      `${process.env.SERVER_URL}/api/v1/students/${data?.user?.email}/photo`,
       {
         method: 'PUT',
         body: formData,
@@ -84,7 +84,7 @@ const AvatarEditable = ({
   return (
     <Avatar className="group relative h-[155px] w-[155px]">
       <AvatarImage
-        src={`${process.env.backendRoute?.slice(0, -5)}:4566/student-manager-files/${photoUrl}`}
+        src={`${process.env.SERVER_URL?.slice(0, -5)}:4566/student-manager-files/${photoUrl}`}
         alt="student-profile-picture"
         className="object-cover"
       />
@@ -113,7 +113,7 @@ const AvatarEditable = ({
                   src={
                     selectedImage
                       ? URL.createObjectURL(selectedImage)
-                      : `${process.env.backendRoute?.slice(0, -5)}:4566/student-manager-files/` +
+                      : `${process.env.SERVER_URL?.slice(0, -5)}:4566/student-manager-files/` +
                         photoUrl
                   }
                   alt="Selected"

@@ -27,7 +27,7 @@ export function DeleteStudent(props: { name: string; email: string }) {
 
   async function handleDelete() {
     const res = await fetch(
-      `${process.env.backendRoute}/api/v1/students/` + props.email,
+      `${process.env.SERVER_URL}/api/v1/students/` + props.email,
       {
         method: 'DELETE',
         headers: {

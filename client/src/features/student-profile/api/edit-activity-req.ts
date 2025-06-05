@@ -13,7 +13,7 @@ export const editActivity = async (data: any) => {
   data.studentEmail = session?.user.email;
 
   try {
-    const res = await fetch(`${process.env.backendRoute}/api/v1/activities`, {
+    const res = await fetch(`${process.env.SERVER_URL}/api/v1/activities`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',

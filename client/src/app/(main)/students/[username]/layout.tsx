@@ -7,7 +7,7 @@ const getData = async (email: string) => {
 
   try {
     const res = await fetch(
-      `${process.env.backendRoute}/api/v1/students/${email}`,
+      `${process.env.SERVER_URL}/api/v1/students/${email}`,
       {
         method: 'GET',
         headers: {
