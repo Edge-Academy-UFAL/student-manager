@@ -8,7 +8,7 @@ interface StudentProfilePageProps {
 
 const fetchStudentActivities = async (email: string, token: string) => {
   const response = await fetch(
-    `${process.env.backendRoute}/api/v1/activities/${email}`,
+    `${process.env.SERVER_URL}/api/v1/activities/${email}`,
     {
       method: 'GET',
       headers: {
@@ -29,7 +29,7 @@ const fetchStudentActivities = async (email: string, token: string) => {
 
 const fetchStudentData = async (email: string, token: string) => {
   const response = await fetch(
-    `${process.env.backendRoute}/api/v1/students/${email}`,
+    `${process.env.SERVER_URL}/api/v1/students/${email}`,
     {
       method: 'GET',
       headers: {

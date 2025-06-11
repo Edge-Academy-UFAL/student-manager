@@ -11,7 +11,7 @@ export const removeActivity = async (data: any) => {
   const token = session?.user.authToken;
 
   try {
-    const res = await fetch(`${process.env.backendRoute}/api/v1/activities`, {
+    const res = await fetch(`${process.env.SERVER_URL}/api/v1/activities`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',

@@ -483,7 +483,7 @@ export function StudentRegistrationDialog() {
     // Get logged user credentials
     const token = data?.user.authToken;
 
-    const res = await fetch(`${process.env.backendRoute}/api/v1/register`, {
+    const res = await fetch(`${process.env.SERVER_URL}/api/v1/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

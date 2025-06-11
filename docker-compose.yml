@@ -38,12 +38,12 @@ services:
     networks:
       - studentmanager-network
 
-  app:
+  server:
     image: gradle:8.5-jdk17-alpine
-    container_name: studentmanager_app
+    container_name: studentmanager_server
     working_dir: /app
     volumes:
-      - .:/app
+      - ./server:/app
     ports:
       - "8080:8080"
     command: [ "gradle", "bootRun" ]
@@ -61,6 +61,20 @@ services:
     depends_on:
       - postgres
       - minio
+    networks:
+      - studentmanager-network
+  client:
+    container_name: studentmanager_client
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+    env_file:
+      - .env
     networks:
       - studentmanager-network
 

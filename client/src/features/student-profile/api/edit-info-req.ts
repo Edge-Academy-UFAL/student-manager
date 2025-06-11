@@ -13,7 +13,7 @@ export const editInfo = async (data: any) => {
 
   try {
     const res = await fetch(
-      `${process.env.backendRoute}/api/v1/students/${email}`,
+      `${process.env.SERVER_URL}/api/v1/students/${email}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
