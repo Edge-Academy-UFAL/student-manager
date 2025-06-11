@@ -1,6 +1,9 @@
 package com.academy.edge.studentmanager.services.impl;
 
+import com.academy.edge.studentmanager.configs.ApplicationProperties;
+import com.academy.edge.studentmanager.dtos.InvitationErrorDTO;
 import com.academy.edge.studentmanager.dtos.InvitationSendResponseDTO;
+import com.academy.edge.studentmanager.enums.InvitationErrorType;
 import com.academy.edge.studentmanager.models.Invitation;
 import com.academy.edge.studentmanager.repositories.InvitationRepository;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
@@ -29,19 +32,22 @@ public class InvitationServiceImpl implements InvitationService {
     private final InvitationRepository invitationRepository;
     private final StudentRepository studentRepository;
     private final EmailService emailService;
+    private final ApplicationProperties applicationProperties;
     private final String invitationEmailTemplate;
 
     public InvitationServiceImpl(
             EmailService emailService,
             StudentRepository studentRepository,
             InvitationRepository invitationRepository,
+            ApplicationProperties applicationProperties,
             ResourceLoader resourceLoader
     ) throws IOException {
         this.emailService = emailService;
         this.invitationRepository = invitationRepository;
         this.studentRepository = studentRepository;
+        this.applicationProperties = applicationProperties;
 
-        var resource = resourceLoader.getResource("classpath:templates/invitation-email.html");
+        var resource = resourceLoader.getResource("classpath:emails/student-invitation.html");
         this.invitationEmailTemplate = resource.getContentAsString(StandardCharsets.UTF_8);
     }
 
@@ -61,11 +67,11 @@ public class InvitationServiceImpl implements InvitationService {
     public InvitationSendResponseDTO sendInvitations(List<String> emails, int studentGroup, LocalDate entryDate) {
         var uniqueEmails = new LinkedHashSet<>(emails);
         var successfulEmails = new ArrayList<String>();
-        var failedEmails = new HashMap<String, String>();
+        var failedEmails = new HashMap<String, InvitationErrorDTO>();
 
         for (var email : uniqueEmails) {
             if (studentRepository.existsByEmail(email)) {
-                failedEmails.put(email, "Email já cadastrado");
+                failedEmails.put(email, new InvitationErrorDTO(InvitationErrorType.ALREADY_REGISTERED, null));
                 continue;
             }
 
@@ -82,7 +88,7 @@ public class InvitationServiceImpl implements InvitationService {
                 successfulEmails.add(email);
             } catch (Exception e) {
                 log.error("Failed to send invitation email", e);
-                failedEmails.put(email, "Não foi possível enviar o convite: " + e.getMessage());
+                failedEmails.put(email, new InvitationErrorDTO(InvitationErrorType.SMTP_ERROR, e.getMessage()));
             }
         }
 
@@ -90,7 +96,7 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     private String constructHtmlMessageText(String code) {
-        var registerUrl = "https://edge.academy.com/register/" + code;
+        var registerUrl = this.applicationProperties.frontendUrl() + "/register/" + code;
         return this.invitationEmailTemplate.replace("[[URL]]", registerUrl);
     }
 }
