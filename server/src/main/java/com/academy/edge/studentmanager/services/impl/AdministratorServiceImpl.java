@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 
 @Log4j2
 @Service
-public class AdmininstratorServiceImpl implements AdministratorService {
+public class AdministratorServiceImpl implements AdministratorService {
 
     private final AdministratorRepository administratorRepository;
     private final EmailService emailService;
@@ -28,7 +28,7 @@ public class AdmininstratorServiceImpl implements AdministratorService {
     private final ApplicationProperties applicationProperties;
     private final String invitationEmailTemplate;
 
-    public AdmininstratorServiceImpl(
+    public AdministratorServiceImpl(
             AdministratorRepository administratorRepository,
             EmailService emailService,
             PasswordEncoder passwordEncoder,
@@ -66,6 +66,28 @@ public class AdmininstratorServiceImpl implements AdministratorService {
         }
 
         return null;
+    }
+
+    @Override
+    public List<AdministratorResponseDTO> getAdministrators() {
+        List<AdministratorResponseDTO> administrators = new ArrayList<>();
+        this.administratorRepository.findAll().forEach(administrator -> administrators.add(modelMapper.map(administrator, AdministratorResponseDTO.class)));
+        return administrators;
+    }
+
+    @Override
+    public AdministratorResponseDTO getAdministratorByEmail(String email) {
+        Administrator administrator = administratorRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Administrator not found"));
+        return modelMapper.map(administrator, AdministratorResponseDTO.class);
+    }
+
+    @Override
+    public void deleteAdministrator(String email) {
+        Administrator administrator = administratorRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Administrator not found"));
+        administrator.setDeleted(true);
+        administratorRepository.save(administrator);
     }
 
     private String constructHtmlMessageText(String password) {

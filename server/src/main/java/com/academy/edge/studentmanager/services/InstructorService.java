@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface InstructorService {
     InstructorResponseDTO getInstructorByEmail(String email);
+    
     List<InstructorResponseDTO> getAllInstructors();
 }

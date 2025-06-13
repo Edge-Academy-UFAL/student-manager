@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdministratorRepository extends CrudRepository<Administrator, String> {
     boolean existsByEmail(String email);
+    Optional<Administrator> findByEmail(String email);
+    void deleteByEmail(String email);
 }
