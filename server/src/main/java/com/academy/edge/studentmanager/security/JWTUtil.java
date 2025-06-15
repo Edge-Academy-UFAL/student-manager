@@ -1,22 +1,22 @@
 package com.academy.edge.studentmanager.security;
 
 
+import com.academy.edge.studentmanager.configs.ApplicationProperties;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
 @Component
+@RequiredArgsConstructor
 public class JWTUtil {
-    @Value("${jwt_secret}")
-    private String jwtSecret;
-
+    private final ApplicationProperties applicationProperties;
 
     public String generateToken(UserDetails userDetails) {
         int oneDay = 1000 * 60 * 60 * 24;
@@ -27,13 +27,13 @@ public class JWTUtil {
                 .withIssuedAt(Instant.now())
                 .withIssuer("com.academy.edge.studentmanager")
                 .withExpiresAt(Instant.now().plusMillis(oneDay))
-                .sign(Algorithm.HMAC256(jwtSecret));
+                .sign(Algorithm.HMAC256(this.applicationProperties.jwtSecret()));
 
     }
 
     public String validateTokenAndRetrieveUsername(String token) {
         JWTVerifier verifier = JWT
-                .require(Algorithm.HMAC256(jwtSecret))
+                .require(Algorithm.HMAC256(this.applicationProperties.jwtSecret()))
                 .withSubject("User details")
                 .withIssuer("com.academy.edge.studentmanager")
                 .build();

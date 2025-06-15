@@ -1,0 +1,23 @@
+import type { NextConfig } from 'next';
+import { loadEnvConfig } from '@next/env'
+
+loadEnvConfig('..')
+
+/** @type {import('next').NextConfig} */
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+  },
+  env: {
+    SERVER_URL: process.env.SERVER_URL ?? 'http://127.0.0.1:8080',
+    awsUrl: process.env.awsUrl ?? 'http://172.0.0.1:4566',
+    awsBucket: process.env.awsBucket ?? 'student-manager-files',
+  },
+};
+
+export default nextConfig;

@@ -1,13 +1,11 @@
-import LoginAccount from '@/components/auth/login'
-import { DotBackground } from '@/components/background'
+import LoginPageComponent from '@/features/login/login';
+import { DotBackground } from '@/shared/components/background';
 
-const LoginPage = () => {
+export default function LoginPage() {
   return (
-    <div>
+    <main>
       <DotBackground />
-      <LoginAccount />
-    </div>
-  )
+      <LoginPageComponent />
+    </main>
+  );
 }
-
-export default LoginPage

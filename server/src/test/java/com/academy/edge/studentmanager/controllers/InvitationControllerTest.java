@@ -1,8 +1,10 @@
 package com.academy.edge.studentmanager.controllers;
 
+import com.academy.edge.studentmanager.configs.ApplicationProperties;
 import com.academy.edge.studentmanager.dtos.InvitationRequestDTO;
 import com.academy.edge.studentmanager.dtos.StudentCreateDTO;
 import com.academy.edge.studentmanager.enums.Course;
+import com.academy.edge.studentmanager.enums.InvitationErrorType;
 import com.academy.edge.studentmanager.models.Student;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -61,6 +63,9 @@ public class InvitationControllerTest {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private ApplicationProperties applicationProperties;
+
     @RegisterExtension
     static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP_IMAP).withConfiguration(
             GreenMailConfiguration.aConfig().withUser("academy@edge.ufal.br", "test", "test"));
@@ -84,7 +89,7 @@ public class InvitationControllerTest {
 
         var firstMessage = receivedMessages[0];
         assertThat(firstMessage.getAllRecipients()).containsExactly(new InternetAddress(emails.get(0)));
-        assertThat((String)firstMessage.getContent()).contains("https://edge.academy.com/register");
+        assertThat((String)firstMessage.getContent()).contains(this.applicationProperties.frontendUrl() + "/register/");
     }
 
     @Test
@@ -123,13 +128,17 @@ public class InvitationControllerTest {
             }
         });
 
+        var expectedError = InvitationErrorType.SMTP_ERROR.toString();
         mockMvc.perform(post("/api/v1/register").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isMultiStatus())
                 .andExpect(jsonPath("$.successfulEmails").isArray())
                 .andExpect(jsonPath("$.successfulEmails.length()").value(1))
                 .andExpect(jsonPath("$.failedEmails").isMap())
-                .andExpect(jsonPath("$.failedEmails.length()").value(2));
+                .andExpect(jsonPath("$.failedEmails.length()").value(2))
+                .andExpect(jsonPath("$.failedEmails").value(hasKey(emails.get(0))))
+                .andExpect(jsonPath("$.failedEmails['%s'].error", emails.get(0)).value(expectedError));
+
 
         var receivedMessages = greenMail.getReceivedMessages();
         assertThat(receivedMessages).hasSize(1);
@@ -144,13 +153,14 @@ public class InvitationControllerTest {
         var email = student.getEmail();
         var requestDTO = new InvitationRequestDTO(List.of(email), 1, LocalDate.now());
 
+        var expectedError = InvitationErrorType.ALREADY_REGISTERED.toString();
         mockMvc.perform(post("/api/v1/register").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isMultiStatus())
                 .andExpect(jsonPath("$.failedEmails").isMap())
                 .andExpect(jsonPath("$.failedEmails.length()").value(1))
                 .andExpect(jsonPath("$.failedEmails").value(hasKey(email)))
-                .andExpect(jsonPath("$.failedEmails['%s']", email).value("Email já cadastrado"));
+                .andExpect(jsonPath("$.failedEmails['%s'].error", email).value(expectedError));
     }
 
     @Test
