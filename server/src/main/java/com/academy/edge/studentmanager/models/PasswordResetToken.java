@@ -28,7 +28,7 @@ public class PasswordResetToken {
     private boolean used;
 
     public PasswordResetToken() {
-        this.expiryDate = calculateExpiryDate(EXPIRATION_MINUTES);
+        this.expiryDate = calculateExpiryDate();
     }
 
     public PasswordResetToken(String token, User user) {
@@ -37,8 +37,8 @@ public class PasswordResetToken {
         this.user = user;
     }
 
-    private LocalDateTime calculateExpiryDate(int expiryTimeInMinutes) {
-        return LocalDateTime.now().plusMinutes(expiryTimeInMinutes);
+    private LocalDateTime calculateExpiryDate() {
+        return LocalDateTime.now().plusMinutes(EXPIRATION_MINUTES);
     }
 
     public boolean isExpired() {

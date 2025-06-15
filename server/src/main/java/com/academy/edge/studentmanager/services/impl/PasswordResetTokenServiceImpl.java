@@ -37,7 +37,7 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
 
     }
 
-    public boolean validatePasswordResetToken(String token) throws RuntimeException {
+    public void validatePasswordResetToken(String token) throws RuntimeException {
         try {
             Optional<PasswordResetToken> passTokenOpt = tokenRepository.findByToken(token);
             if (passTokenOpt.isEmpty()) {
@@ -49,7 +49,6 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
 
                 throw new RuntimeException("Expired token");
             }
-            return true;
         } catch (Exception e) {
             throw new RuntimeException("Error validating password reset token", e);
         }

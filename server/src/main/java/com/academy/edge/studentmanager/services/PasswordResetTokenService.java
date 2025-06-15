@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface PasswordResetTokenService {
     String createPasswordResetTokenForUser(User user);
-    boolean validatePasswordResetToken(String token) throws RuntimeException;
+    void validatePasswordResetToken(String token) throws RuntimeException;
     User getUserByPasswordResetToken(String token) throws RuntimeException;
     void deletePasswordResetToken(String token) throws RuntimeException;
 }

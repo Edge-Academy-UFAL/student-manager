@@ -50,9 +50,8 @@ public class AuthServiceImpl implements AuthService {
     public String forgotPassword(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o email: " + email));
-        String token =  passwordResetTokenService.createPasswordResetTokenForUser(user);
 
-        return token;
+        return passwordResetTokenService.createPasswordResetTokenForUser(user);
     }
 
     @Override
