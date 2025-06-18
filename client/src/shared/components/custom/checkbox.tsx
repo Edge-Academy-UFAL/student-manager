@@ -1,8 +1,10 @@
 import * as Label from '@radix-ui/react-label';
 import { Checkbox } from '@/shared/components/ui/checkbox';
 import { cn } from '@/shared/lib/utils';
+import { useId } from 'react';
 
 type SimpleCheckboxProps = {
+  id?: string;
   label: string;
   checked?: boolean;
   onChange?: (value: boolean) => void;
@@ -12,6 +14,7 @@ type SimpleCheckboxProps = {
 };
 
 export function SimpleCheckbox({
+  id,
   label,
   checked,
   onChange,
@@ -19,9 +22,13 @@ export function SimpleCheckbox({
   className,
   inputClassName,
 }: SimpleCheckboxProps) {
+  const generatedId = useId();
+  const checkboxId = id ?? generatedId;
+
   return (
     <div className={cn('flex h-[48px] flex-row items-center gap-2', className)}>
       <Checkbox
+        id={checkboxId}
         name={name}
         checked={checked}
         onCheckedChange={onChange}
@@ -31,7 +38,7 @@ export function SimpleCheckbox({
         )}
       />
       <Label.Root
-        htmlFor={name}
+        htmlFor={checkboxId}
         className={cn('!text-body-md font-normal text-neutral-950')}
       >
         {label}

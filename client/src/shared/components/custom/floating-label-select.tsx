@@ -16,18 +16,19 @@ type SimpleSelectProps = React.ComponentProps<'select'> & {
   options: { label: string; value: string }[];
   onValueChange?: (value: string) => void;
   defaultValue?: string;
-  isRequired?: boolean;
 };
 
 export function FloatingLabelSelect({
+  id,
   label,
   options,
   defaultValue,
   onValueChange,
-  isRequired,
   ...props
 }: SimpleSelectProps) {
-  const selectId = useId();
+  const generatedId = useId();
+  const selectId = id ?? generatedId;
+
   const [selectedValue, setSelectedValue] = useState(defaultValue ?? '');
 
   function handleChange(value: string) {
@@ -76,7 +77,6 @@ export function FloatingLabelSelect({
         )}
       >
         {label}
-        {isRequired && <span className="ml-0.5">*</span>}
       </Label.Root>
     </div>
   );
