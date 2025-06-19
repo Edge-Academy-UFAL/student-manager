@@ -8,13 +8,12 @@ import com.academy.edge.studentmanager.models.User;
 import com.academy.edge.studentmanager.services.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -24,7 +23,7 @@ public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("/login")
-    public ResponseEntity<JwtAuthResponseDTO> signIn(@Valid @RequestBody SignInRequestDTO requestDTO){
+    public ResponseEntity<JwtAuthResponseDTO> signIn(@Valid @RequestBody SignInRequestDTO requestDTO) {
         String jwt = authService.login(requestDTO);
         JwtAuthResponseDTO responseDTO = new JwtAuthResponseDTO();
         responseDTO.setToken(jwt);
@@ -33,7 +32,7 @@ public class AuthController {
 
     // TODO: temporary endpoint for getting the current user
     @GetMapping("/me")
-    public ResponseEntity<User> me(@AuthenticationPrincipal User user){
+    public ResponseEntity<User> me(@AuthenticationPrincipal User user) {
         user.setPassword(null);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -49,13 +48,13 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    public String handlePasswordReset(@Valid @RequestBody NewPasswordRequestDTO newPasswordRequestDTO,
-                                      RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> handlePasswordReset(@Valid @RequestBody NewPasswordRequestDTO newPasswordRequestDTO
+    ) {
         try {
             authService.resetPassword(newPasswordRequestDTO);
 
-            redirectAttributes.addFlashAttribute("success", "Senha redefinida com sucesso. Você pode fazer login agora.");
-            return "redirect:/login";
+            return ResponseEntity.ok("Password reset successfully");
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
