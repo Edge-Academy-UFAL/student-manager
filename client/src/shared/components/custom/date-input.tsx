@@ -139,6 +139,8 @@ export function DateInput({
                   onChange(date);
                 }
                 setValue(formatDate(date));
+                setDate(date);
+                setMonth(date);
                 setOpen(false);
               }}
             />

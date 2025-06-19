@@ -75,8 +75,8 @@
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--color-neutral-100);
+  --color-foreground: var(--color-neutral-950);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -185,7 +185,7 @@
   --text-heading-sm: 22px;
   --text-heading-xs: 18px;
   --text-body-lg: 1.143rem;
-  --text-body-md: 1rem;
+  --text-body-md: 14px;
   --text-body-sm: 0.857rem;
   --text-label-lg: 1.143rem;
   --text-label-md: 1rem;
@@ -205,5 +205,11 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
   }
 }
