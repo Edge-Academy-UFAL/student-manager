@@ -59,7 +59,7 @@ function isValidDate(date: Date | undefined) {
   return !isNaN(date.getTime());
 }
 
-type DateInputProps = {
+type DateInputProps = Omit<React.ComponentProps<'input'>, 'defaultValue'> & {
   label: string;
   onChange: (value: Date | undefined) => void;
   defaultValue?: Date;
@@ -77,6 +77,7 @@ export function DateInput({
   name,
   disabled,
   className,
+  ...props
 }: DateInputProps) {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(defaultValue);
@@ -111,6 +112,7 @@ export function DateInput({
           }}
           inputMode="numeric"
           disabled={disabled}
+          aria-invalid={props['aria-invalid']}
         />
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>

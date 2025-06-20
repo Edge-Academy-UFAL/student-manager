@@ -7,7 +7,7 @@ import { FloatingLabelInput } from './floating-label-input';
 import { useId } from 'react';
 import React from 'react';
 
-type FloatingLabelPhoneInputProps = {
+type FloatingLabelPhoneInputProps = React.ComponentProps<'input'> & {
   label: string;
   value: string | undefined;
   onChange: (value: string | undefined) => void;
@@ -33,6 +33,7 @@ export function FloatingLabelPhoneInput({
   name,
   disabled,
   className,
+  ...props
 }: FloatingLabelPhoneInputProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
@@ -48,6 +49,7 @@ export function FloatingLabelPhoneInput({
         name={name}
         disabled={disabled}
         country="BR"
+        aria-invalid={props['aria-invalid']}
       />
     </div>
   );
