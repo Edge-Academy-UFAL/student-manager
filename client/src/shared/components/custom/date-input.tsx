@@ -119,6 +119,7 @@ export function DateInput({
             <Button
               variant="ghost"
               className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
+              disabled={disabled}
             >
               <CalendarIcon className="size-3.5 text-neutral-300" />
               <span className="sr-only">Select date</span>

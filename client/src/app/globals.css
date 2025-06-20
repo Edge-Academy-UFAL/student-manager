@@ -199,6 +199,16 @@
   --radius-xl: 48px;
 }
 
+@utility label-background-2-colors {
+  background: linear-gradient(
+    to top,
+    var(--color-neutral-100) 0%,
+    var(--color-neutral-100) 40%,
+    #fff 40%,
+    #fff 100%
+  );
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
