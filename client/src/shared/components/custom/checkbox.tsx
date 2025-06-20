@@ -11,6 +11,7 @@ type SimpleCheckboxProps = {
   name?: string;
   className?: string;
   inputClassName?: string;
+  disabled?: boolean;
 };
 
 export function SimpleCheckbox({
@@ -21,6 +22,7 @@ export function SimpleCheckbox({
   name,
   className,
   inputClassName,
+  disabled,
 }: SimpleCheckboxProps) {
   const generatedId = useId();
   const checkboxId = id ?? generatedId;
@@ -33,13 +35,16 @@ export function SimpleCheckbox({
         checked={checked}
         onCheckedChange={onChange}
         className={cn(
-          'data-[state=checked]:bg-brand-500 data-[state=checked]:border-brand-500 rounded-[2px] border-[2px] border-neutral-400',
+          'peer data-[state=checked]:bg-brand-500 data-[state=checked]:border-brand-500 rounded-[2px] border-[2px] border-neutral-400',
           inputClassName,
         )}
+        disabled={disabled}
       />
       <Label.Root
         htmlFor={checkboxId}
-        className={cn('!text-body-md font-normal text-neutral-950')}
+        className={cn(
+          '!text-body-md font-normal text-neutral-950 peer-disabled:text-neutral-300',
+        )}
       >
         {label}
       </Label.Root>

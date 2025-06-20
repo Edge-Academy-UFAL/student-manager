@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Select,
   SelectContent,
@@ -45,10 +43,12 @@ export function FloatingLabelSelect({
           id={selectId}
           data-size={undefined}
           className={cn(
-            'peer !text-body-md focus:border-brand-600 outline-brand-200 focus-visible:ring-brand-200 relative h-[48px] w-full rounded-md border border-neutral-300 bg-transparent px-[16px] py-[4px] font-normal text-neutral-900 focus:outline-none',
+            'peer !text-body-md focus:border-brand-600 outline-brand-200 focus-visible:ring-brand-200 relative h-[48px] w-full cursor-pointer rounded-md border border-neutral-300 bg-transparent px-[16px] py-[4px] font-normal text-neutral-900 focus:outline-none',
             'aria-invalid:border-destructive',
+            'disabled:border disabled:border-neutral-300 disabled:bg-neutral-100 disabled:text-neutral-300 disabled:opacity-100',
           )}
           aria-invalid={props['aria-invalid']}
+          disabled={props['disabled']}
         >
           <SelectValue placeholder=" " className="text-brand-600" />
         </SelectTrigger>
@@ -74,6 +74,9 @@ export function FloatingLabelSelect({
             ? 'top-1/2 -translate-y-1/2 scale-100'
             : 'top-1 -translate-y-4 scale-75',
           'peer-aria-invalid:text-danger-300',
+          isEmpty
+            ? 'peer-disabled:bg-neutral-100'
+            : 'peer-disabled:bg-linear-to-t peer-disabled:from-neutral-100 peer-disabled:from-50% peer-disabled:to-white peer-disabled:to-50%',
         )}
       >
         {label}
