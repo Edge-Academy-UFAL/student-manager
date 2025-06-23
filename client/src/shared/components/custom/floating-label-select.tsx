@@ -43,9 +43,9 @@ export function FloatingLabelSelect({
           id={selectId}
           data-size={undefined}
           className={cn(
-            'peer !text-body-md focus:border-brand-600 outline-brand-200 focus-visible:ring-brand-200 relative h-[48px] w-full cursor-pointer rounded-md border border-neutral-300 bg-transparent px-[16px] py-[4px] font-normal text-neutral-900 focus:outline-none',
+            'peer !text-body-md relative h-[48px] w-full cursor-pointer rounded-md border border-neutral-300 px-[16px] py-[4px] font-normal text-neutral-900 not-disabled:bg-white not-disabled:hover:bg-white focus:outline-none focus-visible:ring-neutral-200',
             'aria-invalid:border-destructive',
-            'disabled:border disabled:border-neutral-300 disabled:bg-neutral-100 disabled:text-neutral-300 disabled:opacity-100',
+            'disabled:border disabled:border-neutral-300 disabled:bg-neutral-100 disabled:text-neutral-300 disabled:opacity-100 disabled:hover:bg-neutral-100',
           )}
           aria-invalid={props['aria-invalid']}
           disabled={props['disabled']}

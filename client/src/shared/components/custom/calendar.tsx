@@ -102,7 +102,7 @@ function Calendar({
           defaultClassNames.day,
         ),
         day_button: cn(
-          'data-[selected-single=true]:bg-brand-600',
+          'dark:hover:bg-neutral-150 hover:data-[selected-single=true]:bg-brand-400 hover:data-[selected-single=true]:brightness-120',
           defaultClassNames.day_button,
         ),
         range_start: cn(
