@@ -1,11 +1,13 @@
 package com.academy.edge.studentmanager.controllers;
 
+import com.academy.edge.studentmanager.dtos.SignInRequestDTO;
 import com.academy.edge.studentmanager.dtos.StudentCreateDTO;
 import com.academy.edge.studentmanager.dtos.StudentTerminateDTO;
 import com.academy.edge.studentmanager.enums.Course;
 import com.academy.edge.studentmanager.models.Student;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -39,7 +42,28 @@ public class StudentControllerTest {
     private ModelMapper modelMapper;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private StudentRepository studentRepository;
+
+    @Test
+    void studentCanLogin() throws Exception {
+        var student = studentRepository.save(getTestStudent(1));
+        var requestDTO = new SignInRequestDTO(student.getEmail(), "Edge12345678@");
+
+        var result = mockMvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").isString())
+                .andReturn();
+
+        var token = JsonPath.read(result.getResponse().getContentAsString(), "$.token");
+
+        mockMvc.perform(get("/api/v1/auth/me").header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(student.getName()));
+    }
 
     @Test
     @WithMockUser(roles = "ADMIN")
@@ -154,6 +178,7 @@ public class StudentControllerTest {
                 ""
         );
         var student = modelMapper.map(createDTO, Student.class);
+        student.setPassword(passwordEncoder.encode(student.getPassword()));
         student.setEntryDate(LocalDate.now());
         return student;
     }
