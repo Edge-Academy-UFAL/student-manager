@@ -4,7 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class TerminateStudentDTO {
+@AllArgsConstructor
+public class StudentTerminateDTO {
     @NotBlank(message = "Justificativa é obrigatória")
     private String terminationReason;
 }
