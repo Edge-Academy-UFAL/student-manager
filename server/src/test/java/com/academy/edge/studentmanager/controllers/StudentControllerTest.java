@@ -1,23 +1,25 @@
 package com.academy.edge.studentmanager.controllers;
 
 import com.academy.edge.studentmanager.dtos.StudentCreateDTO;
+import com.academy.edge.studentmanager.dtos.StudentTerminateDTO;
 import com.academy.edge.studentmanager.enums.Course;
 import com.academy.edge.studentmanager.models.Student;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,6 +31,9 @@ public class StudentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -100,6 +105,36 @@ public class StudentControllerTest {
         var student1 = studentRepository.save(getTestStudent(1));
 
         mockMvc.perform(delete("/api/v1/students/{email}", student1.getEmail())).andExpect(status().isForbidden());
+
+        mockMvc.perform(get("/api/v1/students/{email}", student1.getEmail())).andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void adminCanTerminateStudentAccount() throws Exception {
+        var student1 = studentRepository.save(getTestStudent(1));
+        var requestDTO = new StudentTerminateDTO("Comeu toda a pipoca.");
+
+        mockMvc.perform(patch(
+                "/api/v1/students/{email}/terminate",
+                student1.getEmail()
+        ).contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDTO))).andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/v1/students/{email}", student1.getEmail())).andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser(roles = "STUDENT", username = "student1@email.com")
+    void studentCannotTerminateAccount() throws Exception {
+        var student1 = studentRepository.save(getTestStudent(1));
+        var requestDTO = new StudentTerminateDTO("Comeu toda a pipoca.");
+
+        mockMvc.perform(patch(
+                "/api/v1/students/{email}/terminate",
+                student1.getEmail()
+        ).contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDTO))).andExpect(status().isForbidden());
 
         mockMvc.perform(get("/api/v1/students/{email}", student1.getEmail())).andExpect(status().isOk());
     }

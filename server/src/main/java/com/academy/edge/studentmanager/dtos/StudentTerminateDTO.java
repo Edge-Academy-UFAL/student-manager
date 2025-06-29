@@ -1,6 +1,7 @@
 package com.academy.edge.studentmanager.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
