@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Work_Sans, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import { Toaster } from '@/shared/components/ui/sonner';
+import { Toaster } from '@/shared/components/custom/toaster';
 import { Providers } from '@/shared/components/providers/providers';
 import { auth } from '@/shared/lib/auth';
 
@@ -27,7 +27,7 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="pt-br" suppressHydrationWarning>
       <body
         className={`${workSans.variable} ${geistMono.variable} antialiased`}
       >
