@@ -63,6 +63,7 @@ services:
       - minio
     networks:
       - studentmanager-network
+
   client:
     container_name: studentmanager_client
     build:
@@ -73,8 +74,13 @@ services:
     volumes:
       - ./client/src:/app/src
       - ./client/public:/app/public
-    env_file:
-      - .env
+    environment:
+      SERVER_URL: http://server:8080
+      S3_ENDPOINT_URL: http://minio:4566
+      S3_BUCKET: student-manager-files
+      NEXTAUTH_SECRET: my_ultra_secure_nextauth_secret
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_URL_INTERNAL: http://client:3000
     networks:
       - studentmanager-network
 
