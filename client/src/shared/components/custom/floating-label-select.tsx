@@ -9,11 +9,14 @@ import * as Label from '@radix-ui/react-label';
 import { cn } from '@/shared/lib/utils';
 import { useId, useState } from 'react';
 
-type SimpleSelectProps = React.ComponentProps<'select'> & {
+type SimpleSelectProps = {
+  id?: string;
   label: string;
   options: { label: string; value: string }[];
   onValueChange?: (value: string) => void;
   defaultValue?: string;
+  disabled?: boolean;
+  'aria-invalid'?: boolean;
 };
 
 export function FloatingLabelSelect({
@@ -22,6 +25,7 @@ export function FloatingLabelSelect({
   options,
   defaultValue,
   onValueChange,
+  disabled,
   ...props
 }: SimpleSelectProps) {
   const generatedId = useId();
@@ -48,7 +52,7 @@ export function FloatingLabelSelect({
             'disabled:border disabled:border-neutral-300 disabled:bg-neutral-100 disabled:text-neutral-300 disabled:opacity-100 disabled:hover:bg-neutral-100',
           )}
           aria-invalid={props['aria-invalid']}
-          disabled={props['disabled']}
+          disabled={disabled}
         >
           <SelectValue placeholder=" " className="text-brand-600" />
         </SelectTrigger>

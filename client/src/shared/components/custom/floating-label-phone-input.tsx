@@ -7,7 +7,7 @@ import { FloatingLabelInput } from './floating-label-input';
 import { useId } from 'react';
 import React from 'react';
 
-type FloatingLabelPhoneInputProps = React.ComponentProps<'input'> & {
+type FloatingLabelPhoneInputProps = {
   label: string;
   value: string | undefined;
   onChange: (value: string | undefined) => void;
@@ -15,6 +15,7 @@ type FloatingLabelPhoneInputProps = React.ComponentProps<'input'> & {
   name?: string;
   disabled?: boolean;
   className?: string;
+  'aria-invalid'?: boolean;
 };
 
 const FloatingPhoneInputAdapter = React.forwardRef<
