@@ -20,7 +20,7 @@ export function UserSheet() {
   const { status, data } = useSession();
 
   const photoUrl = data?.user.photoUrl
-    ? `${process.env.awsUrl}/${process.env.awsBucket}/${data?.user.photoUrl}`
+    ? `${process.env.S3_ENDPOINT_URL}/${process.env.S3_BUCKET}/${data?.user.photoUrl}`
     : undefined;
 
   const username = data?.user.name;
