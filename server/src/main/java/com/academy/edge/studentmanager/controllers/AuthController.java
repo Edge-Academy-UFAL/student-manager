@@ -1,5 +1,6 @@
 package com.academy.edge.studentmanager.controllers;
 
+import com.academy.edge.studentmanager.dtos.AuthMeResponseDTO;
 import com.academy.edge.studentmanager.dtos.ForgetPasswordRequestDTO;
 import com.academy.edge.studentmanager.dtos.JwtAuthResponseDTO;
 import com.academy.edge.studentmanager.dtos.NewPasswordRequestDTO;
@@ -8,6 +9,7 @@ import com.academy.edge.studentmanager.models.User;
 import com.academy.edge.studentmanager.services.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,7 +21,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    final AuthService authService;
+    private final AuthService authService;
+    private final ModelMapper modelMapper;
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("/login")
@@ -32,9 +35,9 @@ public class AuthController {
 
     // TODO: temporary endpoint for getting the current user
     @GetMapping("/me")
-    public ResponseEntity<User> me(@AuthenticationPrincipal User user) {
-        user.setPassword(null);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<AuthMeResponseDTO> me(@AuthenticationPrincipal User user) {
+        var responseDTO = modelMapper.map(user, AuthMeResponseDTO.class);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @PostMapping("/forgot-password")

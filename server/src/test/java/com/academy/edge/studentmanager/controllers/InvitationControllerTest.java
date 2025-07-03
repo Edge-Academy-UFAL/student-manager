@@ -25,6 +25,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -39,9 +40,7 @@ import java.util.regex.Pattern;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasKey;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,6 +58,9 @@ public class InvitationControllerTest {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private StudentRepository studentRepository;
@@ -147,9 +149,7 @@ public class InvitationControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void cannotInviteRegisteredEmail() throws Exception {
-        var student = getTestStudent();
-        studentRepository.save(student);
-
+        var student = studentRepository.save(getTestStudent());
         var email = student.getEmail();
         var requestDTO = new InvitationRequestDTO(List.of(email), 1, LocalDate.now());
 
@@ -241,6 +241,7 @@ public class InvitationControllerTest {
 
     Student getTestStudent() {
         var student = modelMapper.map(getTestStudentCreateDTO(""), Student.class);
+        student.setPassword(passwordEncoder.encode(student.getPassword()));
         student.setEntryDate(LocalDate.now());
         return student;
     }

@@ -2,11 +2,10 @@ package com.academy.edge.studentmanager.utils;
 
 
 import com.academy.edge.studentmanager.enums.Course;
-import com.academy.edge.studentmanager.enums.InstructorSpecialization;
-import com.academy.edge.studentmanager.models.Instructor;
+import com.academy.edge.studentmanager.models.Administrator;
 import com.academy.edge.studentmanager.models.Student;
 import com.academy.edge.studentmanager.models.Invitation;
-import com.academy.edge.studentmanager.repositories.InstructorRepository;
+import com.academy.edge.studentmanager.repositories.AdministratorRepository;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
 import com.academy.edge.studentmanager.repositories.InvitationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ import java.time.LocalDate;
 public class DataInitializer implements CommandLineRunner {
 
     @Autowired
-    private InstructorRepository instructorRepository;
+    private AdministratorRepository administratorRepository;
 
     @Autowired
     private StudentRepository studentRepository;
@@ -32,32 +31,32 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) {
-        if (instructorRepository.findByEmail("admin@admin.com").isEmpty()) {
-            Instructor instructor = new Instructor();
-            instructor.setName("Admin");
-            instructor.setEmail("admin@admin.com");
-            instructor.setPassword(passwordEncoder.encode("Admin123"));
-            instructor.setSpecialization(InstructorSpecialization.TECHNICAL);
-            instructorRepository.save(instructor);
+        if (administratorRepository.findByEmail("admin@admin.com").isEmpty()) {
+            var administrator = new Administrator();
+            administrator.setName("Admin");
+            administrator.setEmail("admin@admin.com");
+            administrator.setPassword(passwordEncoder.encode("Admin123"));
+            administratorRepository.save(administrator);
         }
 
-//        if(studentRepository.findByEmail("aluno@aluno.com").isEmpty()) {
-//            Student student = new Student();
-//            student.setName("Aluno");
-//            student.setEmail("aluno@aluno.com");
-//            student.setPassword(passwordEncoder.encode("Aluno123"));
-//            student.setCourse(Course.COMPUTER_SCIENCE);
-//            student.setRegistration("22111533");
-//            student.setPhone("82940028922");
-//            student.setPeriod(3);
-//            student.setEntryPeriod("2022.1");
-//            student.setStudentGroup(1);
-//            student.setEntryDate(LocalDate.now());
-//            student.setBirthDate(LocalDate.now());
-//            studentRepository.save(student);
-//        }
+        if (studentRepository.findByEmail("fulano.santos@edge.ufal.br").isEmpty()) {
+            var student = new Student();
+            student.setName("Fulano da Silva Santos");
+            student.setEmail("fulano.santos@edge.ufal.br");
+            student.setPassword(passwordEncoder.encode("Aluno123"));
+            student.setCourse(Course.COMPUTER_SCIENCE);
+            student.setRegistration("22111533");
+            student.setPhone("82940028922");
+            student.setPeriod(3);
+            student.setEntryPeriod("2022.1");
+            student.setStudentGroup(1);
+            student.setEntryDate(LocalDate.now());
+            student.setBirthDate(LocalDate.now());
+            studentRepository.save(student);
+        }
 
         // Initialize 50 invitations for manual testing purposes :D
         for (int i = 0; i < 50; i++) {

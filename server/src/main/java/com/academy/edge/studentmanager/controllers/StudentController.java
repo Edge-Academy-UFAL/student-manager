@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import com.academy.edge.studentmanager.dtos.TerminateStudentDTO;
+import com.academy.edge.studentmanager.dtos.StudentTerminateDTO;
 
 import java.util.List;
 
@@ -81,7 +81,7 @@ public class StudentController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> terminateStudent(
             @PathVariable String email,
-            @RequestBody @Valid TerminateStudentDTO dto) {
+            @RequestBody @Valid StudentTerminateDTO dto) {
         studentService.terminateStudent(email, dto.getTerminationReason());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

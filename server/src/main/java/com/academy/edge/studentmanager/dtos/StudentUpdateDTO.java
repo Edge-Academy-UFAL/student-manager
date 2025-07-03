@@ -3,7 +3,6 @@ package com.academy.edge.studentmanager.dtos;
 import com.academy.edge.studentmanager.enums.Course;
 import com.academy.edge.studentmanager.models.User;
 import com.academy.edge.studentmanager.models.Student;
-import com.academy.edge.studentmanager.validators.ValidBirthdate;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +15,7 @@ public class StudentUpdateDTO {
     private String name;
 
     @NotNull(message = "Insira uma data de nascimento")
-    @ValidBirthdate(message = "Informe uma data de nascimento válida")
+    @Past(message = "Informe uma data de nascimento válida")
     private String birthDate;
 
     @NotNull(message = "Curso é obrigatório")
