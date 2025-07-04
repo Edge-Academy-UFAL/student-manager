@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY --chown=developer:clientgroup /client/package*.json ./
 
-RUN ["npm", "install"]
+RUN ["npm", "ci"]
 
 COPY --chown=developer:clientgroup /client .
 
@@ -15,4 +15,4 @@ USER developer
 
 EXPOSE 3000
 
-CMD ["sh", "./entrypoint.sh"]
+CMD ["npm", "run", "dev"]

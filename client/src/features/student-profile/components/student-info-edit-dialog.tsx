@@ -61,7 +61,7 @@ import { ScrollArea } from '@/shared/components/ui/scroll-area';
 
 import { editInfo } from '@/features/student-profile/api/edit-info-req';
 
-import { PhoneInput } from '@/shared/components/ui/phone-input';
+// import { PhoneInput } from '@/shared/components/ui/phone-input';
 import { Value, parsePhoneNumber } from 'react-phone-number-input';
 
 import { EditInfoSchema } from '@/features/student-profile/schemas';
@@ -283,7 +283,7 @@ const EditInfoDialogContent = ({
                 <FormItem>
                   <FormLabel>Telefone Secundário</FormLabel>
                   <FormControl>
-                    <PhoneInput
+                    {/*<PhoneInput
                       initialValueFormat="national"
                       value={
                         parsePhoneNumber(
@@ -293,7 +293,7 @@ const EditInfoDialogContent = ({
                       }
                       onChange={field.onChange}
                       defaultCountry="BR"
-                    />
+                    />*/}
                   </FormControl>
                   <FormMessage />
                 </FormItem>

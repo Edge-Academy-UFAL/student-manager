@@ -1,6 +1,7 @@
 package com.academy.edge.studentmanager.controllers;
 
 import com.academy.edge.studentmanager.dtos.AdministratorCreateDTO;
+import com.academy.edge.studentmanager.dtos.SignInRequestDTO;
 import com.academy.edge.studentmanager.enums.InvitationErrorType;
 import com.academy.edge.studentmanager.models.Administrator;
 import com.academy.edge.studentmanager.repositories.AdministratorRepository;
@@ -9,6 +10,7 @@ import com.icegreen.greenmail.configuration.GreenMailConfiguration;
 import com.icegreen.greenmail.junit5.GreenMailExtension;
 import com.icegreen.greenmail.user.UserException;
 import com.icegreen.greenmail.util.ServerSetupTest;
+import com.jayway.jsonpath.JsonPath;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -17,11 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,6 +41,9 @@ public class AdministratorControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private AdministratorRepository administratorRepository;
@@ -103,9 +110,7 @@ public class AdministratorControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void cannotRegisterEmailAgain() throws Exception {
-        var administrator = getTestAdministrator();
-        administratorRepository.save(administrator);
-
+        var administrator = administratorRepository.save(getTestAdministrator());
         var requestDTO = new AdministratorCreateDTO(administrator.getName(), administrator.getEmail());
 
         mockMvc.perform(post("/api/v1/administrators").contentType(MediaType.APPLICATION_JSON)
@@ -115,11 +120,29 @@ public class AdministratorControllerTest {
                 .andExpect(jsonPath("$.error").value(InvitationErrorType.ALREADY_REGISTERED.toString()));
     }
 
+    @Test
+    void adminCanLogin() throws Exception {
+        var administrator = administratorRepository.save(getTestAdministrator());
+        var requestDTO = new SignInRequestDTO(administrator.getEmail(), "Admin123");
+
+        var result = mockMvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").isString())
+                .andReturn();
+
+        var token = JsonPath.read(result.getResponse().getContentAsString(), "$.token");
+
+        mockMvc.perform(get("/api/v1/auth/me").header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(administrator.getName()));
+    }
+
     Administrator getTestAdministrator() {
         var administrator = new Administrator();
         administrator.setName("John Doe");
         administrator.setEmail("admin1@email.com");
-        administrator.setPassword("admin1");
+        administrator.setPassword(passwordEncoder.encode("Admin123"));
         return administrator;
     }
 }

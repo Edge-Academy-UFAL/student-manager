@@ -53,6 +53,9 @@ public class Student extends User{
     @Column(nullable = false)
     private LocalDate entryDate;
 
+    @Column
+    private String terminationReason;
+
     /* This formula calculates the IRA based in a weighted average of the Student grades
         and the workload of the subjects of this grades
         See more: https://ufal.br/resolucoes/2023/rco-n-77-de-24-10-2023.pdf (Art. 48) */

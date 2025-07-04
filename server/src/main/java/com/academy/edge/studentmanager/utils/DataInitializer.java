@@ -31,6 +31,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) {
         if (administratorRepository.findByEmail("admin@admin.com").isEmpty()) {
@@ -38,25 +39,24 @@ public class DataInitializer implements CommandLineRunner {
             administrator.setName("Admin");
             administrator.setEmail("admin@admin.com");
             administrator.setPassword(passwordEncoder.encode("Admin123"));
-            //administrator.setSpecialization(AdministratorSpecialization.TECHNICAL);
             administratorRepository.save(administrator);
         }
 
-//        if(studentRepository.findByEmail("aluno@aluno.com").isEmpty()) {
-//            Student student = new Student();
-//            student.setName("Aluno");
-//            student.setEmail("aluno@aluno.com");
-//            student.setPassword(passwordEncoder.encode("Aluno123"));
-//            student.setCourse(Course.COMPUTER_SCIENCE);
-//            student.setRegistration("22111533");
-//            student.setPhone("82940028922");
-//            student.setPeriod(3);
-//            student.setEntryPeriod("2022.1");
-//            student.setStudentGroup(1);
-//            student.setEntryDate(LocalDate.now());
-//            student.setBirthDate(LocalDate.now());
-//            studentRepository.save(student);
-//        }
+        if (studentRepository.findByEmail("fulano.santos@edge.ufal.br").isEmpty()) {
+            var student = new Student();
+            student.setName("Fulano da Silva Santos");
+            student.setEmail("fulano.santos@edge.ufal.br");
+            student.setPassword(passwordEncoder.encode("Aluno123"));
+            student.setCourse(Course.COMPUTER_SCIENCE);
+            student.setRegistration("22111533");
+            student.setPhone("82940028922");
+            student.setPeriod(3);
+            student.setEntryPeriod("2022.1");
+            student.setStudentGroup(1);
+            student.setEntryDate(LocalDate.now());
+            student.setBirthDate(LocalDate.now());
+            studentRepository.save(student);
+        }
 
         // Initialize 50 invitations for manual testing purposes :D
         for (int i = 0; i < 50; i++) {

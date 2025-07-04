@@ -8,6 +8,8 @@ import java.util.Optional;
 
 @Repository
 public interface AdministratorRepository extends CrudRepository<Administrator, String> {
+    Optional<Administrator> findByEmail(String email);
+
     boolean existsByEmail(String email);
     Optional<Administrator> findByEmail(String email);
     void deleteByEmail(String email);
