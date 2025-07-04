@@ -15,4 +15,7 @@ public class AdministratorCreateDTO {
     @NotNull
     @Email(message = "Email inválido")
     private String email;
+
+    @NotNull (message = "Uma descrição é obrigatória")
+    private String about;
 }

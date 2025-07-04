@@ -11,15 +11,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdministratorResponseDTO {
+    private String id;
     private String name;
     private String email;
-
-
-    /////// Informações que tinham no Instructor e não estão no Administrator
-    // private String id;
-    // private String about;
-    // private String photoUrl;
-    // private String linkedIn;
-    // private String password;
-    // private InstructorSpecialization specialization;
+    private String about;
+    private String photoUrl;
 }

@@ -3,7 +3,6 @@ package com.academy.edge.studentmanager.controllers;
 import com.academy.edge.studentmanager.dtos.*;
 import com.academy.edge.studentmanager.enums.InvitationErrorType;
 import com.academy.edge.studentmanager.services.AdministratorService;
-import com.academy.edge.studentmanager.services.InstructorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

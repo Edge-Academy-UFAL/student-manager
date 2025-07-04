@@ -35,8 +35,8 @@ public class StudentControllerTest {
     private StudentService studentService;
 
     @Test
-    @WithMockUser(roles = {"INSTRUCTOR"})
-    void instructorCanAccessAllStudents() throws Exception {
+    @WithMockUser(roles = {"ADMIN"})
+    void administratorCanAccessAllStudents() throws Exception {
         StudentResponseDTO studentResponseDTO1 = new StudentResponseDTO();
         studentResponseDTO1.setId("1");
         studentResponseDTO1.setName("John Doe");
@@ -66,8 +66,8 @@ public class StudentControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"INSTRUCTOR"})
-    void instructorCanAccessStudent() throws Exception {
+    @WithMockUser(roles = {"ADMIN"})
+    void administratorCanAccessStudent() throws Exception {
         String userId = "uuid";
         String userEmail = "student@email.com";
         StudentResponseDTO studentResponseDTO = new StudentResponseDTO();
