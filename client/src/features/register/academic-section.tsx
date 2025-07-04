@@ -92,7 +92,7 @@ export default function AcademicDataFormSection({
           control={form.control}
           name="academyGroup"
           render={({ field }) => (
-            <FormItem className="w-full basis-1/4">
+            <FormItem className="w-full basis-1/3">
               <FormControl>
                 <FloatingLabelInput
                   label="Turma do Academy *"
@@ -108,7 +108,7 @@ export default function AcademicDataFormSection({
           control={form.control}
           name="academyOnboardingDate"
           render={({ field }) => (
-            <FormItem className="w-full basis-1/4">
+            <FormItem className="w-full basis-1/3">
               <FormControl>
                 <DateInput
                   label={'Ingresso no Academy *'}
@@ -125,7 +125,7 @@ export default function AcademicDataFormSection({
           control={form.control}
           name="academyStudentLevel"
           render={({ field }) => (
-            <FormItem className="w-full basis-2/4">
+            <FormItem className="w-full basis-1/3">
               <FormControl>
                 <FloatingLabelSelect
                   options={academyStudentLevelOptions}
