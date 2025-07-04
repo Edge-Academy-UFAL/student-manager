@@ -50,7 +50,7 @@ public class AdministratorController {
     }
 
     @DeleteMapping({"/{email}"})
-    //@PreAuthorize("hasAnyRole('ADMIN','INSTRUCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Void> deleteAdministrator(@PathVariable String email){
         administratorService.deleteAdministrator(email);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
