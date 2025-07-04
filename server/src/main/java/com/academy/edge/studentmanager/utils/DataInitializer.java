@@ -2,11 +2,12 @@ package com.academy.edge.studentmanager.utils;
 
 
 import com.academy.edge.studentmanager.enums.Course;
-import com.academy.edge.studentmanager.enums.InstructorSpecialization;
-import com.academy.edge.studentmanager.models.Instructor;
+//import com.academy.edge.studentmanager.enums.InstructorSpecialization;
+
 import com.academy.edge.studentmanager.models.Student;
+import com.academy.edge.studentmanager.models.Administrator;
 import com.academy.edge.studentmanager.models.Invitation;
-import com.academy.edge.studentmanager.repositories.InstructorRepository;
+import com.academy.edge.studentmanager.repositories.AdministratorRepository;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
 import com.academy.edge.studentmanager.repositories.InvitationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import java.time.LocalDate;
 public class DataInitializer implements CommandLineRunner {
 
     @Autowired
-    private InstructorRepository instructorRepository;
+    private AdministratorRepository administratorRepository;
 
     @Autowired
     private StudentRepository studentRepository;
@@ -34,13 +35,13 @@ public class DataInitializer implements CommandLineRunner {
     private PasswordEncoder passwordEncoder;
     @Override
     public void run(String... args) {
-        if (instructorRepository.findByEmail("admin@admin.com").isEmpty()) {
-            Instructor instructor = new Instructor();
-            instructor.setName("Admin");
-            instructor.setEmail("admin@admin.com");
-            instructor.setPassword(passwordEncoder.encode("Admin123"));
-            instructor.setSpecialization(InstructorSpecialization.TECHNICAL);
-            instructorRepository.save(instructor);
+        if (administratorRepository.findByEmail("admin@admin.com").isEmpty()) {
+            Administrator administrator = new Administrator();
+            administrator.setName("Admin");
+            administrator.setEmail("admin@admin.com");
+            administrator.setPassword(passwordEncoder.encode("Admin123"));
+            //administrator.setSpecialization(AdministratorSpecialization.TECHNICAL);
+            administratorRepository.save(administrator);
         }
 
 //        if(studentRepository.findByEmail("aluno@aluno.com").isEmpty()) {
