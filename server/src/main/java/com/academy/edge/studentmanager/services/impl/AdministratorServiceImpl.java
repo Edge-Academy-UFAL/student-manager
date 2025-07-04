@@ -1,22 +1,30 @@
 package com.academy.edge.studentmanager.services.impl;
 
 import com.academy.edge.studentmanager.configs.ApplicationProperties;
-import com.academy.edge.studentmanager.dtos.InvitationErrorDTO;
+import com.academy.edge.studentmanager.dtos.*;
 import com.academy.edge.studentmanager.enums.InvitationErrorType;
 import com.academy.edge.studentmanager.models.Administrator;
+import com.academy.edge.studentmanager.models.Student;
 import com.academy.edge.studentmanager.repositories.AdministratorRepository;
 import com.academy.edge.studentmanager.services.AdministratorService;
 import com.academy.edge.studentmanager.services.EmailService;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.HtmlUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Log4j2
 @Service
@@ -27,18 +35,21 @@ public class AdministratorServiceImpl implements AdministratorService {
     private final PasswordEncoder passwordEncoder;
     private final ApplicationProperties applicationProperties;
     private final String invitationEmailTemplate;
+    final private ModelMapper modelMapper;
 
     public AdministratorServiceImpl(
             AdministratorRepository administratorRepository,
             EmailService emailService,
             PasswordEncoder passwordEncoder,
             ApplicationProperties applicationProperties,
-            ResourceLoader resourceLoader
+            ResourceLoader resourceLoader,
+            ModelMapper modelMapper
     ) throws IOException {
         this.administratorRepository = administratorRepository;
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
         this.applicationProperties = applicationProperties;
+        this.modelMapper =  modelMapper;
 
         var resource = resourceLoader.getResource("classpath:emails/admin-invitation.html");
         this.invitationEmailTemplate = resource.getContentAsString(StandardCharsets.UTF_8);
@@ -80,6 +91,18 @@ public class AdministratorServiceImpl implements AdministratorService {
         Administrator administrator = administratorRepository
                 .findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Administrator not found"));
+        return modelMapper.map(administrator, AdministratorResponseDTO.class);
+    }
+
+    @Override
+    public AdministratorResponseDTO updateAdministrator(String email, AdministratorUpdateDTO administratorUpdateDTO) {
+        Administrator administrator = administratorRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Administrator not found with email: " + email));
+
+        modelMapper.map(administratorUpdateDTO, administrator);
+        administratorRepository.save(administrator);
+
         return modelMapper.map(administrator, AdministratorResponseDTO.class);
     }
 

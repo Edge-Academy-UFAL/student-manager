@@ -9,10 +9,10 @@ import lombok.Data;
 @AllArgsConstructor
 public class AdministratorCreateDTO {
 
-    @NotNull
+    @NotNull(message = "Nome é obrigatório")
     private String name;
 
     @NotNull
-    @Email
+    @Email(message = "Email inválido")
     private String email;
 }
