@@ -49,6 +49,15 @@ public class AdministratorController {
         return new ResponseEntity<>(administratorService.getAdministratorByEmail(email), HttpStatus.OK);
     }
 
+    @PutMapping({"/{email}"})
+    @PreAuthorize("hasAnyRole('ADMIN') or authentication.name == #email")
+    public ResponseEntity<AdministratorResponseDTO> updateAdministratorByEmail(@PathVariable String email,
+                                                     @RequestBody @Valid AdministratorUpdateDTO administratorUpdateDTO) {
+        AdministratorResponseDTO administratorResponseDTO = administratorService.updateAdministrator(email, administratorUpdateDTO);
+
+        return new ResponseEntity<>(administratorResponseDTO, HttpStatus.OK);
+    }
+
     @DeleteMapping({"/{email}"})
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Void> deleteAdministrator(@PathVariable String email){
