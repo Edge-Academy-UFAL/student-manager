@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { DotBackground } from '@/shared/components/background';
+import { DotBackground } from '@/shared/components/custom/dot-background';
 import Navbar from '@/features/navbar/header';
 
 export default function HomePage() {
