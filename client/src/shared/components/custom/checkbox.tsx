@@ -42,9 +42,7 @@ export function SimpleCheckbox({
       />
       <Label.Root
         htmlFor={checkboxId}
-        className={cn(
-          '!text-body-md font-normal text-neutral-950 peer-disabled:text-neutral-300',
-        )}
+        className="text-body-md font-normal text-neutral-950 peer-disabled:text-neutral-300"
       >
         {label}
       </Label.Root>
