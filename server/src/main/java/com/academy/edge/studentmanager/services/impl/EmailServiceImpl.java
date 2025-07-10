@@ -41,26 +41,17 @@ public class EmailServiceImpl implements EmailService {
 
     public void sendPasswordResetEmail(String to, String resetLink) {
         try {
-            MimeMessage mimeMessage = emailSender.createMimeMessage();
-
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
-
             var resource = this.resourceLoader.getResource("classpath:emails/forget-password.html");
             String htmlBody = resource.getContentAsString(StandardCharsets.UTF_8);
-
             htmlBody = htmlBody.replace("{{LINK_REDEFINICAO}}", resetLink);
 
-            helper.setTo(to);
-            helper.setSubject("Redefinição de Senha - SuaApp");
-            helper.setText(htmlBody, true);
-            helper.setFrom("nao-responda@suaapp.com");
+            String subject = "Redefinição de Senha - Academy";
 
-            emailSender.send(mimeMessage);
+            sendEmail(to, subject, htmlBody);
 
         } catch (MessagingException | IOException e) {
-            throw new IllegalStateException("Falha ao enviar o e-mail de redefinição de senha.");
+            throw new IllegalStateException("Falha ao enviar o e-mail de redefinição de senha.", e);
         }
     }
-
 
 }
