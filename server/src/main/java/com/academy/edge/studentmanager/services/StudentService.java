@@ -23,4 +23,6 @@ public interface StudentService {
     void deleteStudent(String email);
 
     StudentResponseDTO updateStudentAcademicRecord(String email, MultipartFile file);
+
+    void terminateStudent(String email, String terminationReason);
 }

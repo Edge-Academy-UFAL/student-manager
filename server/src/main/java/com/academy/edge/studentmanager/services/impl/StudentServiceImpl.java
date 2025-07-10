@@ -186,4 +186,12 @@ public class StudentServiceImpl implements StudentService {
 
         return modelMapper.map(student, StudentResponseDTO.class);
     }
+
+    @Override
+    public void terminateStudent(String email, String terminationReason) {
+        Student student = studentRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
+        student.setTerminationReason(terminationReason);
+        student.setDeleted(true);
+        studentRepository.save(student);
+    }
 }

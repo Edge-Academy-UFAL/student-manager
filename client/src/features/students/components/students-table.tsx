@@ -42,7 +42,7 @@ import {
   TableRow,
 } from '@/shared/components/ui/table';
 
-import { DeleteStudent } from '@/features/students/components/delete-student';
+import { TerminateStudentDialog } from '@/features/student-profile/components/terminate-student-dialog';
 import { getUsername } from '@/shared/lib/utils';
 import { enumToStringCourse } from '@/shared/lib/utils';
 
@@ -173,33 +173,38 @@ export default function StudentsDataTable({ data }: { data: Student[] }) {
       enableHiding: false,
       cell: ({ row }) => {
         const payment = row.original;
+        const terminateTriggerRef = React.useRef<HTMLDivElement>(null);
 
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <DotsHorizontalIcon className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <DropdownMenuItem>
-                <a
-                  href={`https://mail.google.com/a/edge.ufal.br/mail/?view=cm&to=${row.original.email}&su=Contato via plataforma Edge Academy&body=Olá, ${row.original.name}.%0A%0AEstou entrando em contato com você para falar sobre ...
+          <div onClick={(e) => e.stopPropagation()}>
+            <TerminateStudentDialog name={payment.name} email={payment.email}>
+              <div ref={terminateTriggerRef} />
+            </TerminateStudentDialog>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <DotsHorizontalIcon className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>
+                  <a
+                    href={`https://mail.google.com/a/edge.ufal.br/mail/?view=cm&to=${row.original.email}&su=Contato via plataforma Edge Academy&body=Olá, ${row.original.name}.%0A%0AEstou entrando em contato com você para falar sobre ...
                   `}
-                  target="_blank"
+                    target="_blank"
+                  >
+                    Enviar Mensagem
+                  </a>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => terminateTriggerRef.current?.click()}
                 >
-                  Enviar Mensagem
-                </a>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={(e) => e.preventDefault()}>
-                <DeleteStudent name={payment.name} email={payment.email} />
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  Desligar aluno
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         );
       },
     },
