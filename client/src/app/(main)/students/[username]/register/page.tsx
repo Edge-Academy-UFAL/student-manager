@@ -1,4 +1,6 @@
 import StudentRegisterPageComponent from '@/features/register/register-page';
+import { Breadcrumbs } from '@/shared/components/custom/breadcrumbs';
+import { UserRound } from 'lucide-react';
 
 interface StudentRegisterPageProps {
   params: { username: string };
@@ -9,5 +11,16 @@ export default async function StudentRegisterPage({
   const { username } = await params;
   console.log(username);
 
-  return <StudentRegisterPageComponent />;
+  return (
+    <div>
+      <Breadcrumbs
+        Icon={UserRound}
+        items={[
+          { label: 'Meu Perfil', href: `/student/${username}` },
+          { label: 'Editar dados cadastrais' },
+        ]}
+      />
+      <StudentRegisterPageComponent />;
+    </div>
+  );
 }
