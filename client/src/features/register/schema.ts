@@ -2,6 +2,10 @@ import { z } from 'zod';
 import { isValidCEP, isValidCPF } from './utils';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 
+const MAX_FILE_SIZE = 5000000;
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
+const ACCEPTED_DOCUMENT_TYPES = [...ACCEPTED_IMAGE_TYPES, 'application/pdf'];
+
 export const registerFormSchema = z.object({
   name: z
     .string()
@@ -138,4 +142,61 @@ export const registerFormSchema = z.object({
   academyStudentLevel: z.string().nonempty({
     message: 'O nível do aluno é obrigatório.',
   }),
+  photo: z
+    .any()
+    .refine((file) => file, { message: 'A foto é obrigatória.' })
+    .refine(
+      (file) => file?.size <= MAX_FILE_SIZE,
+      `Tamanho máximo de arquivo excedido. O arquivo deve ter no máximo 5MB.`,
+    )
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      'Apenas os formatos .jpg, .jpeg e .png são suportados.',
+    ),
+  rgFile: z
+    .any()
+    .refine((file) => file, { message: 'A foto do RG é obrigatória.' })
+    .refine(
+      (file) => file?.size <= MAX_FILE_SIZE,
+      `Tamanho máximo de arquivo excedido. O arquivo deve ter no máximo 5MB.`,
+    )
+    .refine(
+      (file) => ACCEPTED_DOCUMENT_TYPES.includes(file?.type),
+      'Apenas os formatos .pdf, .jpg, .jpeg e .png são suportados.',
+    ),
+  cpfFile: z
+    .any()
+    .refine((file) => file, { message: 'A foto do CPF é obrigatória.' })
+    .refine(
+      (file) => file?.size <= MAX_FILE_SIZE,
+      `Tamanho máximo de arquivo excedido. O arquivo deve ter no máximo 5MB.`,
+    )
+    .refine(
+      (file) => ACCEPTED_DOCUMENT_TYPES.includes(file?.type),
+      'Apenas os formatos .pdf, .jpg, .jpeg e .png são suportados.',
+    ),
+  proofOfResidenceFile: z
+    .any()
+    .refine((file) => file, {
+      message: 'O comprovante de residência é obrigatório.',
+    })
+    .refine(
+      (file) => file?.size <= MAX_FILE_SIZE,
+      `Tamanho máximo de arquivo excedido. O arquivo deve ter no máximo 5MB.`,
+    )
+    .refine(
+      (file) => ACCEPTED_DOCUMENT_TYPES.includes(file?.type),
+      'Apenas os formatos .pdf, .jpg, .jpeg e .png são suportados.',
+    ),
+  academicHistoryFile: z
+    .any()
+    .refine((file) => file, { message: 'O histórico analítico é obrigatório.' })
+    .refine(
+      (file) => file?.size <= MAX_FILE_SIZE,
+      `Tamanho máximo de arquivo excedido. O arquivo deve ter no máximo 5MB.`,
+    )
+    .refine(
+      (file) => ACCEPTED_DOCUMENT_TYPES.includes(file?.type),
+      'Apenas os formatos .pdf, .jpg, .jpeg e .png são suportados.',
+    ),
 });

@@ -42,6 +42,11 @@ export default function StudentRegisterPageComponent() {
       academyGroup: 'Turma 1',
       academyOnboardingDate: new Date(),
       academyStudentLevel: 'undergraduate-student-1',
+      photo: undefined,
+      rgFile: undefined,
+      cpfFile: undefined,
+      proofOfResidenceFile: undefined,
+      academicHistoryFile: undefined,
     },
   });
 
