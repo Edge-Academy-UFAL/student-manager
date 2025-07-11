@@ -98,9 +98,7 @@ export const registerFormSchema = z.object({
   street: z.string().nonempty({
     message: 'A rua é obrigatória.',
   }),
-  number: z.coerce.number().gte(0).min(1, {
-    message: 'O número da rua é obrigatória.',
-  }),
+  number: z.coerce.number({ message: 'O número é obrigatório.' }).gte(0),
   addressDetail: z.string(),
   linkedinUrl: z.string().url().or(z.literal('')),
   lattesUrl: z.string().url().or(z.literal('')),
