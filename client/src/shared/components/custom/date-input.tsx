@@ -59,7 +59,7 @@ function isValidDate(date: Date | undefined) {
   return !isNaN(date.getTime());
 }
 
-type DateInputProps = Omit<React.ComponentProps<'input'>, 'defaultValue'> & {
+type DateInputProps = {
   label: string;
   onChange: (value: Date | undefined) => void;
   defaultValue?: Date;
@@ -67,6 +67,7 @@ type DateInputProps = Omit<React.ComponentProps<'input'>, 'defaultValue'> & {
   name?: string;
   disabled?: boolean;
   className?: string;
+  'aria-invalid'?: boolean;
 };
 
 export function DateInput({

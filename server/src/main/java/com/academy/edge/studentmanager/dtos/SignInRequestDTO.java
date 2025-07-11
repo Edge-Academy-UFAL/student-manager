@@ -2,9 +2,11 @@ package com.academy.edge.studentmanager.dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class SignInRequestDTO {
     @Email
     private String email;
