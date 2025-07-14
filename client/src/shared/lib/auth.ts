@@ -1,5 +1,7 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import { getUserInfo } from './api/get-user-info-req';
+import { loginAsUser } from './api/login-as-user-req';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
@@ -26,25 +28,16 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           return null;
         }
 
-        const res = await fetch(`${process.env.SERVER_URL}/api/v1/auth/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(credentials),
+        const res = await loginAsUser({
+          email: credentials.email as string,
+          password: credentials.password as string,
         });
-
-        if (res.status === 200) {
-          const data = await res.json();
-          const user = await fetch(`${process.env.SERVER_URL}/api/v1/auth/me`, {
-            headers: {
-              Authorization: `Bearer ${data.token}`,
-            },
-          }).then((res) => res.json());
-
-          user.authToken = data.token;
-          return user;
+        if (!res) {
+          return null;
         }
 
-        return null;
+        const user = await getUserInfo(res.token);
+        return user ? { ...user, authToken: res.token } : null;
       },
     }),
   ],
