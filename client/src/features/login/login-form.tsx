@@ -11,11 +11,10 @@ import {
   FormMessage,
 } from '@/shared/components/ui/form';
 import { Input } from '@/shared/components/ui/input';
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 
 import { LoginFormSchema } from './schemas';
 
@@ -27,14 +26,7 @@ export function LoginForm() {
       password: '',
     },
   });
-  const { status } = useSession();
   const router = useRouter();
-
-  useEffect(() => {
-    if (status !== 'loading' && status === 'authenticated') {
-      router.push('/');
-    }
-  });
 
   async function onSubmit(data: LoginFormSchema, e?: Event) {
     e?.preventDefault();
@@ -57,7 +49,7 @@ export function LoginForm() {
         description: 'Seja bem vindo!',
       });
 
-      router.push('/');
+      router.refresh();
     }
 
     if (res.status >= 400 && res.status < 500) {

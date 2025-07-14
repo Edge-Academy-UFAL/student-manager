@@ -1,41 +1,26 @@
 import { auth } from '@/shared/lib/auth';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { getUsername } from '@/shared/lib/utils';
 
 export async function middleware(request: NextRequest) {
   const session = await auth();
+  const pathname = request.nextUrl.pathname;
 
-  if (
-    !session &&
-    !request.nextUrl.pathname.startsWith('/login') &&
-    !request.nextUrl.pathname.startsWith('/register')
-  ) {
-    return NextResponse.redirect(new URL('/login', request.url));
+  if (session) {
+    if (isAuthenticationRoute(pathname)) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+  } else {
+    if (!isAuthenticationRoute(pathname)) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
   }
 
-  if (
-    session?.user?.dtype === 'Student' &&
-    !request.nextUrl.pathname.startsWith(
-      `/students/${getUsername(session.user.email)}/`,
-    )
-  ) {
-    return NextResponse.redirect(
-      new URL(
-        `/students/${getUsername(session.user.email)}/profile`,
-        request.url,
-      ),
-    );
-  }
-
-  if (
-    session &&
-    (request.nextUrl.pathname.startsWith('/login') ||
-      request.nextUrl.pathname.startsWith('/register'))
-  ) {
-    return NextResponse.redirect(new URL('/', request.url));
-  }
   return NextResponse.next();
+}
+
+function isAuthenticationRoute(path: string) {
+  return ['/login', '/register'].some((route) => path.startsWith(route));
 }
 
 export const config = {
