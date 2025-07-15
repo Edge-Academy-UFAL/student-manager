@@ -9,9 +9,8 @@ import java.util.List;
 
 
 public interface GradeService {
-
-
     GradeResponseDTO updateGrade(GradeUpdateDTO gradeUpdateDTO);
+
     GradeResponseDTO saveGrade(GradeCreateDTO gradeCreateDTO);
 
     List<StudentGradesDTO> getStudentGrades(String studentId);

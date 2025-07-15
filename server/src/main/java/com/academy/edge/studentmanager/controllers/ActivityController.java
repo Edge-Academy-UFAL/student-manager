@@ -24,25 +24,25 @@ public class ActivityController {
     public ActivityController(ActivityService activityService) { this.activityService = activityService; }
 
     @GetMapping("/{email}")
-    @PreAuthorize("hasAnyRole('ADMIN','INSTRUCTOR') or authentication.name == #email")
+    @PreAuthorize("hasAnyRole('ADMIN') or authentication.name == #email")
     public ResponseEntity<List<ActivityResponseDTO>> getAllActivities(@PathVariable String email){
         return new ResponseEntity<>(activityService.getAllActivities(email), HttpStatus.OK);
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN','INSTRUCTOR') or authentication.name == #activityCreateDTO.getStudentEmail()")
+    @PreAuthorize("hasAnyRole('ADMIN') or authentication.name == #activityCreateDTO.getStudentEmail()")
     public ResponseEntity<ActivityResponseDTO> saveActivity(@Valid @RequestBody ActivityCreateDTO activityCreateDTO){
         return new ResponseEntity<>(activityService.saveActivity(activityCreateDTO), HttpStatus.OK);
     }
 
     @PutMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR') or authentication.name == #activityUpdateDTO.getStudentEmail()")
+    @PreAuthorize("hasAnyRole('ADMIN') or authentication.name == #activityUpdateDTO.getStudentEmail()")
     public ResponseEntity<ActivityResponseDTO> updateActivity(@Valid @RequestBody ActivityUpdateDTO activityUpdateDTO){
         return new ResponseEntity<>(activityService.updateActivity(activityUpdateDTO), HttpStatus.OK);
     }
 
     @DeleteMapping
-    @PreAuthorize("hasAnyRole('ADMIN','INSTRUCTOR') or authentication.name == #activityDeleteDTO.getStudentEmail()")
+    @PreAuthorize("hasAnyRole('ADMIN') or authentication.name == #activityDeleteDTO.getStudentEmail()")
     public ResponseEntity<Void> deleteActivity(@Valid @RequestBody ActivityDeleteDTO activityDeleteDTO){
         activityService.deleteActivity(activityDeleteDTO);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

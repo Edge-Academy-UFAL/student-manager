@@ -36,7 +36,7 @@ public class InvitationController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<InvitationSendResponseDTO> register(@Valid @RequestBody InvitationRequestDTO requestDTO) {
         var responseDTO = invitationService.sendInvitations(
                 requestDTO.getEmails(),

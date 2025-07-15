@@ -11,4 +11,6 @@ public interface AdministratorRepository extends CrudRepository<Administrator, S
     Optional<Administrator> findByEmail(String email);
 
     boolean existsByEmail(String email);
+
+    void deleteByEmail(String email);
 }
