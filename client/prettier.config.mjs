@@ -1,11 +1,6 @@
 const config = {
-  trailingComma: 'all',
-  tabWidth: 2,
-  semi: true,
   singleQuote: true,
-  jsxSingleQuote: false,
-  arrowParens: 'always',
-  printWidth: 80,
+  tailwindFunctions: ['clsx', 'cn', 'cva', 'twMerge'],
   plugins: ['prettier-plugin-tailwindcss'],
 };
 
