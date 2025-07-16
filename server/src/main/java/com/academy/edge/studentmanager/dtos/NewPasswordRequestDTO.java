@@ -11,7 +11,4 @@ public class NewPasswordRequestDTO {
 
     @Size(min = 8, max = 20)
     private String password;
-
-    @Size(min = 8, max = 20)
-    private String confirmPassword;
 }

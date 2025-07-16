@@ -55,11 +55,6 @@ public class AuthServiceImpl implements AuthService {
     public void resetPassword(NewPasswordRequestDTO newPasswordRequest) {
         String token = newPasswordRequest.getToken();
         String newPassword = newPasswordRequest.getPassword();
-        String confirmPassword = newPasswordRequest.getConfirmPassword();
-
-        if (!newPassword.equals(confirmPassword)) {
-            throw new RuntimeException("As senhas não coincidem");
-        }
 
         passwordResetTokenService.validatePasswordResetToken(token);
 
