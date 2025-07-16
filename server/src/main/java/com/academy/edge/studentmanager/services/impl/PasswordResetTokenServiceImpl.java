@@ -6,7 +6,9 @@ import com.academy.edge.studentmanager.repositories.PasswordResetTokenRepository
 import com.academy.edge.studentmanager.services.PasswordResetTokenService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -40,13 +42,13 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
     public void validatePasswordResetToken(String token) throws RuntimeException {
         Optional<PasswordResetToken> passTokenOpt = tokenRepository.findByToken(token);
         if (passTokenOpt.isEmpty()) {
-            throw new RuntimeException("Invalid token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
         }
         PasswordResetToken passToken = passTokenOpt.get();
         if (passToken.isExpired()) {
             tokenRepository.delete(passToken);
 
-            throw new RuntimeException("Expired token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Expired token");
         }
     }
 
@@ -54,12 +56,12 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
     public User getUserByPasswordResetToken(String token) throws RuntimeException {
         Optional<PasswordResetToken> passTokenOpt = tokenRepository.findByToken(token);
         if (passTokenOpt.isEmpty()) {
-            throw new RuntimeException("Invalid token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
         }
         PasswordResetToken passToken = passTokenOpt.get();
         User user = passToken.getUser();
         if (user == null) {
-            throw new RuntimeException("User not found for the provided token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found for the provided token");
         }
         return user;
     }
@@ -69,7 +71,7 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
     public void deletePasswordResetToken(String token) throws RuntimeException {
         Optional<PasswordResetToken> passTokenOpt = tokenRepository.findByToken(token);
         if (passTokenOpt.isEmpty()) {
-            throw new RuntimeException("Invalid token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
         }
         PasswordResetToken passToken = passTokenOpt.get();
         tokenRepository.delete(passToken);

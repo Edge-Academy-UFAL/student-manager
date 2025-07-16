@@ -32,10 +32,8 @@ public class SubjectInitializer implements CommandLineRunner {
             return;
         }
 
-        InputStream inputStream = null;
-        try {
-            ClassPathResource resource = new ClassPathResource("data/subjects.json");
-            inputStream = resource.getInputStream();
+        ClassPathResource resource = new ClassPathResource("data/subjects.json");
+        try (InputStream inputStream = resource.getInputStream()) {
             List<Subject> subjects = new ArrayList<>();
 
             JsonNode rootNode = objectMapper.readTree(inputStream);
@@ -51,16 +49,6 @@ public class SubjectInitializer implements CommandLineRunner {
         catch (IOException e) {
             System.out.println("Error loading subjects.json");
             System.out.println(e.getMessage());
-        }
-        finally {
-            if(inputStream != null){
-                try{
-                    inputStream.close();
-                }
-                catch (IOException e){
-                    System.out.println("Error closing input stream");
-                }
-            }
         }
     }
 }

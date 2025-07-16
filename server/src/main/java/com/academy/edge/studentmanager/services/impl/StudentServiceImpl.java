@@ -90,7 +90,7 @@ public class StudentServiceImpl implements StudentService {
             s3Service.uploadFile(student.getPhotoUrl(), file);
         } catch (IOException e) {
             s3Service.deleteFile(student.getPhotoUrl());
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Error while saving student");
         }
         return modelMapper.map(student, StudentResponseDTO.class);
     }
