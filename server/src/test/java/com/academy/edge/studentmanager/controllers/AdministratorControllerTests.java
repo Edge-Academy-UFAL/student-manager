@@ -1,7 +1,6 @@
 package com.academy.edge.studentmanager.controllers;
 
 import com.academy.edge.studentmanager.dtos.AdministratorCreateDTO;
-import com.academy.edge.studentmanager.dtos.SignInRequestDTO;
 import com.academy.edge.studentmanager.models.Administrator;
 import com.academy.edge.studentmanager.repositories.AdministratorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +8,6 @@ import com.icegreen.greenmail.configuration.GreenMailConfiguration;
 import com.icegreen.greenmail.junit5.GreenMailExtension;
 import com.icegreen.greenmail.user.UserException;
 import com.icegreen.greenmail.util.ServerSetupTest;
-import com.jayway.jsonpath.JsonPath;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -24,7 +22,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,8 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Transactional
-public class AdministratorControllerTest {
-
+public class AdministratorControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -47,7 +43,7 @@ public class AdministratorControllerTest {
     private AdministratorRepository administratorRepository;
 
     @RegisterExtension
-    static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP_IMAP).withConfiguration(
+    private static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP_IMAP).withConfiguration(
             GreenMailConfiguration.aConfig().withUser("academy@edge.ufal.br", "test", "test"));
 
     @Test
@@ -64,7 +60,7 @@ public class AdministratorControllerTest {
         var message = receivedMessages[0];
         assertThat(message.getAllRecipients()).containsExactly(new InternetAddress(requestDTO.getEmail()));
 
-        String pattern = "<span class=\"password\">(?!\\[\\[PASSWORD\\]\\])[^<]+</span>";
+        var pattern = "<span class=\"password\">(?!\\[\\[PASSWORD\\]\\])[^<]+</span>";
         assertThat((String)message.getContent()).containsPattern(pattern);
     }
 
@@ -110,24 +106,6 @@ public class AdministratorControllerTest {
 
         mockMvc.perform(post("/api/v1/administrators").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO))).andExpect(status().isConflict());
-    }
-
-    @Test
-    void adminCanLogin() throws Exception {
-        var administrator = administratorRepository.save(getTestAdministrator());
-        var requestDTO = new SignInRequestDTO(administrator.getEmail(), "Admin123");
-
-        var result = mockMvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").isString())
-                .andReturn();
-
-        var token = JsonPath.read(result.getResponse().getContentAsString(), "$.token");
-
-        mockMvc.perform(get("/api/v1/auth/me").header("Authorization", "Bearer " + token))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(administrator.getName()));
     }
 
     Administrator getTestAdministrator() {

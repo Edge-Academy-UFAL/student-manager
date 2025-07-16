@@ -42,8 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Transactional
-public class InvitationControllerTest {
-
+public class InvitationControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -60,7 +59,7 @@ public class InvitationControllerTest {
     private ApplicationProperties applicationProperties;
 
     @RegisterExtension
-    static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP_IMAP).withConfiguration(
+    private static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP_IMAP).withConfiguration(
             GreenMailConfiguration.aConfig().withUser("academy@edge.ufal.br", "test", "test"));
 
     @Test
