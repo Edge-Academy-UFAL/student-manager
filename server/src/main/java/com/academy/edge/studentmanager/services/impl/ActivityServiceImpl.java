@@ -44,17 +44,12 @@ public class ActivityServiceImpl implements ActivityService {
     @Transactional
     public ActivityResponseDTO saveActivity(ActivityCreateDTO activityCreateDTO) {
         Activity activity = modelMapper.map(activityCreateDTO, Activity.class);
-        try{
-            Student student = studentRepository
-                    .findByEmail(activityCreateDTO.getStudentEmail())
-                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
-            activity.setStudent(student);
+        Student student = studentRepository
+                .findByEmail(activityCreateDTO.getStudentEmail())
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
+        activity.setStudent(student);
 
-            activityRepository.save(activity);
-        }
-        catch(Exception e){
-            throw new RuntimeException(e);
-        }
+        activityRepository.save(activity);
 
         return modelMapper.map(activity, ActivityResponseDTO.class);
     }

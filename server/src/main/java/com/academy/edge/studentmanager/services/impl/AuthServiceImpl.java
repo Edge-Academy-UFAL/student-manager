@@ -57,21 +57,17 @@ public class AuthServiceImpl implements AuthService {
         String newPassword = newPasswordRequest.getPassword();
         String confirmPassword = newPasswordRequest.getConfirmPassword();
 
-        try {
-            if (!newPassword.equals(confirmPassword)) {
-                throw new RuntimeException("As senhas não coincidem");
-            }
-
-            passwordResetTokenService.validatePasswordResetToken(token);
-
-            User user = passwordResetTokenService.getUserByPasswordResetToken(token);
-
-            user.setPassword(passwordEncoder.encode(newPassword));
-            userRepository.save(user);
-
-            passwordResetTokenService.deletePasswordResetToken(token);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+        if (!newPassword.equals(confirmPassword)) {
+            throw new RuntimeException("As senhas não coincidem");
         }
+
+        passwordResetTokenService.validatePasswordResetToken(token);
+
+        User user = passwordResetTokenService.getUserByPasswordResetToken(token);
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        passwordResetTokenService.deletePasswordResetToken(token);
     }
 }

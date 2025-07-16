@@ -59,22 +59,17 @@ public class GradeServiceImpl implements GradeService {
     @Transactional
     public GradeResponseDTO saveGrade(GradeCreateDTO gradeCreateDTO) {
         Grade grade = modelMapper.map(gradeCreateDTO, Grade.class);
-        try{
-            Student student = studentRepository
-                    .findByEmail(gradeCreateDTO.getStudentEmail())
-                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
-            grade.setStudent(student);
+        Student student = studentRepository
+                .findByEmail(gradeCreateDTO.getStudentEmail())
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
+        grade.setStudent(student);
 
-            Subject subject = subjectRepository.
-                    findSubjectByCode(gradeCreateDTO.getSubjectCode())
-                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Subject not found"));
-            grade.setSubject(subject);
+        Subject subject = subjectRepository.
+                findSubjectByCode(gradeCreateDTO.getSubjectCode())
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Subject not found"));
+        grade.setSubject(subject);
 
-            gradeRepository.save(grade);
-        }
-        catch(Exception e){
-            throw new RuntimeException(e);
-        }
+        gradeRepository.save(grade);
 
         return modelMapper.map(grade, GradeResponseDTO.class);
     }

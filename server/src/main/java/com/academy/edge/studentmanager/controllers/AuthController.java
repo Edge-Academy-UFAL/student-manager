@@ -7,7 +7,6 @@ import com.academy.edge.studentmanager.dtos.SignInRequestDTO;
 import com.academy.edge.studentmanager.models.User;
 import com.academy.edge.studentmanager.services.AuthService;
 import com.academy.edge.studentmanager.services.EmailService;
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -15,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @Log4j2
 @RestController
@@ -52,9 +49,7 @@ public class AuthController {
         }
         try {
             emailService.sendPasswordResetEmail(email, token);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Error sending password reset email", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send password reset email");
         }
@@ -64,13 +59,8 @@ public class AuthController {
     @PostMapping("/reset-password")
     public ResponseEntity<String> handlePasswordReset(@Valid @RequestBody NewPasswordRequestDTO newPasswordRequestDTO
     ) {
-        try {
-            authService.resetPassword(newPasswordRequestDTO);
+        authService.resetPassword(newPasswordRequestDTO);
 
-            return ResponseEntity.ok("Password reset successfully");
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return ResponseEntity.ok("Password reset successfully");
     }
 }
