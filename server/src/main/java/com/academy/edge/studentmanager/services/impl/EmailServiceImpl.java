@@ -40,7 +40,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendPasswordResetEmail(String to, String resetLink) {
         try {
-            var resource = this.resourceLoader.getResource("classpath:emails/forget-password.html");
+            var resource = this.resourceLoader.getResource("classpath:emails/forgot-password.html");
             String htmlBody = resource.getContentAsString(StandardCharsets.UTF_8);
             htmlBody = htmlBody.replace("{{LINK_REDEFINICAO}}", resetLink);
 

@@ -1,6 +1,6 @@
 package com.academy.edge.studentmanager.services.impl;
 
-import com.academy.edge.studentmanager.dtos.NewPasswordRequestDTO;
+import com.academy.edge.studentmanager.dtos.ResetPasswordRequestDTO;
 import com.academy.edge.studentmanager.dtos.SignInRequestDTO;
 import com.academy.edge.studentmanager.models.User;
 import com.academy.edge.studentmanager.repositories.UserRepository;
@@ -54,17 +54,21 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void resetPassword(NewPasswordRequestDTO newPasswordRequest) {
-        String token = newPasswordRequest.getToken();
-        String newPassword = newPasswordRequest.getPassword();
+    public void resetPassword(ResetPasswordRequestDTO resetPasswordRequestDTO) {
+        String token = resetPasswordRequestDTO.getToken();
+        String newPassword = resetPasswordRequestDTO.getPassword();
 
-        passwordResetTokenService.validatePasswordResetToken(token);
+        var passToken = passwordResetTokenService.getValidPasswordResetToken(token);
 
-        User user = passwordResetTokenService.getUserByPasswordResetToken(token);
+        this.changePassword(passToken.getUser(), newPassword);
 
+        passwordResetTokenService.deletePasswordResetToken(passToken);
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(User user, String newPassword) {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
-
-        passwordResetTokenService.deletePasswordResetToken(token);
     }
 }

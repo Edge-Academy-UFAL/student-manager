@@ -1,9 +1,6 @@
 package com.academy.edge.studentmanager.controllers;
 
-import com.academy.edge.studentmanager.dtos.ForgetPasswordRequestDTO;
-import com.academy.edge.studentmanager.dtos.JwtAuthResponseDTO;
-import com.academy.edge.studentmanager.dtos.NewPasswordRequestDTO;
-import com.academy.edge.studentmanager.dtos.SignInRequestDTO;
+import com.academy.edge.studentmanager.dtos.*;
 import com.academy.edge.studentmanager.models.User;
 import com.academy.edge.studentmanager.services.AuthService;
 import com.academy.edge.studentmanager.services.EmailService;
@@ -14,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @Log4j2
 @RestController
@@ -39,28 +37,27 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@Valid @RequestBody ForgetPasswordRequestDTO forgetPasswordRequestDTO) {
-        String email = forgetPasswordRequestDTO.getEmail();
+    public ResponseEntity<Void> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDTO forgotPasswordRequestDTO) {
+        String email = forgotPasswordRequestDTO.getEmail();
         log.info("Password reset request for email: {}", email);
 
         String token = authService.forgotPassword(email);
         if (token == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with email: " + email);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
         try {
             emailService.sendPasswordResetEmail(email, token);
         } catch (Exception e) {
             log.error("Error sending password reset email", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send password reset email");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to send password reset email");
         }
-        return ResponseEntity.ok("Password reset link sent to " + email + ". Token: " + token);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> handlePasswordReset(@Valid @RequestBody NewPasswordRequestDTO newPasswordRequestDTO
-    ) {
-        authService.resetPassword(newPasswordRequestDTO);
+    public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordRequestDTO resetPasswordRequestDTO) {
+        authService.resetPassword(resetPasswordRequestDTO);
 
-        return ResponseEntity.ok("Password reset successfully");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
