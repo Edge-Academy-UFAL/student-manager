@@ -1,88 +1,77 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+'use client';
 
-import { Button } from '@/shared/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+
+import { Button } from '@/shared/components/custom/button';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/shared/components/ui/form';
-import { Input } from '@/shared/components/ui/input';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-
-import { signIn } from 'next-auth/react';
+import { FloatingLabelInput } from '@/shared/components/custom/floating-label-input';
+import { FloatingLabelPasswordInput } from '@/shared/components/custom/floating-label-password-input';
 
 import { LoginFormSchema } from './schemas';
 
 export function LoginForm() {
-  const form = useForm<LoginFormSchema>({
-    resolver: zodResolver(LoginFormSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
   const router = useRouter();
 
-  async function onSubmit(data: LoginFormSchema, e?: Event) {
-    e?.preventDefault();
+  const form = useForm({
+    resolver: zodResolver(LoginFormSchema),
+    defaultValues: { email: '', password: '' },
+  });
+
+  async function onSubmit(data: LoginFormSchema) {
     const res = await signIn('credentials', {
       email: data.email,
       password: data.password,
       redirect: false,
     });
-
     if (!res) {
-      toast('Não foi possível fazer login', {
-        description: 'Tente novamente mais tarde',
-      });
-
+      toast.error('Erro de conexão com o servidor');
       return;
     }
 
-    if (res.status === 200) {
-      toast('Login feito com sucesso', {
-        description: 'Seja bem vindo!',
-      });
-
+    if (!res.error) {
       router.refresh();
+      return;
     }
 
-    if (res.status >= 400 && res.status < 500) {
-      form.setError('email', { message: '' });
-      form.setError('password', { message: '' });
-      toast.error('Erro ao fazer login', {
-        description: 'Email ou senha inválidos',
-      });
-    }
-
-    if (res.status >= 500) {
-      toast('Não foi possível fazer login', {
-        description: 'Tente novamente mais tarde',
-      });
+    switch (res.error) {
+      case 'CredentialsSignin':
+        form.setError('email', {});
+        form.setError('password', {});
+        toast.error('Erro ao fazer login', {
+          description: 'Email ou senha inválidos',
+        });
+        break;
+      default:
+        toast.error('Não foi possível fazer login', {
+          description: 'Tente novamente mais tarde',
+        });
+        break;
     }
   }
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data, e: unknown) =>
-          onSubmit(data, e as Event),
-        )}
-        className="space-y-8"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-6"
       >
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Email" {...field} />
+                <FloatingLabelInput label="Email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -93,14 +82,16 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Senha</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Senha" {...field} />
+                <FloatingLabelPasswordInput label="Senha" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <Button type="button" variant="ghost" className="ml-auto">
+          Esqueci minha senha
+        </Button>
         <Button type="submit" className="w-full">
           Login
         </Button>
