@@ -66,6 +66,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public void validatePassword(User user, String oldPassword) {
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid password");
+        }
+    }
+
+    @Override
     @Transactional
     public void changePassword(User user, String newPassword) {
         user.setPassword(passwordEncoder.encode(newPassword));
