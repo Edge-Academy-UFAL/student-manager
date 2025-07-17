@@ -47,7 +47,7 @@ export function FloatingLabelSelect({
           id={selectId}
           data-size={undefined}
           className={cn(
-            'peer !text-body-md relative h-[48px] w-full cursor-pointer rounded-md border border-neutral-300 px-[16px] py-[4px] font-normal text-neutral-900 not-disabled:bg-white not-disabled:hover:bg-white focus:outline-none focus-visible:ring-neutral-200',
+            'peer text-body-md relative h-[48px] w-full cursor-pointer rounded-md border border-neutral-300 px-[16px] py-[4px] font-normal text-neutral-900 not-disabled:bg-white not-disabled:hover:bg-white focus:outline-none focus-visible:ring-neutral-200',
             'aria-invalid:border-destructive',
             'disabled:border disabled:border-neutral-300 disabled:bg-neutral-100 disabled:text-neutral-300 disabled:opacity-100 disabled:hover:bg-neutral-100',
           )}
@@ -62,7 +62,7 @@ export function FloatingLabelSelect({
             <SelectItem
               key={opt.value}
               value={opt.value}
-              className="!text-body-md m-0 rounded-none px-[16px] py-[8px]"
+              className="text-body-md m-0 rounded-none px-[16px] py-[8px]"
             >
               {opt.label}
             </SelectItem>
@@ -73,7 +73,7 @@ export function FloatingLabelSelect({
       <Label.Root
         htmlFor={selectId}
         className={cn(
-          '!text-body-md pointer-events-none absolute left-4 z-10 origin-[0] transform bg-white px-1 text-neutral-300 transition-all',
+          'text-body-md pointer-events-none absolute left-4 z-10 origin-[0] transform bg-white px-1 text-neutral-300 transition-all',
           isEmpty
             ? 'top-1/2 -translate-y-1/2 scale-100'
             : 'top-1 -translate-y-4 scale-75',

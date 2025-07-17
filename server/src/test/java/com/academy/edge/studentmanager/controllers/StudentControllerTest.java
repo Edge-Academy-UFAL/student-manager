@@ -67,7 +67,7 @@ public class StudentControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void adminCanAccessAllStudents() throws Exception {
+    void administratorCanAccessAllStudents() throws Exception {
         studentRepository.save(getTestStudent(1));
         studentRepository.save(getTestStudent(2));
 
@@ -84,8 +84,8 @@ public class StudentControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "ADMIN")
-    void adminCanAccessStudent() throws Exception {
+    @WithMockUser(roles = {"ADMIN"})
+    void administratorCanAccessStudent() throws Exception {
         var student1 = studentRepository.save(getTestStudent(1));
 
         mockMvc.perform(get("/api/v1/students/{email}", student1.getEmail()))
