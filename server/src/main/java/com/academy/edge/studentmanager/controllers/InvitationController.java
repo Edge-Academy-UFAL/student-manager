@@ -1,6 +1,5 @@
 package com.academy.edge.studentmanager.controllers;
 
-import com.academy.edge.studentmanager.dtos.InvitationGetResponseDTO;
 import com.academy.edge.studentmanager.dtos.InvitationSendResponseDTO;
 import com.academy.edge.studentmanager.dtos.InvitationRequestDTO;
 import com.academy.edge.studentmanager.services.InvitationService;
@@ -26,11 +25,9 @@ public class InvitationController {
     }
 
     @GetMapping("/{invitationId}")
-    public ResponseEntity<InvitationGetResponseDTO> checkInvitation(@PathVariable String invitationId) {
-        var invitation = this.invitationService.getValidInvitation(invitationId);
-        var responseDTO = new InvitationGetResponseDTO();
-        responseDTO.setEmail(invitation.getEmail());
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    public ResponseEntity<Void> checkInvitation(@PathVariable String invitationId) {
+        this.invitationService.getValidInvitation(invitationId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping

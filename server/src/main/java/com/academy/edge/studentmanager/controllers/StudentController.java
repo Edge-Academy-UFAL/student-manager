@@ -6,7 +6,6 @@ import com.academy.edge.studentmanager.dtos.StudentUpdateDTO;
 import com.academy.edge.studentmanager.services.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -36,10 +35,9 @@ public class StudentController {
         return new ResponseEntity<>(studentService.getStudentByEmail(email), HttpStatus.OK);
     }
 
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<StudentResponseDTO> saveStudent(@ModelAttribute @Valid StudentCreateDTO studentCreateDTO,
-                                                          @RequestParam("photo") MultipartFile file){
-        return new ResponseEntity<>(studentService.insertStudent(studentCreateDTO, file), HttpStatus.CREATED);
+    @PostMapping
+    public ResponseEntity<StudentResponseDTO> createStudent(@RequestBody @Valid StudentCreateDTO studentCreateDTO){
+        return new ResponseEntity<>(studentService.createStudent(studentCreateDTO), HttpStatus.CREATED);
     }
 
     @DeleteMapping({"/{email}"})
@@ -49,7 +47,7 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping({"/{email}"})
+    @PatchMapping({"/{email}"})
     @PreAuthorize("hasAnyRole('ADMIN') or authentication.name == #email")
     public ResponseEntity<StudentResponseDTO> updateStudentByEmail(@PathVariable String email,
                                                      @RequestBody @Valid StudentUpdateDTO studentUpdateDTO) {
@@ -77,7 +75,7 @@ public class StudentController {
         return new ResponseEntity<>(studentResponseDTO, HttpStatus.OK);
     }
 
-    @PatchMapping("/{email}/terminate")
+    @PostMapping("/{email}/terminate")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> terminateStudent(
             @PathVariable String email,

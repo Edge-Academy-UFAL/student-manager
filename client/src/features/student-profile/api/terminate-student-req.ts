@@ -12,7 +12,7 @@ export async function terminateStudent(
   const res = await fetch(
     `${process.env.SERVER_URL}/api/v1/students/${email}/terminate`,
     {
-      method: 'PATCH',
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',

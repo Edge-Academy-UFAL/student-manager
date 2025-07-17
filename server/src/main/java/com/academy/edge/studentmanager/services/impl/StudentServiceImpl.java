@@ -2,14 +2,14 @@ package com.academy.edge.studentmanager.services.impl;
 
 import com.academy.edge.studentmanager.dtos.StudentCreateDTO;
 import com.academy.edge.studentmanager.dtos.StudentResponseDTO;
-import com.academy.edge.studentmanager.models.Invitation;
+import com.academy.edge.studentmanager.dtos.StudentUpdateDTO;
 import com.academy.edge.studentmanager.models.Student;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
 import com.academy.edge.studentmanager.services.InvitationService;
 import com.academy.edge.studentmanager.services.S3Service;
 import com.academy.edge.studentmanager.services.StudentService;
-import com.academy.edge.studentmanager.dtos.StudentUpdateDTO;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +26,7 @@ import java.util.Objects;
 import static org.springframework.http.HttpStatus.*;
 
 @Service
+@RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
 
@@ -40,67 +41,42 @@ public class StudentServiceImpl implements StudentService {
     private static final List<String> imageContentTypes = Arrays.asList("image/png", "image/jpeg", "image/jpg");
     private static final String documentContentType = "application/pdf";
 
-    public StudentServiceImpl(StudentRepository studentRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, InvitationService invitationService, S3Service s3Service) {
-        this.studentRepository = studentRepository;
-        this.modelMapper = modelMapper;
-        this.passwordEncoder = passwordEncoder;
-        this.invitationService = invitationService;
-        this.s3Service = s3Service;
-    }
 
     @Override
     public List<StudentResponseDTO> getStudents() {
         List<StudentResponseDTO> students = new ArrayList<>();
-        this.studentRepository.findAll().forEach(student -> students.add(modelMapper.map(student, StudentResponseDTO.class)));
+        this.studentRepository.findAll()
+                .forEach(student -> students.add(modelMapper.map(student, StudentResponseDTO.class)));
         return students;
     }
 
     @Override
     public StudentResponseDTO getStudentByEmail(String email) {
-        Student student = studentRepository
-                .findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
+        Student student = this.getStudentEntityByEmail(email);
         return modelMapper.map(student, StudentResponseDTO.class);
     }
 
     @Override
     @Transactional
-    public StudentResponseDTO insertStudent(StudentCreateDTO studentCreateDTO, MultipartFile file) {
+    public StudentResponseDTO createStudent(StudentCreateDTO studentCreateDTO) {
+        var invitation = invitationService.getValidInvitation(studentCreateDTO.getActivationCode());
 
-        if(!imageContentTypes.contains(file.getContentType())){
-            throw  new ResponseStatusException(BAD_REQUEST, "File is not a image file");
-        }
-
-        Invitation invitation = invitationService.getValidInvitation(studentCreateDTO.getActivationCode());
-
-        if (!invitation.getEmail().equals(studentCreateDTO.getEmail())) {
-            throw new ResponseStatusException(UNAUTHORIZED, "Invalid email for invitation");
-        }
-
-        Student student = modelMapper.map(studentCreateDTO, Student.class);
-        student.setName(student.getName().trim());
+        var student = new Student();
+        student.setName(invitation.getEmail().split("@", 1)[0]);
+        student.setEmail(invitation.getEmail());
         student.setEntryDate(invitation.getEntryDate());
         student.setStudentGroup(invitation.getStudentGroup());
         student.setPassword(passwordEncoder.encode(studentCreateDTO.getPassword()));
-        student.setPhotoUrl(student.getRegistration()+"_"+file.getOriginalFilename());
 
-        try {
-            studentRepository.save(student);
-            invitationService.deleteInvitation(invitation);
-            s3Service.uploadFile(student.getPhotoUrl(), file);
-        } catch (IOException e) {
-            s3Service.deleteFile(student.getPhotoUrl());
-            throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Error while saving student");
-        }
+        studentRepository.save(student);
+        invitationService.deleteInvitation(invitation);
         return modelMapper.map(student, StudentResponseDTO.class);
     }
 
     @Override
     @Transactional
     public StudentResponseDTO updateStudent(String email, StudentUpdateDTO studentUpdateDTO) {
-        Student student = studentRepository
-                .findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found with email: " + email));
+        Student student = this.getStudentEntityByEmail(email);
 
         modelMapper.map(studentUpdateDTO, student);
         studentRepository.save(student);
@@ -111,11 +87,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public StudentResponseDTO updateStudentPhoto(String email, MultipartFile file) {
-        Student student = studentRepository
-                .findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found with email: " + email));
+        Student student = this.getStudentEntityByEmail(email);
 
-        if(!imageContentTypes.contains(file.getContentType())){
+        if (!imageContentTypes.contains(file.getContentType())) {
             throw new ResponseStatusException(BAD_REQUEST, "File is not a image file");
         }
 
@@ -128,7 +102,10 @@ public class StudentServiceImpl implements StudentService {
 
         try {
             s3Service.uploadFile(newPhotoUrl, file);
-            s3Service.deleteFile(oldPhotoUrl);
+
+            if (oldPhotoUrl != null) {
+                s3Service.deleteFile(oldPhotoUrl);
+            }
         } catch (IOException e) {
             s3Service.deleteFile(newPhotoUrl);
             throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Error uploading the file");
@@ -143,7 +120,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public void deleteStudent(String email) {
-        Student student = studentRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
+        Student student = this.getStudentEntityByEmail(email);
         student.setDeleted(true);
         studentRepository.save(student);
     }
@@ -153,14 +130,13 @@ public class StudentServiceImpl implements StudentService {
     public StudentResponseDTO updateStudentAcademicRecord(String email, MultipartFile file) {
         long MAX_RECORD_FILE_SIZE = 2000000L; // 2MB
 
-        Student student = studentRepository.findByEmail(email).orElseThrow(
-                () -> new ResponseStatusException(NOT_FOUND, "Student not found"));
+        Student student = this.getStudentEntityByEmail(email);
 
-        if(!Objects.equals(file.getContentType(), documentContentType)){
+        if (!Objects.equals(file.getContentType(), documentContentType)) {
             throw new ResponseStatusException(BAD_REQUEST, "File is not a PDF file");
         }
 
-        if(file.getSize() > MAX_RECORD_FILE_SIZE) {
+        if (file.getSize() > MAX_RECORD_FILE_SIZE) {
             throw new ResponseStatusException(BAD_REQUEST, "File size is biggest than 2MB");
         }
 
@@ -168,7 +144,7 @@ public class StudentServiceImpl implements StudentService {
 
         // e.g. format: "historico_JohnDoe_2024-01-04.pdf
         String oldAcademicRecordUrl = student.getAcademicRecordUrl();
-        String newAcademicRecordUrl =  "historico_" + student.getName() + "_" + currentDate + "_" + ".pdf";
+        String newAcademicRecordUrl = "historico_" + student.getName() + "_" + currentDate + "_" + ".pdf";
 
         try {
             if (!Objects.equals(oldAcademicRecordUrl, newAcademicRecordUrl)
@@ -192,9 +168,14 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public void terminateStudent(String email, String terminationReason) {
-        Student student = studentRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
+        Student student = this.getStudentEntityByEmail(email);
         student.setTerminationReason(terminationReason);
         student.setDeleted(true);
         studentRepository.save(student);
+    }
+
+    private Student getStudentEntityByEmail(String email) {
+        return studentRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
     }
 }

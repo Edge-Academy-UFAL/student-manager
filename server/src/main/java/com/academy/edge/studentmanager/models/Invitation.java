@@ -19,7 +19,7 @@ public class Invitation {
     private String code;
 
     @CreationTimestamp
-    @Column()
+    @Column(nullable = false)
     Instant createdAt;
 
     @Column(nullable = false)
