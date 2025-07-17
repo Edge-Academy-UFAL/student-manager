@@ -1,11 +1,11 @@
 package com.academy.edge.studentmanager.dtos;
 
 import com.academy.edge.studentmanager.enums.SubjectStatus;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 public class StudentGradesDTO {
     private String subjectCode;
     private SubjectStatus subjectStatus;
@@ -14,8 +14,4 @@ public class StudentGradesDTO {
     private Double finalGrade;
     private String name;
     private String workload;
-
-    public StudentGradesDTO() {
-
-    }
 }

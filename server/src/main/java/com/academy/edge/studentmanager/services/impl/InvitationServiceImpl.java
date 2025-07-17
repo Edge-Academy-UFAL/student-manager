@@ -58,6 +58,7 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
+    @Transactional
     public void deleteInvitation(Invitation invitation) {
         invitationRepository.delete(invitation);
     }

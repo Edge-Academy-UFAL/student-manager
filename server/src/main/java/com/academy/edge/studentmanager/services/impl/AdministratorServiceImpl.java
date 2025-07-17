@@ -4,7 +4,6 @@ import com.academy.edge.studentmanager.configs.ApplicationProperties;
 import com.academy.edge.studentmanager.dtos.*;
 import com.academy.edge.studentmanager.enums.InvitationErrorType;
 import com.academy.edge.studentmanager.models.Administrator;
-import com.academy.edge.studentmanager.models.Student;
 import com.academy.edge.studentmanager.repositories.AdministratorRepository;
 import com.academy.edge.studentmanager.services.AdministratorService;
 import com.academy.edge.studentmanager.services.EmailService;
@@ -95,6 +94,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
+    @Transactional
     public AdministratorResponseDTO updateAdministrator(String email, AdministratorUpdateDTO administratorUpdateDTO) {
         Administrator administrator = administratorRepository
                 .findByEmail(email)
@@ -107,6 +107,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
+    @Transactional
     public void deleteAdministrator(String email) {
         Administrator administrator = administratorRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Administrator not found"));
         administrator.setDeleted(true);

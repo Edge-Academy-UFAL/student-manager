@@ -8,7 +8,6 @@ import com.academy.edge.studentmanager.security.JWTUtil;
 import com.academy.edge.studentmanager.services.AuthService;
 import com.academy.edge.studentmanager.services.PasswordResetTokenService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,18 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private PasswordResetTokenService passwordResetTokenService;
+    private final PasswordResetTokenService passwordResetTokenService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    final AuthenticationManager authenticationManager;
-    final UserDetailsService userService;
-    final JWTUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userService;
+    private final JWTUtil jwtUtil;
 
     @Override
     public String login(SignInRequestDTO request) {

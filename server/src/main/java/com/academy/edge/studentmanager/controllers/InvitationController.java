@@ -5,7 +5,6 @@ import com.academy.edge.studentmanager.dtos.InvitationSendResponseDTO;
 import com.academy.edge.studentmanager.dtos.InvitationRequestDTO;
 import com.academy.edge.studentmanager.services.InvitationService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +21,6 @@ public class InvitationController {
 
     private final InvitationService invitationService;
 
-    @Autowired
     public InvitationController(InvitationService invitationService) {
         this.invitationService = invitationService;
     }

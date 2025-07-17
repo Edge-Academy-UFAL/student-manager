@@ -55,7 +55,7 @@ public class AdministratorControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void canRegisterAdmin() throws Exception {
-        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1@email.com");
+        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1@email.com", "");
 
         mockMvc.perform(post("/api/v1/administrators").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO))).andExpect(status().isCreated());
@@ -73,7 +73,7 @@ public class AdministratorControllerTest {
     @Test
     @WithMockUser(roles = "STUDENT")
     void nonAdminCannotRegisterAdmin() throws Exception {
-        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1@email.com");
+        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1@email.com", "");
 
         mockMvc.perform(post("/api/v1/administrators").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO))).andExpect(status().isForbidden());
@@ -82,7 +82,7 @@ public class AdministratorControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void cannotRegisterInvalidEmail() throws Exception {
-        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1.email.com");
+        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1.email.com", "");
 
         mockMvc.perform(post("/api/v1/administrators").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO))).andExpect(status().isBadRequest());
@@ -91,7 +91,7 @@ public class AdministratorControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void catchSmtpErrorsWhileSending() throws Exception {
-        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1@email.com");
+        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1@email.com", "");
 
         greenMail.getUserManager().setMessageDeliveryHandler((msg, mailAddress) -> {
             throw new UserException("User not found");
@@ -111,7 +111,7 @@ public class AdministratorControllerTest {
     @WithMockUser(roles = "ADMIN")
     void cannotRegisterEmailAgain() throws Exception {
         var administrator = administratorRepository.save(getTestAdministrator());
-        var requestDTO = new AdministratorCreateDTO(administrator.getName(), administrator.getEmail());
+        var requestDTO = new AdministratorCreateDTO(administrator.getName(), administrator.getEmail(), "");
 
         mockMvc.perform(post("/api/v1/administrators").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))

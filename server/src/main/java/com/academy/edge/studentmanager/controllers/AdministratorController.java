@@ -4,7 +4,6 @@ import com.academy.edge.studentmanager.dtos.*;
 import com.academy.edge.studentmanager.enums.InvitationErrorType;
 import com.academy.edge.studentmanager.services.AdministratorService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,7 +18,6 @@ public class AdministratorController {
 
     private final AdministratorService administratorService;
 
-    @Autowired
     public AdministratorController(AdministratorService administratorService) {
         this.administratorService = administratorService;
     }

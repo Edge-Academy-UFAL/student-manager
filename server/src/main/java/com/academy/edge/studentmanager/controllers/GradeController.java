@@ -2,8 +2,6 @@ package com.academy.edge.studentmanager.controllers;
 
 
 import com.academy.edge.studentmanager.dtos.*;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.academy.edge.studentmanager.services.GradeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,9 +19,8 @@ import java.util.List;
 @RequestMapping("/api/v1/grades")
 public class GradeController {
 
-    final GradeService gradeService;
+    private final GradeService gradeService;
 
-    @Autowired
     public GradeController(GradeService gradeService) {
         this.gradeService = gradeService;
     }

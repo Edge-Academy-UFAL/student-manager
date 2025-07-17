@@ -4,18 +4,20 @@ import com.academy.edge.studentmanager.models.PasswordResetToken;
 import com.academy.edge.studentmanager.models.User;
 import com.academy.edge.studentmanager.repositories.PasswordResetTokenRepository;
 import com.academy.edge.studentmanager.services.PasswordResetTokenService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
-@Service
-@Transactional
-public class PasswordResetTokenServiceImpl implements PasswordResetTokenService {
-    @Autowired
-    private PasswordResetTokenRepository tokenRepository;
 
+@Service
+@RequiredArgsConstructor
+public class PasswordResetTokenServiceImpl implements PasswordResetTokenService {
+    private final PasswordResetTokenRepository tokenRepository;
+
+    @Override
+    @Transactional
     public String createPasswordResetTokenForUser(User user) {
         String tokenValue = UUID.randomUUID().toString();
 
@@ -37,6 +39,8 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
 
     }
 
+    @Override
+    @Transactional
     public void validatePasswordResetToken(String token) throws RuntimeException {
         try {
             Optional<PasswordResetToken> passTokenOpt = tokenRepository.findByToken(token);
@@ -54,6 +58,7 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
         }
     }
 
+    @Override
     public User getUserByPasswordResetToken(String token) throws RuntimeException {
         try {
             Optional<PasswordResetToken> passTokenOpt = tokenRepository.findByToken(token);
@@ -71,6 +76,8 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
         }
     }
 
+    @Override
+    @Transactional
     public void deletePasswordResetToken(String token) throws RuntimeException {
         try {
             Optional<PasswordResetToken> passTokenOpt = tokenRepository.findByToken(token);

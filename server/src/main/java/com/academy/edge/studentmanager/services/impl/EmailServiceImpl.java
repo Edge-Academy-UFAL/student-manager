@@ -3,7 +3,6 @@ package com.academy.edge.studentmanager.services.impl;
 import com.academy.edge.studentmanager.services.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -18,7 +17,6 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender emailSender;
     private final ResourceLoader resourceLoader;
 
-    @Autowired
     public EmailServiceImpl(JavaMailSender emailSender, ResourceLoader resourceLoader
     ) {
         this.emailSender = emailSender;
@@ -39,6 +37,7 @@ public class EmailServiceImpl implements EmailService {
 
     }
 
+    @Override
     public void sendPasswordResetEmail(String to, String resetLink) {
         try {
             var resource = this.resourceLoader.getResource("classpath:emails/forget-password.html");

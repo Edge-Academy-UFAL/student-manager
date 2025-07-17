@@ -4,12 +4,12 @@ import com.academy.edge.studentmanager.enums.Course;
 import com.academy.edge.studentmanager.models.User;
 import com.academy.edge.studentmanager.models.Student;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
-@Getter
-@AllArgsConstructor()
+@Data
+@NoArgsConstructor
 public class StudentUpdateDTO {
     @NotBlank(message = "Nome é obrigatório")
     private String name;

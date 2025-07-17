@@ -11,7 +11,6 @@ import com.academy.edge.studentmanager.services.StudentService;
 import com.academy.edge.studentmanager.dtos.StudentUpdateDTO;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,20 +27,19 @@ import static org.springframework.http.HttpStatus.*;
 
 @Service
 public class StudentServiceImpl implements StudentService {
-    final StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
-    final ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    final InvitationService invitationService;
+    private final InvitationService invitationService;
 
-    final S3Service s3Service;
+    private final S3Service s3Service;
 
     private static final List<String> imageContentTypes = Arrays.asList("image/png", "image/jpeg", "image/jpg");
     private static final String documentContentType = "application/pdf";
 
-    @Autowired
     public StudentServiceImpl(StudentRepository studentRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, InvitationService invitationService, S3Service s3Service) {
         this.studentRepository = studentRepository;
         this.modelMapper = modelMapper;
@@ -98,6 +96,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public StudentResponseDTO updateStudent(String email, StudentUpdateDTO studentUpdateDTO) {
         Student student = studentRepository
                 .findByEmail(email)
@@ -110,6 +109,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public StudentResponseDTO updateStudentPhoto(String email, MultipartFile file) {
         Student student = studentRepository
                 .findByEmail(email)
@@ -141,6 +141,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public void deleteStudent(String email) {
         Student student = studentRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
         student.setDeleted(true);
@@ -148,6 +149,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public StudentResponseDTO updateStudentAcademicRecord(String email, MultipartFile file) {
         long MAX_RECORD_FILE_SIZE = 2000000L; // 2MB
 
@@ -188,6 +190,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public void terminateStudent(String email, String terminationReason) {
         Student student = studentRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
         student.setTerminationReason(terminationReason);

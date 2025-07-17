@@ -1,14 +1,13 @@
 package com.academy.edge.studentmanager.dtos;
 
 import com.academy.edge.studentmanager.models.User;
-import com.academy.edge.studentmanager.models.Administrator;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
-@Getter
-@AllArgsConstructor()
+@Data
+@NoArgsConstructor
 public class AdministratorUpdateDTO {
     @NotBlank(message = "Nome é obrigatório")
     private String name;
