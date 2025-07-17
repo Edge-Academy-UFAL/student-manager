@@ -1,8 +1,8 @@
 package com.academy.edge.studentmanager.controllers;
 
 import com.academy.edge.studentmanager.dtos.SignInRequestDTO;
-import com.academy.edge.studentmanager.dtos.StudentCreateDTO;
 import com.academy.edge.studentmanager.dtos.StudentTerminateDTO;
+import com.academy.edge.studentmanager.dtos.StudentUpdateDTO;
 import com.academy.edge.studentmanager.enums.Course;
 import com.academy.edge.studentmanager.models.Student;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
@@ -10,16 +10,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,9 +39,6 @@ public class StudentControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -139,7 +138,7 @@ public class StudentControllerTest {
         var student1 = studentRepository.save(getTestStudent(1));
         var requestDTO = new StudentTerminateDTO("Comeu toda a pipoca.");
 
-        mockMvc.perform(patch(
+        mockMvc.perform(post(
                 "/api/v1/students/{email}/terminate",
                 student1.getEmail()
         ).contentType(MediaType.APPLICATION_JSON)
@@ -154,7 +153,7 @@ public class StudentControllerTest {
         var student1 = studentRepository.save(getTestStudent(1));
         var requestDTO = new StudentTerminateDTO("Comeu toda a pipoca.");
 
-        mockMvc.perform(patch(
+        mockMvc.perform(post(
                 "/api/v1/students/{email}/terminate",
                 student1.getEmail()
         ).contentType(MediaType.APPLICATION_JSON)
@@ -163,12 +162,33 @@ public class StudentControllerTest {
         mockMvc.perform(get("/api/v1/students/{email}", student1.getEmail())).andExpect(status().isOk());
     }
 
+    @Test
+    @WithMockUser(roles = "STUDENT", username = "student1@email.com")
+    void studentCanUpdateData() throws Exception {
+        var student1 = studentRepository.save(getTestStudent(1));
+        var studentUpdateDTO = getTestStudentUpdateDTO();
+
+        mockMvc.perform(patch("/api/v1/students/{email}", student1.getEmail()).contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(studentUpdateDTO))).andExpect(status().isOk());
+
+        mockMvc.perform(multipart(HttpMethod.PUT, "/api/v1/students/{email}/photo", student1.getEmail()).file(
+                getPlaceholderPhoto())).andExpect(status().isOk());
+    }
+
     Student getTestStudent(int i) {
-        var createDTO = new StudentCreateDTO(
-                "John Doe " + i,
+        var student = new Student();
+        student.setEmail("student" + i + "@email.com");
+        student.setName(student.getEmail().split("@", 1)[0]);
+        student.setEntryDate(LocalDate.now());
+        student.setStudentGroup(1);
+        student.setPassword(passwordEncoder.encode("Edge12345678@"));
+        return student;
+    }
+
+    StudentUpdateDTO getTestStudentUpdateDTO() {
+        return new StudentUpdateDTO(
+                "John Doe",
                 LocalDate.of(2024, 4, 14),
-                "student" + i + "@email.com",
-                "Edge12345678@",
                 Course.COMPUTER_SCIENCE,
                 "98765432",
                 "82988887777",
@@ -177,9 +197,14 @@ public class StudentControllerTest {
                 "2022.1",
                 ""
         );
-        var student = modelMapper.map(createDTO, Student.class);
-        student.setPassword(passwordEncoder.encode(student.getPassword()));
-        student.setEntryDate(LocalDate.now());
-        return student;
+    }
+
+    MockMultipartFile getPlaceholderPhoto() {
+        return new MockMultipartFile(
+                "photo",
+                "photo.jpg",
+                MediaType.IMAGE_JPEG_VALUE,
+                "placeholder-data".getBytes(StandardCharsets.US_ASCII)
+        );
     }
 }

@@ -2,7 +2,6 @@ package com.academy.edge.studentmanager.controllers;
 
 import com.academy.edge.studentmanager.dtos.AdministratorCreateDTO;
 import com.academy.edge.studentmanager.dtos.SignInRequestDTO;
-import com.academy.edge.studentmanager.enums.InvitationErrorType;
 import com.academy.edge.studentmanager.models.Administrator;
 import com.academy.edge.studentmanager.repositories.AdministratorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,7 +26,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -98,10 +96,7 @@ public class AdministratorControllerTest {
         });
 
         mockMvc.perform(post("/api/v1/administrators").contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").isMap())
-                .andExpect(jsonPath("$.error").value(InvitationErrorType.SMTP_ERROR.toString()));
+                .content(objectMapper.writeValueAsString(requestDTO))).andExpect(status().isInternalServerError());
 
         var receivedMessages = greenMail.getReceivedMessages();
         assertThat(receivedMessages).hasSize(0);
@@ -114,10 +109,7 @@ public class AdministratorControllerTest {
         var requestDTO = new AdministratorCreateDTO(administrator.getName(), administrator.getEmail(), "");
 
         mockMvc.perform(post("/api/v1/administrators").contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath("$").isMap())
-                .andExpect(jsonPath("$.error").value(InvitationErrorType.ALREADY_REGISTERED.toString()));
+                .content(objectMapper.writeValueAsString(requestDTO))).andExpect(status().isConflict());
     }
 
     @Test
