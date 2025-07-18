@@ -21,12 +21,12 @@ export default function StudentUpdateProfileFormComponent({
   return (
     <Form {...form}>
       <form className="flex gap-[24px] space-y-8">
-        <div className="flex basis-2/3 flex-col gap-[24px]">
+        <div className="flex min-w-[600px] basis-2/3 flex-col gap-[24px]">
           <PersonalDataFormSection form={form} />
           <ContactDataFormSection form={form} />
           <AcademicDataFormSection form={form} />
         </div>
-        <div className="flex basis-1/3 flex-col gap-[24px]">
+        <div className="flex min-w-[270px] basis-1/3 flex-col gap-[24px]">
           <PhotoUploadFormSection form={form} />
           <DucumentUploadFormSection form={form} />
         </div>
