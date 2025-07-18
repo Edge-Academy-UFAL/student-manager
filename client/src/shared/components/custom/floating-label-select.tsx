@@ -49,7 +49,7 @@ export function FloatingLabelSelect({
           className={cn(
             'peer !text-body-md relative h-[48px] w-full cursor-pointer rounded-md border border-neutral-300 px-[16px] py-[4px] font-normal text-neutral-900 not-disabled:bg-white not-disabled:hover:bg-white focus:outline-none focus-visible:ring-neutral-200',
             'aria-invalid:border-destructive',
-            'disabled:border disabled:border-neutral-300 disabled:bg-neutral-100 disabled:text-neutral-300 disabled:opacity-100 disabled:hover:bg-neutral-100',
+            'disabled:bg-neutral-150 disabled:border disabled:border-neutral-300 disabled:text-neutral-300 disabled:opacity-100 disabled:hover:bg-neutral-100',
           )}
           aria-invalid={props['aria-invalid']}
           disabled={disabled}
@@ -79,7 +79,7 @@ export function FloatingLabelSelect({
             : 'top-1 -translate-y-4 scale-75',
           'peer-aria-invalid:text-danger-300',
           isEmpty
-            ? 'peer-disabled:bg-neutral-100'
+            ? 'peer-disabled:bg-neutral-150'
             : 'peer-disabled:label-background-2-colors',
         )}
       >
