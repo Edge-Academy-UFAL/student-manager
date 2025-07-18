@@ -6,7 +6,7 @@ const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 const ACCEPTED_DOCUMENT_TYPES = [...ACCEPTED_IMAGE_TYPES, 'application/pdf'];
 
-export const registerFormSchema = z.object({
+export const updateProfileFormSchema = z.object({
   name: z
     .string()
     .min(1, {

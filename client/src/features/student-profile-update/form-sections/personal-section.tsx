@@ -11,20 +11,20 @@ import {
 import { FloatingLabelInput } from '@/shared/components/custom/floating-label-input';
 import { FloatingLabelSelect } from '@/shared/components/custom/floating-label-select';
 import { SimpleCheckbox } from '@/shared/components/custom/checkbox';
+import { DateInput } from '@/shared/components/custom/date-input';
 
-import FormSection from './form-section';
+import FormSection from '../components/form-section';
 
-import { registerFormSchema } from './schema';
+import { updateProfileFormSchema } from '../schema';
 import {
   raceOptions,
   maritalStateOptions,
   pronounsOptions,
   genderOptions,
-} from './models';
-import { DateInput } from '@/shared/components/custom/date-input';
+} from '../models';
 
 interface PersonalDataFormSectionProps {
-  form: UseFormReturn<z.infer<typeof registerFormSchema>>;
+  form: UseFormReturn<z.infer<typeof updateProfileFormSchema>>;
 }
 
 export default function PersonalDataFormSection({

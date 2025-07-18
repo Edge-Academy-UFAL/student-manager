@@ -11,11 +11,11 @@ import {
 import { FloatingLabelInput } from '@/shared/components/custom/floating-label-input';
 import { FloatingLabelPhoneInput } from '@/shared/components/custom/floating-label-phone-input';
 
-import FormSection from './form-section';
-import { registerFormSchema } from './schema';
+import FormSection from '../components/form-section';
+import { updateProfileFormSchema } from '../schema';
 
 interface ContactDataFormSectionProps {
-  form: UseFormReturn<z.infer<typeof registerFormSchema>>;
+  form: UseFormReturn<z.infer<typeof updateProfileFormSchema>>;
 }
 
 export default function ContactDataFormSection({

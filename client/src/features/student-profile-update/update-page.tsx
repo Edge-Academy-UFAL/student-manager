@@ -6,12 +6,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Button } from '@/shared/components/ui/button';
 
-import StudentRegisterFormComponent from './register-form';
-import { registerFormSchema } from './schema';
+import StudentUpdateProfileFormComponent from './update-form';
+import { updateProfileFormSchema } from './schema';
 
-export default function StudentRegisterPageComponent() {
-  const form = useForm<z.infer<typeof registerFormSchema>>({
-    resolver: zodResolver(registerFormSchema),
+export default function StudentProfileUpdatePageComponent() {
+  const form = useForm<z.infer<typeof updateProfileFormSchema>>({
+    resolver: zodResolver(updateProfileFormSchema),
     defaultValues: {
       name: '',
       birthDate: undefined,
@@ -50,7 +50,7 @@ export default function StudentRegisterPageComponent() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof registerFormSchema>) {
+  function onSubmit(values: z.infer<typeof updateProfileFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
@@ -87,7 +87,7 @@ export default function StudentRegisterPageComponent() {
           </Button>
         </div>
       </div>
-      <StudentRegisterFormComponent form={form} />
+      <StudentUpdateProfileFormComponent form={form} />
     </main>
   );
 }

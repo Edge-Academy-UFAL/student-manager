@@ -1,5 +1,5 @@
-import { cn } from '@/shared/lib/utils';
 import React from 'react';
+import { cn } from '@/shared/lib/utils';
 
 export default function FormSection({
   children,

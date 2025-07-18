@@ -8,12 +8,12 @@ import {
   FormMessage,
 } from '@/shared/components/ui/form';
 
-import FormSection from './form-section';
-import { registerFormSchema } from './schema';
-import { MockFileUpload } from './mock-upload-file';
+import FormSection from '../components/form-section';
+import { MockFileUpload } from '../components/mock-upload-file';
+import { updateProfileFormSchema } from '../schema';
 
 interface PhotoUploadFormSectionProps {
-  form: UseFormReturn<z.infer<typeof registerFormSchema>>;
+  form: UseFormReturn<z.infer<typeof updateProfileFormSchema>>;
 }
 
 export default function PhotoUploadFormSection({

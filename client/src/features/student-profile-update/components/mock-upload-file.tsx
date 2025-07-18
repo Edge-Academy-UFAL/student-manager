@@ -1,6 +1,7 @@
-import { Button } from '@/shared/components/ui/button';
-import { cn } from '@/shared/lib/utils';
 import { useId, useRef } from 'react';
+import { cn } from '@/shared/lib/utils';
+
+import { Button } from '@/shared/components/ui/button';
 
 type FileUploadProps = {
   id?: string;

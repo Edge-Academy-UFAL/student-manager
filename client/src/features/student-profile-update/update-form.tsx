@@ -5,17 +5,18 @@ import { z } from 'zod';
 
 import { Form } from '@/shared/components/ui/form';
 
-import { registerFormSchema } from './schema';
-import PersonalDataFormSection from './personal-section';
-import ContactDataFormSection from './contact-section';
-import AcademicDataFormSection from './academic-section';
-import PhotoUploadFormSection from './photo-section';
-import DucumentUploadFormSection from './document-section';
+import PersonalDataFormSection from './form-sections/personal-section';
+import ContactDataFormSection from './form-sections/contact-section';
+import AcademicDataFormSection from './form-sections/academic-section';
+import PhotoUploadFormSection from './form-sections/photo-section';
+import DucumentUploadFormSection from './form-sections/document-section';
 
-export default function StudentRegisterFormComponent({
+import { updateProfileFormSchema } from './schema';
+
+export default function StudentUpdateProfileFormComponent({
   form,
 }: {
-  form: UseFormReturn<z.infer<typeof registerFormSchema>>;
+  form: UseFormReturn<z.infer<typeof updateProfileFormSchema>>;
 }) {
   return (
     <Form {...form}>

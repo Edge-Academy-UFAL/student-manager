@@ -12,12 +12,12 @@ import { FloatingLabelInput } from '@/shared/components/custom/floating-label-in
 import { FloatingLabelSelect } from '@/shared/components/custom/floating-label-select';
 import { DateInput } from '@/shared/components/custom/date-input';
 
-import FormSection from './form-section';
-import { registerFormSchema } from './schema';
-import { academyStudentLevelOptions, courseOptions } from './models';
+import FormSection from '../components/form-section';
+import { updateProfileFormSchema } from '../schema';
+import { academyStudentLevelOptions, courseOptions } from '../models';
 
 interface AcademicDataFormSectionProps {
-  form: UseFormReturn<z.infer<typeof registerFormSchema>>;
+  form: UseFormReturn<z.infer<typeof updateProfileFormSchema>>;
 }
 
 export default function AcademicDataFormSection({
