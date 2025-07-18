@@ -149,7 +149,7 @@ export default function PersonalDataFormSection({
                   <SimpleCheckbox
                     label="Pessoa com deficiência?"
                     checked={field.value}
-                    onChange={field.onChange}
+                    onCheckedChange={field.onChange}
                     name={field.name}
                   />
                 </FormControl>
