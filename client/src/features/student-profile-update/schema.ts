@@ -66,29 +66,13 @@ export const updateProfileFormSchema = z.object({
     .nonempty({
       message: 'O telefone é obrigatório.',
     })
-    .refine(isValidPhoneNumber, { message: 'Número de telefone inválido.' })
-    .refine(
-      (value) => {
-        return value.length === 14;
-      },
-      {
-        message: 'Número de telefone inválido.',
-      },
-    ),
+    .refine(isValidPhoneNumber, { message: 'Número de telefone inválido.' }),
   whatsapp: z
     .string()
     .nonempty({
       message: 'O Whatsapp é obrigatório.',
     })
-    .refine(isValidPhoneNumber, { message: 'Número de Whatsapp inválido.' })
-    .refine(
-      (value) => {
-        return value.length === 14;
-      },
-      {
-        message: 'Número de Whatsapp inválido.',
-      },
-    ),
+    .refine(isValidPhoneNumber, { message: 'Número de Whatsapp inválido.' }),
   cep: z
     .string()
     .min(1, { message: 'O CEP é obrigatório.' })
