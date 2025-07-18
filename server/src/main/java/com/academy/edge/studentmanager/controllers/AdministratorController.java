@@ -1,7 +1,6 @@
 package com.academy.edge.studentmanager.controllers;
 
 import com.academy.edge.studentmanager.dtos.*;
-import com.academy.edge.studentmanager.enums.InvitationErrorType;
 import com.academy.edge.studentmanager.services.AdministratorService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,17 +23,9 @@ public class AdministratorController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<InvitationErrorDTO> register(@Valid @RequestBody AdministratorCreateDTO requestDTO) {
-        var responseDTO = this.administratorService.register(requestDTO.getName(), requestDTO.getEmail());
-        HttpStatus status;
-        if (responseDTO == null) {
-            status = HttpStatus.CREATED;
-        } else if (responseDTO.getError() == InvitationErrorType.ALREADY_REGISTERED) {
-            status = HttpStatus.CONFLICT;
-        } else {
-            status = HttpStatus.BAD_REQUEST;
-        }
-        return new ResponseEntity<>(responseDTO, status);
+    public ResponseEntity<Void> register(@Valid @RequestBody AdministratorCreateDTO requestDTO) {
+        this.administratorService.register(requestDTO.getName(), requestDTO.getEmail());
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping

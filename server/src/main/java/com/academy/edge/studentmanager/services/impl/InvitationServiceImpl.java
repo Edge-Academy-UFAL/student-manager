@@ -9,21 +9,19 @@ import com.academy.edge.studentmanager.repositories.InvitationRepository;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
 import com.academy.edge.studentmanager.services.EmailService;
 import com.academy.edge.studentmanager.services.InvitationService;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.core.io.ResourceLoader;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 
 @Log4j2
 @Service
@@ -33,22 +31,20 @@ public class InvitationServiceImpl implements InvitationService {
     private final StudentRepository studentRepository;
     private final EmailService emailService;
     private final ApplicationProperties applicationProperties;
-    private final String invitationEmailTemplate;
+    private final Resource invitationEmail;
 
     public InvitationServiceImpl(
             EmailService emailService,
             StudentRepository studentRepository,
             InvitationRepository invitationRepository,
             ApplicationProperties applicationProperties,
-            ResourceLoader resourceLoader
-    ) throws IOException {
+            @Value("classpath:emails/student-invitation.html") Resource invitationEmail
+    ) {
         this.emailService = emailService;
         this.invitationRepository = invitationRepository;
         this.studentRepository = studentRepository;
         this.applicationProperties = applicationProperties;
-
-        var resource = resourceLoader.getResource("classpath:emails/student-invitation.html");
-        this.invitationEmailTemplate = resource.getContentAsString(StandardCharsets.UTF_8);
+        this.invitationEmail = invitationEmail;
     }
 
     @Override
@@ -82,10 +78,10 @@ public class InvitationServiceImpl implements InvitationService {
             invitation.setStudentGroup(studentGroup);
             invitation.setEntryDate(entryDate);
             invitation.setCode(code);
+            invitationRepository.save(invitation);
 
             try {
-                invitationRepository.save(invitation);
-                emailService.sendEmail(email, "Bem vindo ao Academy!", this.constructHtmlMessageText(code));
+                this.sendInvitationEmail(email, code);
                 successfulEmails.add(email);
             } catch (Exception e) {
                 log.error("Failed to send invitation email", e);
@@ -96,8 +92,9 @@ public class InvitationServiceImpl implements InvitationService {
         return new InvitationSendResponseDTO(successfulEmails, failedEmails);
     }
 
-    private String constructHtmlMessageText(String code) {
+    private void sendInvitationEmail(String email, String code) throws MessagingException, IOException {
         var registerUrl = this.applicationProperties.frontendUrl() + "/register/" + code;
-        return this.invitationEmailTemplate.replace("[[URL]]", registerUrl);
+        var replacements = Map.of("[[URL]]", registerUrl);
+        emailService.sendEmailFromTemplate(email, "Bem vindo ao Academy!", this.invitationEmail, replacements);
     }
 }

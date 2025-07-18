@@ -6,7 +6,7 @@ import com.academy.edge.studentmanager.models.User;
 
 public interface AuthService {
     String login(SignInRequestDTO signInRequestDTO);
-    String forgotPassword(String email);
+    void forgotPassword(String email);
     void resetPassword(ResetPasswordRequestDTO resetPasswordRequestDTO);
     void validatePassword(User user, String oldPassword);
     void changePassword(User user, String newPassword);

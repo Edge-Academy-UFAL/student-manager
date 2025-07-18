@@ -1,11 +1,12 @@
 package com.academy.edge.studentmanager.services;
 
-import com.academy.edge.studentmanager.dtos.*;
+import com.academy.edge.studentmanager.dtos.AdministratorResponseDTO;
+import com.academy.edge.studentmanager.dtos.AdministratorUpdateDTO;
 
 import java.util.List;
 
 public interface AdministratorService {
-    InvitationErrorDTO register(String name, String email);
+    void register(String name, String email);
 
     List<AdministratorResponseDTO> getAdministrators();
 
