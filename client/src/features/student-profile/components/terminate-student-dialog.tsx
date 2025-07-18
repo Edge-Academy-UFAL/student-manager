@@ -120,6 +120,7 @@ export function TerminateStudentDialog({
     try {
       res = await terminateStudent(email, { terminationReason: reason });
     } catch (error) {
+      console.error(error);
       toast.error('Erro de conexão com o servidor');
       return;
     }
@@ -150,8 +151,8 @@ export function TerminateStudentDialog({
   );
 }
 
-export interface TerminateStudentDialogProps {
+interface TerminateStudentDialogProps {
   name: string;
   email: string;
-  children: React.ComponentProps<typeof DialogTrigger>['children'];
+  children: React.ReactNode;
 }

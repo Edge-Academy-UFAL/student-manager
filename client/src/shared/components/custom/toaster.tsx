@@ -20,12 +20,12 @@ function ToasterWrapper(props: React.ComponentProps<typeof Toaster>) {
         unstyled: true,
         classNames: {
           toast: cn(
-            'px-4 py-2 rounded-sm shadow-[0_4px_12px_rgba(0,0,0,0.1)] w-89 text-sm flex items-center gap-4',
+            'flex w-89 items-center gap-4 rounded-sm px-4 py-2 text-sm shadow-[0_4px_12px_rgba(0,0,0,0.1)]',
           ),
-          title: cn('font-bold leading-normal'),
-          description: cn('leading-normal text-foreground'),
+          title: cn('leading-normal font-bold'),
+          description: cn('text-foreground leading-normal'),
           closeButton: cn(
-            'h-6 w-6 flex justify-center items-center text-foreground cursor-pointer order-last ml-auto',
+            'text-foreground order-last ml-auto flex h-6 w-6 cursor-pointer items-center justify-center',
           ),
           success: cn('!bg-success-100 text-success-400'),
           error: cn('!bg-danger-100 text-danger-400'),
@@ -34,7 +34,7 @@ function ToasterWrapper(props: React.ComponentProps<typeof Toaster>) {
           default: cn('bg-background'),
           content: cn('flex flex-col'),
           icon: cn(
-            'flex h-4 w-4 relative justify-start items-center flex-shrink-0 ml-[var(--toast-icon-margin-start)] mr-[var(--toast-icon-margin-end)] [&_>*]:flex-shrink-0 [&_svg]:ml-[var(--toast-svg-margin-start)] [&_svg]:mr-[var(--toast-svg-margin-end)]',
+            'relative mr-[var(--toast-icon-margin-end)] ml-[var(--toast-icon-margin-start)] flex h-4 w-4 flex-shrink-0 items-center justify-start [&_>*]:flex-shrink-0 [&_svg]:mr-[var(--toast-svg-margin-end)] [&_svg]:ml-[var(--toast-svg-margin-start)]',
           ),
         },
         closeButtonAriaLabel: 'Fechar notificação',

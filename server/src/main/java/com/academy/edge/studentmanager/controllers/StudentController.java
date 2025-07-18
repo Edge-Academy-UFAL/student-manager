@@ -25,13 +25,13 @@ public class StudentController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN','INSTRUCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<List<StudentResponseDTO>> getAllStudents(){
         return new ResponseEntity<>(studentService.getStudents(), HttpStatus.OK);
     }
 
     @GetMapping({"/{email}"})
-    @PreAuthorize("hasAnyRole('ADMIN','INSTRUCTOR') or authentication.name == #email")
+    @PreAuthorize("hasAnyRole('ADMIN') or authentication.name == #email")
     public ResponseEntity<StudentResponseDTO> getStudent(@PathVariable String email){
         return new ResponseEntity<>(studentService.getStudentByEmail(email), HttpStatus.OK);
     }
@@ -43,14 +43,14 @@ public class StudentController {
     }
 
     @DeleteMapping({"/{email}"})
-    @PreAuthorize("hasAnyRole('ADMIN','INSTRUCTOR')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Void> deleteStudent(@PathVariable String email){
         studentService.deleteStudent(email);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping({"/{email}"})
-    @PreAuthorize("hasAnyRole('ADMIN','INSTRUCTOR') or authentication.name == #email")
+    @PreAuthorize("hasAnyRole('ADMIN') or authentication.name == #email")
     public ResponseEntity<StudentResponseDTO> updateStudentByEmail(@PathVariable String email,
                                                      @RequestBody @Valid StudentUpdateDTO studentUpdateDTO) {
         StudentResponseDTO studentResponseDTO = studentService.updateStudent(email, studentUpdateDTO);
@@ -59,7 +59,7 @@ public class StudentController {
     }
 
     @PutMapping({"/{email}/photo"})
-    @PreAuthorize("hasAnyRole('ADMIN','INSTRUCTOR') or authentication.name == #email")
+    @PreAuthorize("hasAnyRole('ADMIN') or authentication.name == #email")
     public ResponseEntity<StudentResponseDTO> updateStudentPhotoByEmail(@PathVariable String email,
                                                                         @RequestParam("photo") MultipartFile file) {
         StudentResponseDTO studentResponseDTO = studentService.updateStudentPhoto(email, file);
@@ -68,7 +68,7 @@ public class StudentController {
     }
 
     @PutMapping({"/{email}/record"})
-    @PreAuthorize("hasAnyRole('ADMIN', 'INSTRUCTOR') or authentication.name == #email")
+    @PreAuthorize("hasAnyRole('ADMIN') or authentication.name == #email")
     public ResponseEntity<StudentResponseDTO> updateStudentAcademicRecordByEmail(
             @PathVariable String email,
             @RequestParam("photo") MultipartFile file) {

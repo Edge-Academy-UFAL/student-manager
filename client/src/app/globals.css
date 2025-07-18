@@ -58,6 +58,7 @@
   --color-chart-600: #007e90;
   --color-chart-800: #004f5a;
 
+  /* Keep synchronized with customTwMerge in utils.ts */
   --text-heading-xl: 32px;
   --text-heading-lg: 28px;
   --text-heading-md: 28px;

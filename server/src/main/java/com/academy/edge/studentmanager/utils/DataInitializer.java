@@ -2,8 +2,8 @@ package com.academy.edge.studentmanager.utils;
 
 
 import com.academy.edge.studentmanager.enums.Course;
-import com.academy.edge.studentmanager.models.Administrator;
 import com.academy.edge.studentmanager.models.Student;
+import com.academy.edge.studentmanager.models.Administrator;
 import com.academy.edge.studentmanager.models.Invitation;
 import com.academy.edge.studentmanager.repositories.AdministratorRepository;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
@@ -35,7 +35,7 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         if (administratorRepository.findByEmail("admin@admin.com").isEmpty()) {
-            var administrator = new Administrator();
+            Administrator administrator = new Administrator();
             administrator.setName("Admin");
             administrator.setEmail("admin@admin.com");
             administrator.setPassword(passwordEncoder.encode("Admin123"));
