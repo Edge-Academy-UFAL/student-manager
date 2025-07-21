@@ -1,5 +1,3 @@
-import Navbar from '@/features/navbar/header';
-
 export default function MainLayout({
   children,
 }: Readonly<{
@@ -7,8 +5,10 @@ export default function MainLayout({
 }>) {
   return (
     <div>
-      <Navbar />
-      {children}
+      <div className="flex h-[100vh] w-full">
+        <aside className="bg-action-100 px-[16px] py-[24px]">EA</aside>
+        <div className="grow overflow-y-scroll p-[24px]">{children}</div>
+      </div>
     </div>
   );
 }

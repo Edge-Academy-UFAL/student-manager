@@ -23,7 +23,7 @@ export function SimpleCheckbox({
       <Checkbox
         id={checkboxId}
         className={cn(
-          'peer data-[state=checked]:bg-brand-500 data-[state=checked]:border-brand-500 rounded-[2px] border-[2px] border-neutral-400',
+          'peer data-[state=checked]:bg-brand-500 data-[state=checked]:border-brand-500 rounded-[2px] border-[2px] border-neutral-400 not-data-[state=checked]:bg-transparent',
           inputClassName,
         )}
         {...props}
