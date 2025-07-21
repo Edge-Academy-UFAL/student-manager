@@ -3,7 +3,6 @@ import { Work_Sans, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/shared/components/custom/toaster';
 import { Providers } from '@/shared/components/providers/providers';
-import { auth } from '@/shared/lib/auth';
 
 const workSans = Work_Sans({
   variable: '--font-work-sans',
@@ -20,18 +19,17 @@ export const metadata: Metadata = {
   description: 'Gerenciador de alunos do Edge Academy.',
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
   return (
     <html lang="pt-br" suppressHydrationWarning>
       <body
         className={`${workSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers session={session}>{children}</Providers>
+        <Providers>{children}</Providers>
         <Toaster />
       </body>
     </html>
