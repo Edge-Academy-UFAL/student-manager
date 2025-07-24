@@ -1,0 +1,1392 @@
+[
+  [
+    "COMP001",
+    "INTRODUÇÃO À COMPUTAÇÃO",
+    80
+  ],
+  [
+    "COMP389",
+    "CONCEITOS DE LINGUAGEM DE PROGRAMAÇÃO",
+    72
+  ],
+  [
+    "COMP390",
+    "APRENDIZAGEM DE MÁQUINA",
+    72
+  ],
+  [
+    "COMP391",
+    "SISTEMAS DIGITAIS",
+    72
+  ],
+  [
+    "COMP392",
+    "SISTEMAS DISTRIBUÍDOS",
+    72
+  ],
+  [
+    "COMP393",
+    "REDES NEURAIS E APRENDIZADO PROFUNDO",
+    72
+  ],
+  [
+    "COMP394",
+    "FPGA",
+    72
+  ],
+  [
+    "COMP395",
+    "INTERAÇÃO HOMEM-MÁQUINA",
+    72
+  ],
+  [
+    "COMP396",
+    "PROCESSAMENTO DIGITAL DE IMAGENS",
+    72
+  ],
+  [
+    "COMP397",
+    "COMPUTAÇÃO EVOLUCIONÁRIA",
+    72
+  ],
+  [
+    "COMP398",
+    "SISTEMAS EMBARCADOS",
+    72
+  ],
+  [
+    "COMP399",
+    "GERÊNCIA DE PROJETO",
+    72
+  ],
+  [
+    "COMP400",
+    "VISÃO COMPUTACIONAL",
+    72
+  ],
+  [
+    "COMP401",
+    "CIÊNCIA DE DADOS",
+    72
+  ],
+  [
+    "COMP402",
+    "MICROCONTROLADORES E APLICAÇÕES",
+    72
+  ],
+  [
+    "COMP403",
+    "SEGURANÇA DE SISTEMAS COMPUTACIONAIS",
+    72
+  ],
+  [
+    "COMP404",
+    "CÁLCULO 3",
+    72
+  ],
+  [
+    "COMP405",
+    "TÓPICOS EM CIÊNCIA DA COMPUTAÇÃO 1",
+    72
+  ],
+  [
+    "COMP406",
+    "TÓPICOS EM CIÊNCIA DA COMPUTAÇÃO 2",
+    72
+  ],
+  [
+    "COMP407",
+    "TÓPICOS EM CIÊNCIA DA COMPUTAÇÃO 3",
+    72
+  ],
+  [
+    "COMP409",
+    "TÓPICOS EM MATEMÁTICA PARA COMPUTAÇÃO 1",
+    72
+  ],
+  [
+    "COMP410",
+    "TÓPICOS EM MATEMÁTICA PARA COMPUTAÇÃO 2",
+    72
+  ],
+  [
+    "COMP411",
+    "TÓPICOS EM MATEMÁTICA PARA COMPUTAÇÃO 3",
+    72
+  ],
+  [
+    "COMP412",
+    "TÓPICOS EM FÍSICA PARA COMPUTAÇÃO 1",
+    72
+  ],
+  [
+    "COMP413",
+    "TÓPICOS EM FÍSICA PARA COMPUTAÇÃO 2",
+    72
+  ],
+  [
+    "COMP414",
+    "TÓPICOS EM FÍSICA PARA COMPUTAÇÃO 3",
+    72
+  ],
+  [
+    "COMP417",
+    "NAVEGAÇÃO EM ROBÓTICA MÓVEL",
+    72
+  ],
+  [
+    "COMP418",
+    "PESQUISA OPERACIONAL",
+    72
+  ],
+  [
+    "COMP419",
+    "CÁLCULO 2",
+    72
+  ],
+  [
+    "COMP420",
+    "EMPREENDEDORISMO",
+    72
+  ],
+  [
+    "COMP421",
+    "INTRODUÇÃO À COMPUTAÇÃO",
+    72
+  ],
+  [
+    "COMP422",
+    "TESTE DE SOFTWARE",
+    72
+  ],
+  [
+    "COMP423",
+    "BANCO DE DADOS 2",
+    40
+  ],
+  [
+    "COMP424",
+    "FUNDAMENTOS DE IA APLICADOS AO DIAGNÓSTICO MÉDICO",
+    72
+  ],
+  [
+    "COMP425",
+    "PROCESSAMENTO DE LINGUAGEM NATURAL;",
+    72
+  ],
+  [
+    "COMP426",
+    "LABORATÓRIO DE PROGRAMAÇÃO",
+    40
+  ],
+  [
+    "COMP427",
+    "REDES NEURAIS E APRENDIZADO PROFUNDO;",
+    72
+  ],
+  [
+    "COMP428",
+    "INTELIGÊNCIA ARTIFICIAL APLICADA AO DIAGNÓSTICO DE DOENÇAS",
+    72
+  ],
+  [
+    "COMP429",
+    "CÁLCULO 4",
+    72
+  ],
+  [
+    "COMP430",
+    "TÓPICOS EM SOFTWARE BÁSICO",
+    72
+  ],
+  [
+    "COMP431",
+    "LIBRAS",
+    72
+  ],
+  [
+    "COMP433",
+    "GAMIFICAÇÃO",
+    72
+  ],
+  [
+    "COMP434",
+    "EXPLORAÇÃO E MINERAÇÃO DE DADOS",
+    72
+  ],
+  [
+    "COMP435",
+    "TÓPICOS ESPECIAIS EM GESTÃO DE PROJETOS",
+    72
+  ],
+  [
+    "COMP436",
+    "TÓPICOS ESP. BANCO DE DADOS: GER. DE DADOS SEMIESTRUTURADOS",
+    40
+  ],
+  [
+    "COMP437",
+    "TÓPICOS EM ENGENHARIA DE SOFTWARE - PROJETANDO LINHAS DE PRODUTO DE SOFTWARE",
+    40
+  ],
+  [
+    "COMP439",
+    "CÁLCULO 1;",
+    72
+  ],
+  [
+    "COMP440",
+    "INTRODUÇÃO À ADMINISTRAÇÃO",
+    72
+  ],
+  [
+    "COMP441",
+    "LABORATÓRIO DE INTELIGÊNCIA ARTIFICIAL EM ROBÓTICA",
+    72
+  ],
+  [
+    "COMP442",
+    "TÓPICOS ESPECIAIS EM GERÊNCIA E PROCESSAMENTO DE DADOS EM LARGA ESCALA",
+    72
+  ],
+  [
+    "COMP443",
+    "REDES DE COMPUTADORES 2;",
+    40
+  ],
+  [
+    "COMP444",
+    "REUSO DE SOFTWARE E METODOLOGIAS ÁGEIS",
+    40
+  ],
+  [
+    "COMP448",
+    "INGLÊS INSTRUMENTAL",
+    72
+  ],
+  [
+    "COMP449",
+    "METODOLOGIA E PROCESSOS",
+    40
+  ],
+  [
+    "COMP450",
+    "CIRCUITOS DIGITAIS",
+    40
+  ],
+  [
+    "COMP451",
+    "DESENHO",
+    72
+  ],
+  [
+    "COMP453",
+    "TÓPICOS ESPECIAIS EM BANCO DE DADOS: DADOS ESTRUTURADOS, SEMIESTRUTURADOS E NÃO-ESTRUTURADOS",
+    72
+  ],
+  [
+    "COMP359",
+    "PROGRAMAÇÃO 1",
+    72
+  ],
+  [
+    "COMP360",
+    "LÓGICA PARA COMPUTAÇÃO",
+    72
+  ],
+  [
+    "COMP361",
+    "COMPUTAÇÃO, SOCIEDADE E ÉTICA",
+    72
+  ],
+  [
+    "COMP362",
+    "MATEMÁTICA DISCRETA",
+    72
+  ],
+  [
+    "COMP363",
+    "CÁLCULO DIFERENCIAL E INTEGRAL",
+    144
+  ],
+  [
+    "COMP364",
+    "ESTRUTURA DE DADOS",
+    72
+  ],
+  [
+    "COMP365",
+    "BANCO DE DADOS",
+    72
+  ],
+  [
+    "COMP366",
+    "ORGANIZAÇÃO E ARQUITETURA DE COMPUTADORES",
+    72
+  ],
+  [
+    "COMP367",
+    "GEOMETRIA ANALÍTICA",
+    72
+  ],
+  [
+    "COMP368",
+    "REDES DE COMPUTADORES",
+    72
+  ],
+  [
+    "COMP369",
+    "TEORIA DOS GRAFOS",
+    72
+  ],
+  [
+    "COMP370",
+    "PROBABILIDADE E ESTATÍSTICA",
+    72
+  ],
+  [
+    "COMP371",
+    "ÁLGEBRA LINEAR",
+    72
+  ],
+  [
+    "COMP372",
+    "PROGRAMAÇÃO 2",
+    72
+  ],
+  [
+    "COMP373",
+    "PROGRAMAÇÃO 3",
+    72
+  ],
+  [
+    "COMP374",
+    "PROJETO E ANÁLISE DE ALGORITMOS",
+    72
+  ],
+  [
+    "COMP376",
+    "TEORIA DA COMPUTAÇÃO",
+    72
+  ],
+  [
+    "COMP377",
+    "ACE 1: PROJETO I",
+    75
+  ],
+  [
+    "COMP378",
+    "SISTEMAS OPERACIONAIS",
+    72
+  ],
+  [
+    "COMP379",
+    "COMPILADORES",
+    72
+  ],
+  [
+    "COMP380",
+    "INTELIGÊNCIA ARTIFICIAL",
+    72
+  ],
+  [
+    "COMP381",
+    "COMPUTAÇÃO GRÁFICA",
+    72
+  ],
+  [
+    "COMP383",
+    "ACE 2: CONTINUIDADE DO PROJETO I",
+    75
+  ],
+  [
+    "COMP382",
+    "PROJETO E DESENVOLVIMENTO DE SISTEMAS",
+    288
+  ],
+  [
+    "COMP384",
+    "ACE 3: PROJETO 2",
+    75
+  ],
+  [
+    "COMP386",
+    "METODOLOGIA DE PESQUISA E TRABALHO INDIVIDUAL",
+    72
+  ],
+  [
+    "COMP387",
+    "NOÇÕES DE DIREITO",
+    72
+  ],
+  [
+    "COMP388",
+    "ACE 4: CONTINUAÇÃO DO PROJETO 2",
+    75
+  ],
+  [
+    "COMP385",
+    "ACE 5: EVENTO",
+    75
+  ],
+  [
+    "TCC0296",
+    "TCC",
+    180
+  ],
+  [
+    "ECOM038",
+    "CONCEITOS DE LINGUAGENS DE PROGRAMAÇÃO",
+    60
+  ],
+  [
+    "ECOM043",
+    "SISTEMAS DE EVENTOS DISCRETOS",
+    60
+  ],
+  [
+    "ECOM045",
+    "COMPILADORES",
+    60
+  ],
+  [
+    "ECOM047",
+    "PARADIGMAS DE LING. DE PROGRAMAÇÃO",
+    30
+  ],
+  [
+    "ECOM049",
+    "GERÊNCIA DE PROJETOS",
+    60
+  ],
+  [
+    "ECOM050",
+    "LABORATÓRIO DE PROGRAMAÇÃO",
+    30
+  ],
+  [
+    "ECOM052",
+    "FUNDAMENTOS DE LIBRAS",
+    45
+  ],
+  [
+    "ECOM053",
+    "DESENVOLVIMENTO BASEADO EM ONTOLOGIAS",
+    40
+  ],
+  [
+    "ECOM054",
+    "PROCESSAMENTO DIGITAL DE SINAIS",
+    60
+  ],
+  [
+    "ECOM055",
+    "TÓPICOS ESPECIAIS EM CIRCUITOS ELÉTRICOS",
+    30
+  ],
+  [
+    "ECOM056",
+    "LABORATÓRIO DE ESTRUTURA DE DADOS",
+    30
+  ],
+  [
+    "ECOM065",
+    "TÓPICOS EM SISTEMAS DISTRIBUÍDOS: PARADIGMAS MODERNOS",
+    30
+  ],
+  [
+    "ECOM066",
+    "LABORATÓRIO DE ELETRÔNICA",
+    30
+  ],
+  [
+    "ECOM067",
+    "LABORATÓRIOS DE CIRCUITOS ELÉTRICOS",
+    30
+  ],
+  [
+    "ECOM068",
+    "LABORATÓRIO DE ELETRÔNICA",
+    30
+  ],
+  [
+    "ECOM069",
+    "TÓPICOS EM SISTEMAS DISTRIBUÍDOS - ALGORITMOS DISTRIBUÍDOS I",
+    30
+  ],
+  [
+    "ECOM070",
+    "TÓPICOS EM SISTEMAS DISTRIBUÍDOS 'ALGORITMOS DISTRIBUÍDOS II'",
+    30
+  ],
+  [
+    "ECOM071",
+    "REDES DE PETRI",
+    60
+  ],
+  [
+    "ECOM072",
+    "INTRODUÇÃO À TEORIA DA INFORMAÇÃO",
+    30
+  ],
+  [
+    "ECOM073",
+    "INTELIGÊNCIA ARTIFICIAL 2",
+    30
+  ],
+  [
+    "ECOM074",
+    "DESENVOLVIMENTO COM QT/C++",
+    30
+  ],
+  [
+    "ECOM075",
+    "PROGRAMAÇÃO AVANÇADA III",
+    60
+  ],
+  [
+    "ECOM076",
+    "PROGRAMAÇÃO AVANÇADA I",
+    60
+  ],
+  [
+    "ECOM077",
+    "REDES DE PETRI",
+    60
+  ],
+  [
+    "ECOM078",
+    "TÓPICOS ESP. BANCO DE DADOS: GER. DE DADOS SEMIESTRUTURADOS.",
+    30
+  ],
+  [
+    "ECOM079",
+    "ESCALABILIDADE DE SOFTWARE NA INTERNET: FUND. E TECNOLOGIAS",
+    30
+  ],
+  [
+    "ECOM080",
+    "DADOS ABERTOS CONECTADOS (LINKED OPEN DATA)",
+    30
+  ],
+  [
+    "ECOM081",
+    "INTRODUÇÃO À ADMINISTRAÇÃO",
+    60
+  ],
+  [
+    "ECOM082",
+    "INTERAÇÃO HOMEM-MÁQUINA",
+    30
+  ],
+  [
+    "ECOM083",
+    "MATEMÁTICA FINANCEIRA",
+    60
+  ],
+  [
+    "ECOM084",
+    "ESTATÍSTICA ECONÔMICA",
+    60
+  ],
+  [
+    "ECOM085",
+    "ECONOMIA INDUSTRIAL 1",
+    60
+  ],
+  [
+    "ECOM086",
+    "CIRCUITOS IMPRESSOS",
+    60
+  ],
+  [
+    "ECOM087",
+    "PROJETO DE SISTEMAS EMBARCADOS",
+    60
+  ],
+  [
+    "ECOM088",
+    "PROJETO E APLICAÇÕES EM REDES DE SENSORES",
+    60
+  ],
+  [
+    "ECOM089",
+    "INTELIGÊNCIA ARTIFICIAL 2",
+    60
+  ],
+  [
+    "ECOM090",
+    "FENÔMENOS DE TRANSPORTE 1",
+    60
+  ],
+  [
+    "ECOM091",
+    "PESQUISA OPERACIONAL",
+    60
+  ],
+  [
+    "ECOM092",
+    "GESTÃO DE PROCESSOS DE NEGÓCIO",
+    60
+  ],
+  [
+    "ECOM093",
+    "APRENDIZADO DE MÁQUINA",
+    60
+  ],
+  [
+    "ECOM094",
+    "FUNDAMENTOS EM INFORMÁTICA MÉDICA E TELEMEDICINA",
+    60
+  ],
+  [
+    "ECOM095",
+    "SISTEMAS DE TEMPO REAL E APLICAÇÕES",
+    60
+  ],
+  [
+    "ECOM096",
+    "RESIDÊNCIA EM HARDWARE",
+    60
+  ],
+  [
+    "ECOM097",
+    "GESTÃO FINANCEIRA E ORÇAMENTÁRIA 1",
+    60
+  ],
+  [
+    "ECOM098",
+    "FUNDAMENTOS EM ANÁLISE DE IMAGENS MÉDICAS",
+    60
+  ],
+  [
+    "ECOM099",
+    "ENERGIA SOLAR FOTOVOLTAICA",
+    30
+  ],
+  [
+    "ECOM100",
+    "VISÃO COMPUTACIONAL",
+    60
+  ],
+  [
+    "ECOM101",
+    "ENGENHARIA DE SISTEMAS EMBARCADOS",
+    30
+  ],
+  [
+    "ECOM102",
+    "INTERNET DAS COISAS",
+    80
+  ],
+  [
+    "ECOM103",
+    "TEORIA DA COMPUTAÇÃO",
+    30
+  ],
+  [
+    "ECOM104",
+    "INTERNET E WEB",
+    30
+  ],
+  [
+    "ECOM105",
+    "COMUNICAÇÕES DIGITAIS",
+    60
+  ],
+  [
+    "ECOM106",
+    "INTRODUÇÃO À ROBÓTICA MÓVEL",
+    60
+  ],
+  [
+    "ECOM107",
+    "FUNDAMENTOS DE MATEMÁTICA",
+    60
+  ],
+  [
+    "ECOM108",
+    "BANCO DE DADOS II",
+    30
+  ],
+  [
+    "ECOM109",
+    "FUNDAMENTOS EM INFORMÁTICA MÉDICA E TELEMEDICINA",
+    30
+  ],
+  [
+    "ECOM110",
+    "PROGRAMAÇÃO PARA SISTEMAS EMBARCADOS",
+    60
+  ],
+  [
+    "ECOM111",
+    "REDES DE COMPUTADORES 2",
+    30
+  ],
+  [
+    "ECOM112",
+    "PROJETO DE SISTEMAS DIGITAIS COM FPGA",
+    30
+  ],
+  [
+    "ECOM113",
+    "NAVEGAÇÃO EM ROBÓTICA MÓVEL",
+    60
+  ],
+  [
+    "ECOM114",
+    "ECONOMIA PARA ENGENHARIA",
+    60
+  ],
+  [
+    "ECOM115",
+    "COMPUTAÇÃO GRÁFICA",
+    60
+  ],
+  [
+    "ECOM116",
+    "PROJETO DE COMPUTAÇÃO NATURAL",
+    60
+  ],
+  [
+    "ECOM117",
+    "TÓPICOS EM ENERGIA SOLAR FOTOVOLTAICA",
+    60
+  ],
+  [
+    "ECOM120",
+    "PROJETO DE SISTEMAS DE CONTROLE",
+    60
+  ],
+  [
+    "ECOM121",
+    "INTRODUÇÃO À IDENTIFICAÇÃO DE SISTEMAS",
+    60
+  ],
+  [
+    "ECOM122",
+    "EXPLORAÇÃO E MINERAÇÃO DE DADOS",
+    60
+  ],
+  [
+    "ECOM123",
+    "LABORATÓRIO DE ARQUITETURA DE COMPUTADORES",
+    30
+  ],
+  [
+    "ECOM124",
+    "COMUNICAÇÕES ÓPTICAS",
+    30
+  ],
+  [
+    "ECOM125",
+    "TÓP EM ENG DE SOFTWARE:PROJETANDO LINHAS DE PROD DE SOFTWARE",
+    30
+  ],
+  [
+    "ECOM127",
+    "ADMINISTRAÇÃO",
+    30
+  ],
+  [
+    "ECOM128",
+    "EQUAÇÕES DIFERENCIAIS ORDINÁRIAS",
+    30
+  ],
+  [
+    "ECOM129",
+    "TÓPICOS EM SISTEMAS OPEREACIONAIS",
+    30
+  ],
+  [
+    "ECOM130",
+    "PROGRAMAÇÃO EM PYTHON",
+    60
+  ],
+  [
+    "ECOM131",
+    "TÓPICOS AVANÇADOS EM C",
+    60
+  ],
+  [
+    "ECOM132",
+    "TÓPICOS AVANÇADOS EM CIRCUITOS DIGITAIS",
+    60
+  ],
+  [
+    "ECOM133",
+    "TÓPICOS EM LINGUAGENS COMPUTACIONAIS - C ++",
+    60
+  ],
+  [
+    "ECOM134",
+    "TÓPICOS EM LÓGICA APLICADA À PROGRAMAÇÃO",
+    60
+  ],
+  [
+    "ECOM135",
+    "ESPANHOL INTERMEDIÁRIO",
+    60
+  ],
+  [
+    "ECOM136",
+    "PROGRAMAÇÃO COM MATLAB",
+    60
+  ],
+  [
+    "ECOM137",
+    "TÓPICOS EM INTELIGÊNCIA ARTIFICIAL: LAB DE INTELIÊNCIA ARTIF",
+    30
+  ],
+  [
+    "ECOM138",
+    "TÓPICOS EM SISTEMAS TUTORES INTELIGENTES",
+    30
+  ],
+  [
+    "ECOM139",
+    "GAMIFICAÇÃO",
+    60
+  ],
+  [
+    "ECOM140",
+    "NAVEGAÇÃO DE ROBÔS",
+    60
+  ],
+  [
+    "ECOM141",
+    "COMUNICAÇÃO DIGITAL SEM FIO",
+    60
+  ],
+  [
+    "ECOM142",
+    "SÍNTESE DE ÁUDIO",
+    60
+  ],
+  [
+    "ECOM143",
+    "TECNOLOGIAS DE MULTÍMÍDIA",
+    60
+  ],
+  [
+    "ECOM144",
+    "AUTENTICAÇÃO BIOMÉTRICA: FUNDAMENTOS E TECNOLOGIAS",
+    60
+  ],
+  [
+    "ECOM145",
+    "RECONHECIMENTO DE FALA",
+    60
+  ],
+  [
+    "ECOM146",
+    "SISTEMA DE INFORMAÇÃO",
+    60
+  ],
+  [
+    "ECOM147",
+    "EXPERIMENTANDO E COMPARANDO TÉCNICAS INTELIGENTES",
+    60
+  ],
+  [
+    "ECOM149",
+    "CIRCUITOS ELÉTRICOS I I",
+    60
+  ],
+  [
+    "ECOM151",
+    "PROJETO DE JOGOS ELETRÔNICOS",
+    60
+  ],
+  [
+    "ECOM152",
+    "ELETROMAGNÉTICA APLICADA",
+    60
+  ],
+  [
+    "ECOM153",
+    "TÓPICOS EM INTERNET E WEB: DESENVOLVIMENTO EM RAILS",
+    60
+  ],
+  [
+    "ECOM155",
+    "TÓPICOS EM BANCO DE DADOS: BIG DATA E APLICAÇÕES",
+    60
+  ],
+  [
+    "ECOM156",
+    "GESTÃO DE RESÍDUOS SÓLIDOS",
+    60
+  ],
+  [
+    "ECOM157",
+    "LABORATÓRIO DE QUÍMICA",
+    30
+  ],
+  [
+    "ECOM158",
+    "EFICIÊNCIA ENERGÉTICA",
+    30
+  ],
+  [
+    "ECOM159",
+    "MATLAB APLICADO À SISTEMAS DE CONTROLE",
+    30
+  ],
+  [
+    "ECOM160",
+    "TÓPICOS ESPECIAIS EM ARQUITETURA DE COMPUTADORES",
+    60
+  ],
+  [
+    "ECOM161",
+    "MODELAGEM E CONTROLE DE ROBÔS",
+    60
+  ],
+  [
+    "ECOM162",
+    "CIÊNCIAS DE DADOS PARA NEGÓCIOS I",
+    60
+  ],
+  [
+    "ECOM163",
+    "TEORIA DAS INSTALAÇÕES ELÉTRICAS PREDIAIS",
+    60
+  ],
+  [
+    "ECOM164",
+    "TEORIA DOS JOGOS",
+    60
+  ],
+  [
+    "ECOM165",
+    "TESTE DE SOFTWARE",
+    60
+  ],
+  [
+    "ECOM166",
+    "OTIMIZAÇÃO BIOINSPIRADA",
+    60
+  ],
+  [
+    "ECOM167",
+    "LABORATÓRIO DE PROGRAMAÇÃO 2",
+    60
+  ],
+  [
+    "ECOM168",
+    "MODELAGEM DO SISTEMA CARDIOVASCULAR HUMANO",
+    60
+  ],
+  [
+    "ECOM169",
+    "LIBRAS",
+    60
+  ],
+  [
+    "ECOM170",
+    "TÓPICOS ESPECIAIS EM COMPUTAÇÃO PERSUASIVA NA EDUCAÇÃO",
+    30
+  ],
+  [
+    "ECOM171",
+    "TÓPICOS ESPECIAIS EM COMPUTAÇÃO",
+    60
+  ],
+  [
+    "ECOM172",
+    "CIÊNCIA DE DADOS",
+    60
+  ],
+  [
+    "ECOM173",
+    "TÓPICOS ESPECIAIS EM BANCO DE DADOS:ABORDAGENS NOSQL/NEWSQL",
+    30
+  ],
+  [
+    "ECOM174",
+    "INTROUDÇÃO A ROBÓTICA PROBABILÍSTICA",
+    60
+  ],
+  [
+    "ECOM175",
+    "METODOLOGIA E PROCESSOS",
+    30
+  ],
+  [
+    "ECOM176",
+    "PROJETO DE SISTEMAS DIGITAIS COM FPGA E APLICAÇÕES",
+    60
+  ],
+  [
+    "ECOM177",
+    "ELETROTÉCNICA",
+    60
+  ],
+  [
+    "ECOM178",
+    "REDES NEURAIS E APRENDIZADO PROFUNDO",
+    60
+  ],
+  [
+    "ECOM179",
+    "PROCESSAMENTO DE LINGUAGEM NATURAL",
+    60
+  ],
+  [
+    "ECOM181",
+    "FUNDAMENTOS DE IA APLICADOS AO DIAGNÓSTICO MÉDICO",
+    72
+  ],
+  [
+    "ECOM182",
+    "GAMIFICAÇÃO EXPERIMENTAL",
+    60
+  ],
+  [
+    "ECOM183",
+    "FORMAÇÃO ECONÔMICA DO BRASIL",
+    60
+  ],
+  [
+    "ECOM184",
+    "ECONOMIA INTERNACIONAL I",
+    60
+  ],
+  [
+    "ECOM185",
+    "FÍSICA EXPERIMENTAL 2",
+    30
+  ],
+  [
+    "ECOM186",
+    "INTRODUÇÃO À CIÊNCIA DE DADOS",
+    60
+  ],
+  [
+    "ECOM187",
+    "PESQUISA QUALITATVA EM GAMIFICAÇÃO",
+    60
+  ],
+  [
+    "ECOM188",
+    "SEGURANÇA DE SISTEMAS COMPUTACIONAIS",
+    72
+  ],
+  [
+    "ECOM189",
+    "REUSO DE SOFTWARE E METODOLOGIAS ÁGEIS",
+    30
+  ],
+  [
+    "ECOM190",
+    "TÓPICOS ESPECIAIS EM GERÊNCIA E PROCESSAMENTO DE DADOS EM LARGA ESCALA",
+    60
+  ],
+  [
+    "ECOM191",
+    "LABORATÓRIO DE INTELIGÊNCIA ARTIFICIAL EM ROBÓTICA",
+    60
+  ],
+  [
+    "ECOM192",
+    "TEORIA DA COMPUTAÇÃO",
+    60
+  ],
+  [
+    "ECOM193",
+    "APRENDIZAGEM DE MÁQUINA EM SISTEMAS EMBARCADOS",
+    60
+  ],
+  [
+    "ECOM194",
+    "TÓPICOS EM TEORIA DOS GRAFOS",
+    60
+  ],
+  [
+    "ECOM195",
+    "INTERAÇÃO HOMEM-MÁQUINA",
+    60
+  ],
+  [
+    "ECOM196",
+    "COMPUTAÇÃO EVOLUCIONÁRIA",
+    60
+  ],
+  [
+    "ECOM001",
+    "INGLÊS INSTRUMENTAL",
+    60
+  ],
+  [
+    "ECOM002",
+    "PROGRAMAÇÃO 1",
+    60
+  ],
+  [
+    "ECOM003",
+    "MATEMÁTICA DISCRETA",
+    60
+  ],
+  [
+    "ECOM004",
+    "CÁLCULO 1",
+    60
+  ],
+  [
+    "ECOM005",
+    "GEOMETRIA ANALÍTICA",
+    60
+  ],
+  [
+    "ECOM006",
+    "INTRODUÇÃO À ENGENHARIA DE COMPUTAÇÃO",
+    60
+  ],
+  [
+    "ECOM007",
+    "LÓGICA APLICADA À COMPUTAÇÃO",
+    60
+  ],
+  [
+    "ECOM008",
+    "ESTRUTURA DE DADOS",
+    60
+  ],
+  [
+    "ECOM009",
+    "FÌSICA 1",
+    60
+  ],
+  [
+    "ECOM010",
+    "CÁLCULO 2",
+    60
+  ],
+  [
+    "ECOM011",
+    "ÁLGEBRA LINEAR",
+    60
+  ],
+  [
+    "ECOM012",
+    "CIRCUITOS DIGITAIS",
+    30
+  ],
+  [
+    "ECOM013",
+    "DESENHO",
+    60
+  ],
+  [
+    "ECOM014",
+    "LINGUAGENS FORMAIS, AUTÔMATOS E COMPUTABILIDADE",
+    60
+  ],
+  [
+    "ECOM015",
+    "PROJETO DE SOFTWARE",
+    60
+  ],
+  [
+    "ECOM016",
+    "FÍSICA 2",
+    60
+  ],
+  [
+    "ECOM017",
+    "CÁLCULO 3",
+    60
+  ],
+  [
+    "ECOM018",
+    "METODOLOGIA DA PESQUISA E DO TRABALHO CIENTÍFICO",
+    30
+  ],
+  [
+    "ECOM019",
+    "SISTEMAS DIGITAIS",
+    60
+  ],
+  [
+    "ECOM057",
+    "QUÍMICA TECNOLÓGICA",
+    60
+  ],
+  [
+    "ECOM020",
+    "PROBABILIDADE E ESTATÍSTICA",
+    60
+  ],
+  [
+    "ECOM021",
+    "ENGENHARIA DE SOFTWARE",
+    60
+  ],
+  [
+    "ECOM022",
+    "FÍSICA 3",
+    60
+  ],
+  [
+    "ECOM023",
+    "CÁLCULO 4",
+    60
+  ],
+  [
+    "ECOM024",
+    "VARIÁVEIS COMPLEXAS",
+    60
+  ],
+  [
+    "ECOM025",
+    "ORGANIZAÇÃO E ARQUITETURA DE COMPUTADORES",
+    60
+  ],
+  [
+    "ECOM026",
+    "FÍSICA EXPERIMENTAL 3",
+    30
+  ],
+  [
+    "ECOM027",
+    "PROJETO E ANÁLISE DE ALGORITMOS",
+    60
+  ],
+  [
+    "ECOM028",
+    "CIRCUITOS ELÉTRICOS",
+    60
+  ],
+  [
+    "ECOM029",
+    "REDES DE COMPUTADORES",
+    60
+  ],
+  [
+    "ECOM030",
+    "SINAIS E SISTEMAS",
+    90
+  ],
+  [
+    "ECOM031",
+    "INTELIGÊNCIA ARTIFICIAL",
+    60
+  ],
+  [
+    "ECOM032",
+    "SISTEMAS OPERACIONAIS",
+    60
+  ],
+  [
+    "ECOM033",
+    "TEORIA DOS GRAFOS",
+    30
+  ],
+  [
+    "ECOM034",
+    "PRINCÍPIOS DE COMUNICAÇÃO",
+    60
+  ],
+  [
+    "ECOM035",
+    "ELETRÔNICA",
+    60
+  ],
+  [
+    "ECOM036",
+    "MÉTODOS NUMÉRICOS",
+    60
+  ],
+  [
+    "ECOM037",
+    "SISTEMAS DE CONTROLE 1",
+    60
+  ],
+  [
+    "ECOM040",
+    "EMPREENDEDORISMO",
+    60
+  ],
+  [
+    "ECOM048",
+    "COMPUTADOR, SOCIEDADE E ÉTICA",
+    30
+  ],
+  [
+    "ECOM118",
+    "FENÔMENOS DE TRANSPORTES",
+    60
+  ],
+  [
+    "ECOM041",
+    "BANCO DE DADOS",
+    60
+  ],
+  [
+    "ECOM046",
+    "NOÇOES DE DIREITO",
+    60
+  ],
+  [
+    "ECOM058",
+    "SISTEMAS DE CONTROLE 2",
+    60
+  ],
+  [
+    "ECOM059",
+    "MICROCONTROLADORES E APLICAÇÕES",
+    60
+  ],
+  [
+    "ECOM060",
+    "INSTRUMENTAÇÃO ELETRÔNICA",
+    60
+  ],
+  [
+    "ECOM063",
+    "PROCESSAMENTO DIGITAL DE SINAIS",
+    60
+  ],
+  [
+    "ECOM039",
+    "COMPUTAÇÃO GRÁFICA E PROCESSAMENTO DE IMAGENS",
+    60
+  ],
+  [
+    "ECOM042",
+    "SISTEMAS EMBARCADOS",
+    60
+  ],
+  [
+    "ECOM044",
+    "SISTEMAS DISTRIBUÍDOS",
+    60
+  ],
+  [
+    "ECOM061",
+    "AUTOMAÇÃO INDUSTRIAL",
+    60
+  ],
+  [
+    "ECOM062",
+    "ROBÓTICA",
+    60
+  ],
+  [
+    "ECOM119",
+    "MECÂNICA DOS SÓLIDOS",
+    60
+  ],
+  [
+    "ECOM126",
+    "ESTÁGIO SUPERVISIONADO",
+    160
+  ],
+  [
+    "TCC0175",
+    "TCC",
+    90
+  ]
+]

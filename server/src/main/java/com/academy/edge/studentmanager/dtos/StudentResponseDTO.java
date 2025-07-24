@@ -1,20 +1,20 @@
 package com.academy.edge.studentmanager.dtos;
 
 import com.academy.edge.studentmanager.enums.Course;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class StudentResponseDTO {
     private String id;
     private String name;
     private String photoUrl;
-    private Date birthDate;
+    private String academicRecordUrl;
+    private String about;
+    private LocalDate birthDate;
     private Course course;
     private String registration;
     private String phone;
@@ -23,6 +23,7 @@ public class StudentResponseDTO {
     private String entryPeriod;
     private String dtype;
     private String email;
-    private Date entryDate;
+    private LocalDate entryDate;
     private int studentGroup;
+    private double ira;
 }

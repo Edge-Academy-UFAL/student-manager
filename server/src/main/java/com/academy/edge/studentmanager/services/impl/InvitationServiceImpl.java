@@ -1,99 +1,100 @@
 package com.academy.edge.studentmanager.services.impl;
 
-import com.academy.edge.studentmanager.dtos.InvitationResponseDTO;
+import com.academy.edge.studentmanager.configs.ApplicationProperties;
+import com.academy.edge.studentmanager.dtos.InvitationErrorDTO;
+import com.academy.edge.studentmanager.dtos.InvitationSendResponseDTO;
+import com.academy.edge.studentmanager.enums.InvitationErrorType;
 import com.academy.edge.studentmanager.models.Invitation;
 import com.academy.edge.studentmanager.repositories.InvitationRepository;
+import com.academy.edge.studentmanager.repositories.StudentRepository;
 import com.academy.edge.studentmanager.services.EmailService;
 import com.academy.edge.studentmanager.services.InvitationService;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
-import org.modelmapper.internal.bytebuddy.utility.RandomString;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.Date;
-import java.util.List;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.*;
 
+@Log4j2
 @Service
 public class InvitationServiceImpl implements InvitationService {
 
     private final InvitationRepository invitationRepository;
+    private final StudentRepository studentRepository;
     private final EmailService emailService;
+    private final ApplicationProperties applicationProperties;
+    private final Resource invitationEmail;
 
-    public InvitationServiceImpl(EmailService emailService, InvitationRepository invitationRepository){
+    public InvitationServiceImpl(
+            EmailService emailService,
+            StudentRepository studentRepository,
+            InvitationRepository invitationRepository,
+            ApplicationProperties applicationProperties,
+            @Value("classpath:emails/student-invitation.html") Resource invitationEmail
+    ) {
         this.emailService = emailService;
         this.invitationRepository = invitationRepository;
+        this.studentRepository = studentRepository;
+        this.applicationProperties = applicationProperties;
+        this.invitationEmail = invitationEmail;
     }
 
     @Override
-    public Invitation isInvitationValid(String invitationId, String email) {
-        return invitationRepository.findByCodeAndEmail(invitationId, email);
+    public Invitation getValidInvitation(String invitationId) {
+        return invitationRepository.findByCode(invitationId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid invitation code"));
     }
 
     @Override
-    public void deleteInvitation(String invitationId, String email) {
-        Invitation invitation = invitationRepository.findByCodeAndEmail(invitationId, email);
+    @Transactional
+    public void deleteInvitation(Invitation invitation) {
         invitationRepository.delete(invitation);
     }
 
     @Override
     @Transactional
-    public InvitationResponseDTO sendInvitation(List<String> emails, int studentGroup, String entryDate) {
-        InvitationResponseDTO result = new InvitationResponseDTO();
-        emails.forEach(email -> {
+    public InvitationSendResponseDTO sendInvitations(List<String> emails, int studentGroup, LocalDate entryDate) {
+        var uniqueEmails = new LinkedHashSet<>(emails);
+        var successfulEmails = new ArrayList<String>();
+        var failedEmails = new HashMap<String, InvitationErrorDTO>();
+
+        for (var email : uniqueEmails) {
+            if (studentRepository.existsByEmail(email)) {
+                failedEmails.put(email, new InvitationErrorDTO(InvitationErrorType.ALREADY_REGISTERED, null));
+                continue;
+            }
+
+            var code = RandomStringUtils.secureStrong().nextAlphanumeric(64);
+            var invitation = new Invitation();
+            invitation.setEmail(email);
+            invitation.setStudentGroup(studentGroup);
+            invitation.setEntryDate(entryDate);
+            invitation.setCode(code);
+            invitationRepository.save(invitation);
 
             try {
-                String code = RandomString.make(64);
-
-                Invitation invitation = new Invitation();
-                invitation.setEmail(email);
-                invitation.setStudentGroup(studentGroup);
-                invitation.setEntryDate(Date.valueOf(entryDate));
-                invitation.setCode(code);
-
-                invitationRepository.save(invitation);
-                emailService.sendEmail(email, "Bem vindo ao Academy!", this.constructHtmlMessageText(code, email));
-
-                result.getSuccessfulEmails().add(email);
-            } catch (Exception e){
-                System.out.println(e);
-                result.getFailedEmails().add(email);
+                this.sendInvitationEmail(email, code);
+                successfulEmails.add(email);
+            } catch (Exception e) {
+                log.error("Failed to send invitation email", e);
+                failedEmails.put(email, new InvitationErrorDTO(InvitationErrorType.SMTP_ERROR, e.getMessage()));
             }
-        });
+        }
 
-        return result;
+        return new InvitationSendResponseDTO(successfulEmails, failedEmails);
     }
 
-    private String constructHtmlMessageText(String code, String email){
-        String content = "Olá,<br><br>"
-                + "Estamos muito felizes em dar as boas-vindas a você ao programa Edge Academy! Sua jornada de descoberta e aprimoramento está prestes a começar, e não poderíamos estar mais animados por ter você conosco.<br><br>"
-                + "Para garantir uma transição suave para esta nova fase de aprendizado, por favor, realize sua inscrição na plataforma clicando no link abaixo. É um pequeno passo para você, mas um salto gigante em sua trajetória de aprendizado!<br><br>"
-                + "<h3 style='text-align: center;'><a href='[[URL]]' target='_self' style='padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px;'>REGISTRAR</a></h3><br>"
-                + "Caso tenha alguma dúvida ou precise de ajuda ao longo do caminho, não hesite em entrar em contato. Nossa equipe está sempre pronta para auxiliar você em cada etapa da sua jornada.<br><br>"
-                + "Com apreço,<br>"
-                + "<strong>Equipe Edge Academy</strong><br><br>"
-                + "<em>PS: Prepare-se para uma experiência enriquecedora cheia de aprendizado e crescimento. Estamos ansiosos para ver o seu progresso!</em>";
-        String siteUrl = "https://edge.academy.com/register/"+code + "?email=" + email;
-        content = content.replace("[[URL]]", siteUrl);
-
-        String htmlContent = "<!DOCTYPE html>"
-                + "<html>"
-                + "<head>"
-                + "<style>"
-                + "body { font-family: 'Arial', sans-serif; color: #2c3e50; background-color: white; padding: 20px; }"
-                + "a.verify-button { padding: 10px 20px; background-color: #52a0b6; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }"
-                + "h3 { text-align: center; }"
-                + ".content { background-color: white; padding: 20px;}"
-                + "em { color: #2c3e50; }"
-                + "strong { color: #2c3e50; }"
-                + "</style>"
-                + "</head>"
-                + "<body>"
-                + "<div class='content'>"
-                + "<img src='https://www.edge.ufal.br/wp-content/uploads/2023/03/logo-azul.svg' alt='Logo da Edge Academy' style='display: block; margin-left: auto; margin-right: auto; width: 50%; max-width:200px'>"
-                + content
-                + "</div>"
-                + "</body>"
-                + "</html>";
-
-        return htmlContent;
+    private void sendInvitationEmail(String email, String code) throws MessagingException, IOException {
+        var registerUrl = this.applicationProperties.frontendUrl() + "/register/" + code;
+        var replacements = Map.of("[[URL]]", registerUrl);
+        emailService.sendEmailFromTemplate(email, "Bem vindo ao Academy!", this.invitationEmail, replacements);
     }
 }

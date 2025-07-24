@@ -3,20 +3,21 @@ package com.academy.edge.studentmanager.services.impl;
 import com.academy.edge.studentmanager.services.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+
 @Service
+@RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender emailSender;
-
-    @Autowired
-    public EmailServiceImpl(JavaMailSender emailSender) {
-        this.emailSender = emailSender;
-    }
 
     @Override
     public void sendEmail(String to, String subject, String text) throws MessagingException {
@@ -28,7 +29,20 @@ public class EmailServiceImpl implements EmailService {
         helper.setSubject(subject);
 
         helper.setText(text, true);
-
         emailSender.send(message);
+
     }
+
+    @Override
+    public void sendEmailFromTemplate(String to, String subject, Resource resource, Map<String, String> replacements)
+            throws IOException, MessagingException {
+        var text = resource.getContentAsString(StandardCharsets.UTF_8);
+
+        for (var entry : replacements.entrySet()) {
+            text = text.replace(entry.getKey(), entry.getValue());
+        }
+
+        sendEmail(to, subject, text);
+    }
+
 }

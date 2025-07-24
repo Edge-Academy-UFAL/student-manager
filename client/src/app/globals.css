@@ -1,89 +1,137 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+@theme inline {
+  /* Figma Theme Variables */
+  --color-background: var(--color-neutral-100);
+  --color-foreground: var(--color-neutral-950);
 
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+  --font-sans: var(--font-work-sans);
+  --font-mono: var(--font-geist-mono);
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
+  --color-brand-100: #ebfffe;
+  --color-brand-200: #a1fcff;
+  --color-brand-300: #18e9f8;
+  --color-brand-400: #009db4;
+  --color-brand-500: #125667;
+  --color-brand-600: #053847;
 
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+  --color-success-100: #e7f7e1;
+  --color-success-200: #a9df96;
+  --color-success-300: #65c046;
+  --color-success-400: #387025;
+  --color-success-500: #28491e;
+  --color-success-950: #11280b;
 
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
+  --color-action-100: #e7ecf3;
+  --color-action-200: #d5e6f9;
+  --color-action-300: #93bff0;
+  --color-action-400: #487cb6;
+  --color-action-500: #175191;
+  --color-action-950: #173c6b;
 
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
+  --color-danger-100: #fee3e2;
+  --color-danger-200: #fba9a6;
+  --color-danger-300: #ed524d;
+  --color-danger-400: #b7231e;
+  --color-danger-500: #7d221f;
+  --color-danger-950: #440d0b;
 
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
+  --color-warning-100: #fee9c7;
+  --color-warning-200: #fdd28a;
+  --color-warning-300: #fba034;
+  --color-warning-400: #d95106;
+  --color-warning-500: #92280e;
+  --color-warning-600: #450e03;
 
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+  --color-neutral-100: #f5f6f6;
+  --color-neutral-150: #eceeee;
+  --color-neutral-200: #e4e6e9;
+  --color-neutral-300: #a9b0b7;
+  --color-neutral-400: #66707a;
+  --color-neutral-500: #494e55;
+  --color-neutral-950: #232529;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+  --color-chart-200: #99d8e1;
+  --color-chart-300: #4dbacb;
+  --color-chart-400: #009db4;
+  --color-chart-600: #007e90;
+  --color-chart-800: #004f5a;
 
-    --ring: 240 5% 64.9%;
+  /* Keep synchronized with customTwMerge in utils.ts */
+  --text-heading-xl: 32px;
+  --text-heading-lg: 28px;
+  --text-heading-md: 28px;
+  --text-heading-sm: 22px;
+  --text-heading-xs: 18px;
+  --text-body-lg: 16px;
+  --text-body-md: 14px;
+  --text-body-sm: 12px;
+  --text-label-lg: 16px;
+  --text-label-md: 14px;
+  --text-label-sm: 12px;
 
-    --radius: 0.5rem;
-  }
+  --radius-none: 0;
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 48px;
 
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+  /* Shadcn base variables */
+  --color-card: white;
+  --color-card-foreground: var(--color-neutral-950);
+  --color-popover: white;
+  --color-popover-foreground: var(--color-neutral-950);
+  --color-primary: var(--color-brand-400);
+  --color-primary-foreground: var(--color-neutral-100);
+  --color-secondary: var(--color-neutral-100);
+  --color-secondary-foreground: var(--color-neutral-950);
+  --color-muted: var(--color-neutral-100);
+  --color-muted-foreground: var(--color-neutral-400);
+  --color-accent: var(--color-neutral-100);
+  --color-accent-foreground: var(--color-neutral-950);
+  --color-destructive: var(--color-danger-300);
+  --color-destructive-foreground: white;
+  --color-border: var(--color-neutral-200);
+  --color-input: var(--color-neutral-200);
+  --color-ring: var(--color-neutral-300);
+  --color-chart-1: var(--color-chart-200);
+  --color-chart-2: var(--color-chart-300);
+  --color-chart-3: var(--color-chart-400);
+  --color-chart-4: var(--color-chart-600);
+  --color-chart-5: var(--color-chart-800);
+  --color-sidebar: var(--color-neutral-100);
+  --color-sidebar-foreground: var(--color-neutral-950);
+  --color-sidebar-primary: var(--color-neutral-950);
+  --color-sidebar-primary-foreground: var(--color-neutral-100);
+  --color-sidebar-accent: var(--color-neutral-150);
+  --color-sidebar-accent-foreground: var(--color-neutral-950);
+  --color-sidebar-border: var(--color-neutral-200);
+  --color-sidebar-ring: var(--color-neutral-300);
+}
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 85.7% 97.3%;
-
-    --ring: 240 3.7% 15.9%;
-  }
+@utility label-background-2-colors {
+  background: linear-gradient(
+    to top,
+    var(--color-neutral-150) 0%,
+    var(--color-neutral-150) 40%,
+    #fff 40%,
+    #fff 100%
+  );
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
-    -webkit-font-smoothing: antialiased;
   }
-}
-
-@layer base {
-  input[type='number']::-webkit-outer-spin-button,
-  input[type='number']::-webkit-inner-spin-button,
-  input[type='number'] {
-    -webkit-appearance: none;
-    margin: 0;
-    -moz-appearance: textfield !important;
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
   }
 }

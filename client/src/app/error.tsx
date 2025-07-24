@@ -1,30 +1,31 @@
-'use client' // Error components must be Client Components
+'use client';
 
-import { RefreshCw } from 'lucide-react'
-import Link from 'next/link'
+import { RefreshCw } from 'lucide-react';
+import Link from 'next/link';
+
 export default function Error({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   return (
     <section>
-      <div className="container flex items-center min-h-screen px-6 py-12 mx-auto">
+      <div className="container mx-auto flex min-h-screen items-center px-6 py-12">
         <div>
-          <p className="text-sm font-medium text-foreground">404</p>
-          <h1 className="mt-3 text-2xl font-semibold text-gray-800 dark:text-white md:text-3xl">
+          <p className="text-foreground text-sm font-medium">404</p>
+          <h1 className="mt-3 text-2xl font-semibold text-gray-800 md:text-3xl dark:text-white">
             {error.message}
           </h1>
           <p className="mt-4 text-gray-500 dark:text-gray-400">
             Um erro inesperado ocorreu. Por favor, tente novamente.
           </p>
 
-          <div className="flex items-center mt-6 gap-x-3">
+          <div className="mt-6 flex items-center gap-x-3">
             <button
               onClick={reset}
-              className="flex items-center justify-center w-1/2 px-5 py-2 text-sm transition-colors duration-200 bg-transparent text-foreground border rounded-lg gap-x-2 sm:w-auto "
+              className="text-foreground flex w-1/2 items-center justify-center gap-x-2 rounded-lg border bg-transparent px-5 py-2 text-sm transition-colors duration-200 sm:w-auto"
             >
               <RefreshCw size={16} />
 
@@ -32,8 +33,8 @@ export default function Error({
             </button>
 
             <Link
-              href="/client/public"
-              className="w-1/2 px-5 py-2 text-sm tracking-widetransition-colors duration-200 bg-foreground text-background rounded-lg shrink-0 sm:w-auto "
+              href="/"
+              className="tracking-widetransition-colors bg-foreground text-background w-1/2 shrink-0 rounded-lg px-5 py-2 text-sm duration-200 sm:w-auto"
             >
               Voltar para Home
             </Link>
@@ -41,5 +42,5 @@ export default function Error({
         </div>
       </div>
     </section>
-  )
+  );
 }

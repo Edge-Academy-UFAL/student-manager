@@ -1,25 +1,21 @@
 package com.academy.edge.studentmanager.models;
 
-import com.academy.edge.studentmanager.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 
 @Entity
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -29,6 +25,8 @@ import java.util.Collections;
 })
 @SQLRestriction("deleted=false")
 public class User implements UserDetails {
+    public static final int MAX_ABOUT_LENGTH = 2600;
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(updatable = false, nullable = false)
@@ -37,7 +35,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     String email;
 
     @Column(nullable = false)
@@ -46,12 +44,16 @@ public class User implements UserDetails {
     @Column
     String photoUrl;
 
+    @Column(length = MAX_ABOUT_LENGTH)
+    String about;
+
     @CreationTimestamp
     @Column(updatable = false)
-    Timestamp createdAt;
+    Instant createdAt;
 
     @UpdateTimestamp
-    Timestamp updatedAt;
+    @Column
+    Instant updatedAt;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
     boolean deleted = false;
@@ -61,27 +63,12 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+Role.USER.name()));
+        return Collections.emptyList();
     }
 
     @Override
     public String getUsername() {
         return this.email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
     }
 
     @Override

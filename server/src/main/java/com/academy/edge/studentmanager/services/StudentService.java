@@ -2,6 +2,7 @@ package com.academy.edge.studentmanager.services;
 
 import com.academy.edge.studentmanager.dtos.StudentCreateDTO;
 import com.academy.edge.studentmanager.dtos.StudentResponseDTO;
+import com.academy.edge.studentmanager.dtos.StudentUpdateDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,10 +14,15 @@ public interface StudentService {
 
     StudentResponseDTO getStudentByEmail(String email);
 
-    StudentResponseDTO insertStudent(StudentCreateDTO studentCreateDTO, MultipartFile file);
+    StudentResponseDTO createStudent(StudentCreateDTO studentCreateDTO);
 
-    //TODO: update student
-    //void updateStudent(String uuid, );
+    StudentResponseDTO updateStudent(String email, StudentUpdateDTO studentUpdateDTO);
+
+    StudentResponseDTO updateStudentPhoto(String email, MultipartFile file);
 
     void deleteStudent(String email);
+
+    StudentResponseDTO updateStudentAcademicRecord(String email, MultipartFile file);
+
+    void terminateStudent(String email, String terminationReason);
 }

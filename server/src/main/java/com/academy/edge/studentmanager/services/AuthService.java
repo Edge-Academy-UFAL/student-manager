@@ -1,7 +1,13 @@
 package com.academy.edge.studentmanager.services;
 
+import com.academy.edge.studentmanager.dtos.ResetPasswordRequestDTO;
 import com.academy.edge.studentmanager.dtos.SignInRequestDTO;
+import com.academy.edge.studentmanager.models.User;
 
 public interface AuthService {
     String login(SignInRequestDTO signInRequestDTO);
+    void forgotPassword(String email);
+    void resetPassword(ResetPasswordRequestDTO resetPasswordRequestDTO);
+    void validatePassword(User user, String oldPassword);
+    void changePassword(User user, String newPassword);
 }
