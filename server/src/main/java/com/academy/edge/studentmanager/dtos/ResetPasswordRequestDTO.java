@@ -1,6 +1,5 @@
 package com.academy.edge.studentmanager.dtos;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -10,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignInRequestDTO {
+public class ResetPasswordRequestDTO {
     @NotBlank
-    @Email
-    private String email;
+    private String token;
 
     @NotBlank
     @Size(min = 8, max = 20)

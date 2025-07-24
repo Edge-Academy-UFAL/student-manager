@@ -14,7 +14,7 @@ public interface StudentService {
 
     StudentResponseDTO getStudentByEmail(String email);
 
-    StudentResponseDTO insertStudent(StudentCreateDTO studentCreateDTO, MultipartFile file);
+    StudentResponseDTO createStudent(StudentCreateDTO studentCreateDTO);
 
     StudentResponseDTO updateStudent(String email, StudentUpdateDTO studentUpdateDTO);
 

@@ -1,31 +1,22 @@
 package com.academy.edge.studentmanager.controllers;
 
-import com.academy.edge.studentmanager.dtos.ForgetPasswordRequestDTO;
-import com.academy.edge.studentmanager.dtos.JwtAuthResponseDTO;
-import com.academy.edge.studentmanager.dtos.NewPasswordRequestDTO;
-import com.academy.edge.studentmanager.dtos.SignInRequestDTO;
+import com.academy.edge.studentmanager.dtos.*;
 import com.academy.edge.studentmanager.models.User;
 import com.academy.edge.studentmanager.services.AuthService;
-import com.academy.edge.studentmanager.services.EmailService;
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    final AuthService authService;
-    final EmailService emailService;
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+    private final AuthService authService;
 
     @PostMapping("/login")
     public ResponseEntity<JwtAuthResponseDTO> signIn(@Valid @RequestBody SignInRequestDTO requestDTO) {
@@ -43,35 +34,24 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@Valid @RequestBody ForgetPasswordRequestDTO forgetPasswordRequestDTO) {
-        String email = forgetPasswordRequestDTO.getEmail();
-        logger.info("Password reset request for email: {}", email);
-
-        String token = authService.forgotPassword(email);
-        if (token == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with email: " + email);
-        }
-        try {
-            emailService.sendPasswordResetEmail(email, token);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            logger.error("Error sending password reset email", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send password reset email");
-        }
-        return ResponseEntity.ok("Password reset link sent to " + email + ". Token: " + token);
+    public ResponseEntity<Void> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDTO forgotPasswordRequestDTO) {
+        String email = forgotPasswordRequestDTO.getEmail();
+        authService.forgotPassword(email);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> handlePasswordReset(@Valid @RequestBody NewPasswordRequestDTO newPasswordRequestDTO
-    ) {
-        try {
-            authService.resetPassword(newPasswordRequestDTO);
+    public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordRequestDTO resetPasswordRequestDTO) {
+        authService.resetPassword(resetPasswordRequestDTO);
 
-            return ResponseEntity.ok("Password reset successfully");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @PostMapping("/change-password")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Void> changePassword(@AuthenticationPrincipal User user, @Valid @RequestBody ChangePasswordRequestDTO changePasswordRequestDTO) {
+        authService.validatePassword(user, changePasswordRequestDTO.getOldPassword());
+        authService.changePassword(user, changePasswordRequestDTO.getNewPassword());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

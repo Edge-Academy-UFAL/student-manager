@@ -3,11 +3,9 @@ package com.academy.edge.studentmanager.controllers;
 import com.academy.edge.studentmanager.configs.ApplicationProperties;
 import com.academy.edge.studentmanager.dtos.InvitationRequestDTO;
 import com.academy.edge.studentmanager.dtos.StudentCreateDTO;
-import com.academy.edge.studentmanager.enums.Course;
 import com.academy.edge.studentmanager.enums.InvitationErrorType;
 import com.academy.edge.studentmanager.models.Student;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icegreen.greenmail.configuration.GreenMailConfiguration;
 import com.icegreen.greenmail.junit5.GreenMailExtension;
@@ -19,20 +17,16 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.LinkedMultiValueMap;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -48,16 +42,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Transactional
-public class InvitationControllerTest {
-
+public class InvitationControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -69,7 +59,7 @@ public class InvitationControllerTest {
     private ApplicationProperties applicationProperties;
 
     @RegisterExtension
-    static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP_IMAP).withConfiguration(
+    private static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP_IMAP).withConfiguration(
             GreenMailConfiguration.aConfig().withUser("academy@edge.ufal.br", "test", "test"));
 
     @Test
@@ -149,7 +139,7 @@ public class InvitationControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void cannotInviteRegisteredEmail() throws Exception {
-        var student = studentRepository.save(getTestStudent());
+        var student = studentRepository.save(getTestStudent(1));
         var email = student.getEmail();
         var requestDTO = new InvitationRequestDTO(List.of(email), 1, LocalDate.now());
 
@@ -188,14 +178,13 @@ public class InvitationControllerTest {
                 .content(objectMapper.writeValueAsString(invitationRequestDTO))).andExpect(status().isOk());
 
         var code = extractActivationCode(greenMail.getReceivedMessages()[0]);
-        var studentCreateDTO = getTestStudentCreateDTO(code);
 
-        mockMvc.perform(get("/api/v1/register/{invitationId}", code))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value(emails.get(0)));
+        mockMvc.perform(get("/api/v1/register/{invitationId}", code)).andExpect(status().isNoContent());
 
-        mockMvc.perform(multipart("/api/v1/students").file(getPlaceholderPhoto())
-                .params(convertDTOToParams(studentCreateDTO))).andExpect(status().isCreated());
+        var studentCreateDTO = new StudentCreateDTO("Edge12345678@", code);
+
+        mockMvc.perform(multipart("/api/v1/students").contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(studentCreateDTO))).andExpect(status().isCreated());
     }
 
     @Test
@@ -208,67 +197,28 @@ public class InvitationControllerTest {
                 .content(objectMapper.writeValueAsString(invitationRequestDTO))).andExpect(status().isOk());
 
         var code = extractActivationCode(greenMail.getReceivedMessages()[0]);
-        var studentCreateDTO = getTestStudentCreateDTO(code);
 
-        mockMvc.perform(get("/api/v1/register/{invitationId}", code)).andExpect(status().isOk());
+        mockMvc.perform(get("/api/v1/register/{invitationId}", code)).andExpect(status().isNoContent());
 
-        mockMvc.perform(multipart("/api/v1/students").file(getPlaceholderPhoto())
-                .params(convertDTOToParams(studentCreateDTO))).andExpect(status().isCreated());
+        var studentCreateDTO = new StudentCreateDTO("Edge12345678@", code);
+
+        mockMvc.perform(multipart("/api/v1/students").contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(studentCreateDTO))).andExpect(status().isCreated());
 
         mockMvc.perform(get("/api/v1/register/{invitationId}", code)).andExpect(status().isUnauthorized());
 
-        mockMvc.perform(multipart("/api/v1/students").file(getPlaceholderPhoto())
-                .params(convertDTOToParams(studentCreateDTO))).andExpect(status().isUnauthorized());
+        mockMvc.perform(multipart("/api/v1/students").contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(studentCreateDTO))).andExpect(status().isUnauthorized());
     }
 
-    @Test
-    void studentCannotSendFormWithAnotherEmail() throws Exception {
-        var emails = List.of("student1@email.com");
-        var invitationRequestDTO = new InvitationRequestDTO(emails, 1, LocalDate.now());
-
-        mockMvc.perform(post("/api/v1/register").with(user("admin@admin.com").roles("ADMIN"))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(invitationRequestDTO))).andExpect(status().isOk());
-        var code = extractActivationCode(greenMail.getReceivedMessages()[0]);
-        var studentCreateDTO = getTestStudentCreateDTO(code);
-
-        mockMvc.perform(get("/api/v1/register/{invitationId}", code)).andExpect(status().isOk());
-
-        studentCreateDTO.setEmail("not-" + emails.get(0));
-        mockMvc.perform(multipart("/api/v1/students").file(getPlaceholderPhoto())
-                .params(convertDTOToParams(studentCreateDTO))).andExpect(status().isUnauthorized());
-    }
-
-    Student getTestStudent() {
-        var student = modelMapper.map(getTestStudentCreateDTO(""), Student.class);
-        student.setPassword(passwordEncoder.encode(student.getPassword()));
+    Student getTestStudent(int i) {
+        var student = new Student();
+        student.setEmail("student" + i + "@email.com");
+        student.setName(student.getEmail().split("@", 1)[0]);
         student.setEntryDate(LocalDate.now());
+        student.setStudentGroup(1);
+        student.setPassword(passwordEncoder.encode("Edge12345678@"));
         return student;
-    }
-
-    StudentCreateDTO getTestStudentCreateDTO(String code) {
-        return new StudentCreateDTO(
-                "John Doe",
-                LocalDate.of(2024, 4, 14),
-                "student1@email.com",
-                "Edge12345678@",
-                Course.COMPUTER_SCIENCE,
-                "98765432",
-                "82988887777",
-                "",
-                5,
-                "2022.1",
-                code
-        );
-    }
-
-    MockMultipartFile getPlaceholderPhoto() {
-        return new MockMultipartFile(
-                "photo",
-                "photo.jpg",
-                MediaType.IMAGE_JPEG_VALUE,
-                "placeholder-data".getBytes(StandardCharsets.US_ASCII)
-        );
     }
 
     String extractActivationCode(MimeMessage message) throws IOException, MessagingException {
@@ -276,11 +226,5 @@ public class InvitationControllerTest {
         var matcher = Pattern.compile("/register/([^\"']+)").matcher(content);
         assertThat(matcher.find()).isTrue();
         return matcher.group(1);
-    }
-
-    LinkedMultiValueMap<String, String> convertDTOToParams(Object dto) {
-        var params = new LinkedMultiValueMap<String, String>();
-        params.setAll(objectMapper.convertValue(dto, new TypeReference<>() {}));
-        return params;
     }
 }

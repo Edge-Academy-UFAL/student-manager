@@ -2,17 +2,12 @@ package com.academy.edge.studentmanager.controllers;
 
 
 import com.academy.edge.studentmanager.dtos.*;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.academy.edge.studentmanager.services.GradeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import com.academy.edge.studentmanager.models.Student;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -21,9 +16,8 @@ import java.util.List;
 @RequestMapping("/api/v1/grades")
 public class GradeController {
 
-    final GradeService gradeService;
+    private final GradeService gradeService;
 
-    @Autowired
     public GradeController(GradeService gradeService) {
         this.gradeService = gradeService;
     }
@@ -66,13 +60,5 @@ public class GradeController {
     public ResponseEntity<List<Double>> getStudentGradesAveragePerPeriod(@PathVariable String email) {
         List<Double> studentGradesAveragePerPeriod = gradeService.getStudentGradesAveragePerPeriod(email);
         return new ResponseEntity<>(studentGradesAveragePerPeriod, HttpStatus.OK);
-    }
-
-    //TODO: temporary method to verify user identity
-    void verifyUser(String id){
-        Student student = (Student) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(!student.getId().equals(id)){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Usuário não autorizado para acessar este recurso.");
-        }
     }
 }

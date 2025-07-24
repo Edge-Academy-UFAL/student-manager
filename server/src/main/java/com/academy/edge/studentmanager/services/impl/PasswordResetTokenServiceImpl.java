@@ -4,84 +4,62 @@ import com.academy.edge.studentmanager.models.PasswordResetToken;
 import com.academy.edge.studentmanager.models.User;
 import com.academy.edge.studentmanager.repositories.PasswordResetTokenRepository;
 import com.academy.edge.studentmanager.services.PasswordResetTokenService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
 import java.util.UUID;
+
 @Service
-@Transactional
+@RequiredArgsConstructor
 public class PasswordResetTokenServiceImpl implements PasswordResetTokenService {
-    @Autowired
-    private PasswordResetTokenRepository tokenRepository;
+    private final PasswordResetTokenRepository tokenRepository;
 
+    @Override
+    @Transactional
     public String createPasswordResetTokenForUser(User user) {
-        String tokenValue = UUID.randomUUID().toString();
+        var tokenValue = UUID.randomUUID().toString();
 
-        try {
-            PasswordResetToken existingToken = tokenRepository.findByUser(user).orElse(null);
+        var existingToken = tokenRepository.findByUser(user);
 
-            if (existingToken != null) {
-                tokenRepository.delete(existingToken);
-                tokenRepository.flush();
-            }
-
-            PasswordResetToken passwordResetToken = new PasswordResetToken(tokenValue, user);
-
-            tokenRepository.save(passwordResetToken);
-            return tokenValue;
-        } catch (Exception e) {
-            throw new RuntimeException("Error creating password reset token", e);
+        if (existingToken.isPresent()) {
+            tokenRepository.delete(existingToken.get());
+            tokenRepository.flush();
         }
+
+        var passwordResetToken = new PasswordResetToken(tokenValue, user);
+
+        tokenRepository.save(passwordResetToken);
+        return tokenValue;
 
     }
 
-    public void validatePasswordResetToken(String token) throws RuntimeException {
-        try {
-            Optional<PasswordResetToken> passTokenOpt = tokenRepository.findByToken(token);
-            if (passTokenOpt.isEmpty()) {
-                throw new RuntimeException("Invalid token");
-            }
-            PasswordResetToken passToken = passTokenOpt.get();
-            if (passToken.isExpired()) {
-                tokenRepository.delete(passToken);
+    @Override
+    @Transactional
+    public PasswordResetToken getValidPasswordResetToken(String token) {
+        var passToken = tokenRepository.findByToken(token)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token"));
 
-                throw new RuntimeException("Expired token");
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Error validating password reset token", e);
-        }
-    }
-
-    public User getUserByPasswordResetToken(String token) throws RuntimeException {
-        try {
-            Optional<PasswordResetToken> passTokenOpt = tokenRepository.findByToken(token);
-            if (passTokenOpt.isEmpty()) {
-                throw new RuntimeException("Invalid token");
-            }
-            PasswordResetToken passToken = passTokenOpt.get();
-            User user = passToken.getUser();
-            if (user == null) {
-                throw new RuntimeException("User not found for the provided token");
-            }
-            return user;
-        } catch (Exception e) {
-            throw new RuntimeException("Error retrieving user by password reset token", e);
-        }
-    }
-
-    public void deletePasswordResetToken(String token) throws RuntimeException {
-        try {
-            Optional<PasswordResetToken> passTokenOpt = tokenRepository.findByToken(token);
-            if (passTokenOpt.isEmpty()) {
-                throw new RuntimeException("Invalid token");
-            }
-            PasswordResetToken passToken = passTokenOpt.get();
+        if (passToken.isExpired()) {
             tokenRepository.delete(passToken);
-        } catch (Exception e) {
-            throw new RuntimeException("Error deleting password reset token", e);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Expired token");
         }
+
+        var user = passToken.getUser();
+        if (user == null) {
+            tokenRepository.delete(passToken);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found for the provided token");
+        }
+
+        return passToken;
+    }
+
+    @Override
+    @Transactional
+    public void deletePasswordResetToken(PasswordResetToken passToken) {
+        tokenRepository.delete(passToken);
     }
 
 }

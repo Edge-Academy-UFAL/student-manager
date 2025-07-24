@@ -8,7 +8,7 @@ import com.academy.edge.studentmanager.models.Invitation;
 import com.academy.edge.studentmanager.repositories.AdministratorRepository;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
 import com.academy.edge.studentmanager.repositories.InvitationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,19 +18,16 @@ import java.time.LocalDate;
 
 @Component
 @Profile("dev")
+@RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 
-    @Autowired
-    private AdministratorRepository administratorRepository;
+    private final AdministratorRepository administratorRepository;
 
-    @Autowired
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
-    @Autowired
-    private InvitationRepository invitationRepository;
+    private final InvitationRepository invitationRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {

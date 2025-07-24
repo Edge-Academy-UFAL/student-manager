@@ -2,13 +2,11 @@ package com.academy.edge.studentmanager.dtos;
 
 import com.academy.edge.studentmanager.enums.ActivityType;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class ActivityUpdateDTO {
 
     @NotNull(message = "Tipo da atividade é obrigatório")

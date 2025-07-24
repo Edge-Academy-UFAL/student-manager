@@ -11,14 +11,13 @@ import com.academy.edge.studentmanager.repositories.StudentRepository;
 import com.academy.edge.studentmanager.repositories.GradeRepository;
 import com.academy.edge.studentmanager.repositories.SubjectRepository;
 import com.academy.edge.studentmanager.services.GradeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import com.academy.edge.studentmanager.models.Grade;
 import com.academy.edge.studentmanager.models.Student;
 import com.academy.edge.studentmanager.models.Subject;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import static org.springframework.http.HttpStatus.*;
 
@@ -29,22 +28,15 @@ import java.util.List;
 
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GradeServiceImpl implements GradeService {
-    final GradeRepository gradeRepository;
-    final StudentRepository studentRepository;
-    final SubjectRepository subjectRepository;
-    final ModelMapper modelMapper;
-
-    @Autowired
-    public GradeServiceImpl(GradeRepository gradeRepository, ModelMapper modelMapper, StudentRepository studentRepository, SubjectRepository subjectRepository) {
-        this.gradeRepository = gradeRepository;
-        this.modelMapper = modelMapper;
-        this.studentRepository = studentRepository;
-        this.subjectRepository = subjectRepository;
-    }
+    private final GradeRepository gradeRepository;
+    private final StudentRepository studentRepository;
+    private final SubjectRepository subjectRepository;
+    private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public GradeResponseDTO updateGrade(GradeUpdateDTO gradeUpdateDTO) {
 
         Student student = studentRepository
@@ -67,22 +59,17 @@ public class GradeServiceImpl implements GradeService {
     @Transactional
     public GradeResponseDTO saveGrade(GradeCreateDTO gradeCreateDTO) {
         Grade grade = modelMapper.map(gradeCreateDTO, Grade.class);
-        try{
-            Student student = studentRepository
-                    .findByEmail(gradeCreateDTO.getStudentEmail())
-                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
-            grade.setStudent(student);
+        Student student = studentRepository
+                .findByEmail(gradeCreateDTO.getStudentEmail())
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
+        grade.setStudent(student);
 
-            Subject subject = subjectRepository.
-                    findSubjectByCode(gradeCreateDTO.getSubjectCode())
-                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Subject not found"));
-            grade.setSubject(subject);
+        Subject subject = subjectRepository.
+                findSubjectByCode(gradeCreateDTO.getSubjectCode())
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Subject not found"));
+        grade.setSubject(subject);
 
-            gradeRepository.save(grade);
-        }
-        catch(Exception e){
-            throw new RuntimeException(e);
-        }
+        gradeRepository.save(grade);
 
         return modelMapper.map(grade, GradeResponseDTO.class);
     }

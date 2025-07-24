@@ -1,11 +1,9 @@
 package com.academy.edge.studentmanager.controllers;
 
-import com.academy.edge.studentmanager.dtos.InvitationGetResponseDTO;
 import com.academy.edge.studentmanager.dtos.InvitationSendResponseDTO;
 import com.academy.edge.studentmanager.dtos.InvitationRequestDTO;
 import com.academy.edge.studentmanager.services.InvitationService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,17 +20,14 @@ public class InvitationController {
 
     private final InvitationService invitationService;
 
-    @Autowired
     public InvitationController(InvitationService invitationService) {
         this.invitationService = invitationService;
     }
 
     @GetMapping("/{invitationId}")
-    public ResponseEntity<InvitationGetResponseDTO> checkInvitation(@PathVariable String invitationId) {
-        var invitation = this.invitationService.getValidInvitation(invitationId);
-        var responseDTO = new InvitationGetResponseDTO();
-        responseDTO.setEmail(invitation.getEmail());
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    public ResponseEntity<Void> checkInvitation(@PathVariable String invitationId) {
+        this.invitationService.getValidInvitation(invitationId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping

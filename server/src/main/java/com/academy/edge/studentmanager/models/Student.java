@@ -22,32 +22,32 @@ public class Student extends User{
     public static final int MAX_NUM_DEGREE_SEMESTER_COMPUTER_SCIENCE = 12;
     public static final int MAX_NUM_DEGREE_SEMESTER_COMPUTER_ENGINEERING = 15;
 
-    @Column(nullable = false)
+    @Column
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     Course course;
 
-    @Column(nullable = false)
+    @Column
     String registration;
 
-    @Column(nullable = false)
+    @Column
     private String phone;
 
-    @Column()
+    @Column
     private String secondaryPhone;
 
-    @Column(nullable = false)
+    @Column
     private int period;
 
-    @Column(nullable = false)
+    @Column
     private String entryPeriod;
 
     @Column(nullable = false)
     private int studentGroup;
 
-    @Column()
+    @Column
     private String academicRecordUrl;
 
     @Column(nullable = false)

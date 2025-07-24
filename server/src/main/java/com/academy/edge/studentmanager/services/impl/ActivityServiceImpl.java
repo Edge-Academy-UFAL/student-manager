@@ -10,9 +10,8 @@ import com.academy.edge.studentmanager.services.ActivityService;
 import com.academy.edge.studentmanager.repositories.ActivityRepository;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -21,20 +20,12 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ActivityServiceImpl implements ActivityService {
 
-    final ActivityRepository activityRepository;
-    final StudentRepository studentRepository;
-    final ModelMapper modelMapper;
-
-    @Autowired
-    public ActivityServiceImpl(ModelMapper modelMapper, ActivityRepository activityRepository, StudentRepository studentRepository)
-    {
-        this.activityRepository = activityRepository;
-        this.studentRepository = studentRepository;
-        this.modelMapper = modelMapper;
-    }
+    private final ActivityRepository activityRepository;
+    private final StudentRepository studentRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public List<ActivityResponseDTO> getAllActivities(String email) {
@@ -53,22 +44,18 @@ public class ActivityServiceImpl implements ActivityService {
     @Transactional
     public ActivityResponseDTO saveActivity(ActivityCreateDTO activityCreateDTO) {
         Activity activity = modelMapper.map(activityCreateDTO, Activity.class);
-        try{
-            Student student = studentRepository
-                    .findByEmail(activityCreateDTO.getStudentEmail())
-                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
-            activity.setStudent(student);
+        Student student = studentRepository
+                .findByEmail(activityCreateDTO.getStudentEmail())
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
+        activity.setStudent(student);
 
-            activityRepository.save(activity);
-        }
-        catch(Exception e){
-            throw new RuntimeException(e);
-        }
+        activityRepository.save(activity);
 
         return modelMapper.map(activity, ActivityResponseDTO.class);
     }
 
     @Override
+    @Transactional
     public ActivityResponseDTO updateActivity(ActivityUpdateDTO activityUpdateDTO) {
         Activity activity = activityRepository
                 .findById(activityUpdateDTO.getActivityId())
@@ -79,6 +66,7 @@ public class ActivityServiceImpl implements ActivityService {
         return modelMapper.map(activity, ActivityResponseDTO.class);
     }
 
+    @Override
     @Transactional
     public void deleteActivity(ActivityDeleteDTO activityDeleteDTO) {
         activityRepository.deleteActivityById(activityDeleteDTO.getActivityId());

@@ -1,8 +1,6 @@
 package com.academy.edge.studentmanager.controllers;
 
 import com.academy.edge.studentmanager.dtos.AdministratorCreateDTO;
-import com.academy.edge.studentmanager.dtos.SignInRequestDTO;
-import com.academy.edge.studentmanager.enums.InvitationErrorType;
 import com.academy.edge.studentmanager.models.Administrator;
 import com.academy.edge.studentmanager.repositories.AdministratorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +8,6 @@ import com.icegreen.greenmail.configuration.GreenMailConfiguration;
 import com.icegreen.greenmail.junit5.GreenMailExtension;
 import com.icegreen.greenmail.user.UserException;
 import com.icegreen.greenmail.util.ServerSetupTest;
-import com.jayway.jsonpath.JsonPath;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -25,17 +22,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Transactional
-public class AdministratorControllerTest {
-
+public class AdministratorControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
@@ -49,13 +43,13 @@ public class AdministratorControllerTest {
     private AdministratorRepository administratorRepository;
 
     @RegisterExtension
-    static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP_IMAP).withConfiguration(
+    private static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP_IMAP).withConfiguration(
             GreenMailConfiguration.aConfig().withUser("academy@edge.ufal.br", "test", "test"));
 
     @Test
     @WithMockUser(roles = "ADMIN")
     void canRegisterAdmin() throws Exception {
-        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1@email.com");
+        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1@email.com", "");
 
         mockMvc.perform(post("/api/v1/administrators").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO))).andExpect(status().isCreated());
@@ -66,14 +60,14 @@ public class AdministratorControllerTest {
         var message = receivedMessages[0];
         assertThat(message.getAllRecipients()).containsExactly(new InternetAddress(requestDTO.getEmail()));
 
-        String pattern = "<span class=\"password\">(?!\\[\\[PASSWORD\\]\\])[^<]+</span>";
+        var pattern = "<span class=\"password\">(?!\\[\\[PASSWORD\\]\\])[^<]+</span>";
         assertThat((String)message.getContent()).containsPattern(pattern);
     }
 
     @Test
     @WithMockUser(roles = "STUDENT")
     void nonAdminCannotRegisterAdmin() throws Exception {
-        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1@email.com");
+        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1@email.com", "");
 
         mockMvc.perform(post("/api/v1/administrators").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO))).andExpect(status().isForbidden());
@@ -82,7 +76,7 @@ public class AdministratorControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void cannotRegisterInvalidEmail() throws Exception {
-        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1.email.com");
+        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1.email.com", "");
 
         mockMvc.perform(post("/api/v1/administrators").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO))).andExpect(status().isBadRequest());
@@ -91,17 +85,14 @@ public class AdministratorControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void catchSmtpErrorsWhileSending() throws Exception {
-        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1@email.com");
+        var requestDTO = new AdministratorCreateDTO("John Doe", "admin1@email.com", "");
 
         greenMail.getUserManager().setMessageDeliveryHandler((msg, mailAddress) -> {
             throw new UserException("User not found");
         });
 
         mockMvc.perform(post("/api/v1/administrators").contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").isMap())
-                .andExpect(jsonPath("$.error").value(InvitationErrorType.SMTP_ERROR.toString()));
+                .content(objectMapper.writeValueAsString(requestDTO))).andExpect(status().isInternalServerError());
 
         var receivedMessages = greenMail.getReceivedMessages();
         assertThat(receivedMessages).hasSize(0);
@@ -111,31 +102,10 @@ public class AdministratorControllerTest {
     @WithMockUser(roles = "ADMIN")
     void cannotRegisterEmailAgain() throws Exception {
         var administrator = administratorRepository.save(getTestAdministrator());
-        var requestDTO = new AdministratorCreateDTO(administrator.getName(), administrator.getEmail());
+        var requestDTO = new AdministratorCreateDTO(administrator.getName(), administrator.getEmail(), "");
 
         mockMvc.perform(post("/api/v1/administrators").contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath("$").isMap())
-                .andExpect(jsonPath("$.error").value(InvitationErrorType.ALREADY_REGISTERED.toString()));
-    }
-
-    @Test
-    void adminCanLogin() throws Exception {
-        var administrator = administratorRepository.save(getTestAdministrator());
-        var requestDTO = new SignInRequestDTO(administrator.getEmail(), "Admin123");
-
-        var result = mockMvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").isString())
-                .andReturn();
-
-        var token = JsonPath.read(result.getResponse().getContentAsString(), "$.token");
-
-        mockMvc.perform(get("/api/v1/auth/me").header("Authorization", "Bearer " + token))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(administrator.getName()));
+                .content(objectMapper.writeValueAsString(requestDTO))).andExpect(status().isConflict());
     }
 
     Administrator getTestAdministrator() {

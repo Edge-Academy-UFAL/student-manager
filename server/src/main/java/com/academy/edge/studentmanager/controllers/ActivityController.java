@@ -6,7 +6,6 @@ import com.academy.edge.studentmanager.dtos.ActivityUpdateDTO;
 import com.academy.edge.studentmanager.dtos.ActivityDeleteDTO;
 import com.academy.edge.studentmanager.services.ActivityService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,9 +17,8 @@ import java.util.List;
 @RequestMapping("/api/v1/activities")
 public class ActivityController {
 
-    final ActivityService activityService;
+    private final ActivityService activityService;
 
-    @Autowired
     public ActivityController(ActivityService activityService) { this.activityService = activityService; }
 
     @GetMapping("/{email}")

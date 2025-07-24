@@ -1,22 +1,25 @@
 package com.academy.edge.studentmanager.dtos;
 
 import com.academy.edge.studentmanager.enums.Course;
-import com.academy.edge.studentmanager.models.User;
 import com.academy.edge.studentmanager.models.Student;
+import com.academy.edge.studentmanager.models.User;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 
-@Getter
-@AllArgsConstructor()
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class StudentUpdateDTO {
     @NotBlank(message = "Nome é obrigatório")
     private String name;
 
     @NotNull(message = "Insira uma data de nascimento")
     @Past(message = "Informe uma data de nascimento válida")
-    private String birthDate;
+    private LocalDate birthDate;
 
     @NotNull(message = "Curso é obrigatório")
     private Course course;
