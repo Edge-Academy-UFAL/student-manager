@@ -9,7 +9,7 @@ import PersonalDataFormSection from './form-sections/personal-section';
 import ContactDataFormSection from './form-sections/contact-section';
 import AcademicDataFormSection from './form-sections/academic-section';
 import PhotoUploadFormSection from './form-sections/photo-section';
-import DucumentUploadFormSection from './form-sections/document-section';
+import DocumentUploadFormSection from './form-sections/document-section';
 
 import { updateProfileFormSchema } from './schema';
 
@@ -28,7 +28,7 @@ export default function StudentUpdateProfileFormComponent({
         </div>
         <div className="flex min-w-[270px] basis-1/3 flex-col gap-[24px]">
           <PhotoUploadFormSection form={form} />
-          <DucumentUploadFormSection form={form} />
+          <DocumentUploadFormSection form={form} />
         </div>
       </form>
     </Form>

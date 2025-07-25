@@ -13,7 +13,7 @@ import { FloatingLabelSelect } from '@/shared/components/custom/floating-label-s
 import { SimpleCheckbox } from '@/shared/components/custom/checkbox';
 import { DateInput } from '@/shared/components/custom/date-input';
 
-import FormSection from '../components/form-section';
+import { ProfileSection } from '@/shared/components/custom/profile-section';
 
 import { updateProfileFormSchema } from '../schema';
 import {
@@ -31,11 +31,7 @@ export default function PersonalDataFormSection({
   form,
 }: PersonalDataFormSectionProps) {
   return (
-    <FormSection
-      title="Dados Pessoais"
-      ariaLabelledby="personal-info"
-      className="gap-[16px]"
-    >
+    <ProfileSection title="Dados Pessoais" aria-labelledby="personal-info">
       <div className="flex w-full gap-[16px]">
         <FormField
           control={form.control}
@@ -194,6 +190,6 @@ export default function PersonalDataFormSection({
           )}
         />
       </div>
-    </FormSection>
+    </ProfileSection>
   );
 }

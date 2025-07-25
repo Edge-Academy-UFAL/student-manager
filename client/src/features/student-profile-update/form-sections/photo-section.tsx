@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from '@/shared/components/ui/form';
 
-import FormSection from '../components/form-section';
+import { ProfileSection } from '@/shared/components/custom/profile-section';
 import { MockFileUpload } from '../components/mock-upload-file';
 import { updateProfileFormSchema } from '../schema';
 
@@ -20,11 +20,10 @@ export default function PhotoUploadFormSection({
   form,
 }: PhotoUploadFormSectionProps) {
   return (
-    <FormSection
+    <ProfileSection
       title="Foto"
       description="Essa foto será utilizada no seu crachá e em possíveis apresentações de time, artes de veiculação interna e outros."
-      ariaLabelledby="photo-upload"
-      className="gap-[16px]"
+      aria-labelledby="photo-upload"
     >
       <FormField
         control={form.control}
@@ -42,6 +41,6 @@ export default function PhotoUploadFormSection({
           </FormItem>
         )}
       />
-    </FormSection>
+    </ProfileSection>
   );
 }
