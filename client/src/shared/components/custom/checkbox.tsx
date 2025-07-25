@@ -6,6 +6,7 @@ import React, { useId } from 'react';
 interface SimpleCheckboxProps extends React.ComponentProps<typeof Checkbox> {
   label: string;
   inputClassName?: string;
+  labelClassName?: string;
 }
 
 export function SimpleCheckbox({
@@ -13,6 +14,7 @@ export function SimpleCheckbox({
   label,
   className,
   inputClassName,
+  labelClassName,
   ...props
 }: SimpleCheckboxProps) {
   const generatedId = useId();
@@ -30,7 +32,10 @@ export function SimpleCheckbox({
       />
       <Label.Root
         htmlFor={checkboxId}
-        className="text-body-md font-normal text-neutral-950 peer-disabled:text-neutral-300"
+        className={cn(
+          'text-body-md font-normal text-neutral-950 peer-disabled:text-neutral-300',
+          labelClassName,
+        )}
       >
         {label}
       </Label.Root>
