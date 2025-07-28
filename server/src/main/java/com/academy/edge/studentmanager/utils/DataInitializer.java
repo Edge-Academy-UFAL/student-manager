@@ -64,6 +64,9 @@ public class DataInitializer implements CommandLineRunner {
             invitation.setEntryDate(LocalDate.of(2001, 1, 1));
             invitation.setCode(String.valueOf(i));
 
+            invitation.setCreatedAt(LocalDate.now().atStartOfDay(java.time.ZoneId.systemDefault()).toInstant());
+            
+
             invitationRepository.save(invitation);
         }
     }
