@@ -1,11 +1,9 @@
 import Link from 'next/link';
 import { DotBackground } from '@/shared/components/custom/dot-background';
-import Navbar from '@/features/navbar/header';
 
 export default function HomePage() {
   return (
     <main>
-      <Navbar />
       <section className="flex h-[calc(100vh-100px)] w-full items-center justify-center py-12 md:py-24 lg:py-32">
         <DotBackground />
         <div className="container px-4 md:px-6">
