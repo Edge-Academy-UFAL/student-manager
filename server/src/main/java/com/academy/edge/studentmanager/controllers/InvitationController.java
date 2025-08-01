@@ -32,7 +32,7 @@ public class InvitationController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<InvitationSendResponseDTO> register(@Valid @RequestBody InvitationRequestDTO requestDTO) {
+    public ResponseEntity<InvitationSendResponseDTO> inviteStudents(@Valid @RequestBody InvitationRequestDTO requestDTO) {
         var responseDTO = invitationService.sendInvitations(
                 requestDTO.getEmails(),
                 requestDTO.getStudentGroup(),

@@ -62,7 +62,7 @@ public class StudentServiceImpl implements StudentService {
         var invitation = invitationService.getValidInvitation(studentCreateDTO.getActivationCode());
 
         var student = new Student();
-        student.setName(invitation.getEmail().split("@", 1)[0]);
+        student.setName(invitation.getEmail().split("@", 1)[0].replace('.', ' '));
         student.setEmail(invitation.getEmail());
         student.setEntryDate(invitation.getEntryDate());
         student.setStudentGroup(invitation.getStudentGroup());
