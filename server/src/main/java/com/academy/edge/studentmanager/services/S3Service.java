@@ -10,5 +10,7 @@ public interface S3Service {
 
     S3Object getFile(String keyName);
 
-    void deleteFile(String photoUrl);
+    void deleteFile(String keyName);
+
+    String getFileUrl(String keyName);
 }

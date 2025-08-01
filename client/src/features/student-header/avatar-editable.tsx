@@ -84,7 +84,7 @@ const AvatarEditable = ({
   return (
     <Avatar className="group relative h-[155px] w-[155px]">
       <AvatarImage
-        src={`${process.env.SERVER_URL?.slice(0, -5)}:4566/student-manager-files/${photoUrl}`}
+        src={photoUrl}
         alt="student-profile-picture"
         className="object-cover"
       />

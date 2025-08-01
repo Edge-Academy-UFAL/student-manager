@@ -76,13 +76,7 @@ export default function StudentsDataTable({ data }: { data: Student[] }) {
           <div className="flex flex-row gap-3 ps-4">
             <Avatar>
               {/* TODO: Add the correct image */}
-              <AvatarImage
-                src={
-                  'http://localhost:4566/student-manager-files/' +
-                  row.original.photoUrl
-                }
-                alt="@shadcn"
-              />
+              <AvatarImage src={row.original.photoUrl} alt="@shadcn" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div>

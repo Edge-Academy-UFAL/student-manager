@@ -1,7 +1,6 @@
 package com.academy.edge.studentmanager;
 
 import com.academy.edge.studentmanager.configs.ApplicationProperties;
-import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -13,17 +12,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableConfigurationProperties(ApplicationProperties.class)
 public class StudentManagerApplication {
 
-	@Bean
-	public PasswordEncoder passwordEncoder(){
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
-	public static void main(String[] args) {
-		SpringApplication.run(StudentManagerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(StudentManagerApplication.class, args);
+    }
 
 }

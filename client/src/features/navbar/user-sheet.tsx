@@ -19,9 +19,7 @@ import { useSession, signOut } from 'next-auth/react';
 export function UserSheet() {
   const { status, data } = useSession();
 
-  const photoUrl = data?.user.photoUrl
-    ? `${process.env.S3_ENDPOINT_URL}/${process.env.S3_BUCKET}/${data?.user.photoUrl}`
-    : undefined;
+  const photoUrl = data?.user.photoUrl ?? undefined;
 
   const username = data?.user.name;
 
