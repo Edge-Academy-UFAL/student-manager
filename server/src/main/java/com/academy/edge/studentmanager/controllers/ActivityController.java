@@ -33,12 +33,14 @@ public class ActivityController {
         return new ResponseEntity<>(activityService.saveActivity(activityCreateDTO), HttpStatus.OK);
     }
 
+    // TODO: Should receive the id from the path
     @PutMapping
     @PreAuthorize("hasAnyRole('ADMIN') or authentication.name == #activityUpdateDTO.getStudentEmail()")
     public ResponseEntity<ActivityResponseDTO> updateActivity(@Valid @RequestBody ActivityUpdateDTO activityUpdateDTO){
         return new ResponseEntity<>(activityService.updateActivity(activityUpdateDTO), HttpStatus.OK);
     }
 
+    // TODO: Should receive the id from the path
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ADMIN') or authentication.name == #activityDeleteDTO.getStudentEmail()")
     public ResponseEntity<Void> deleteActivity(@Valid @RequestBody ActivityDeleteDTO activityDeleteDTO){
