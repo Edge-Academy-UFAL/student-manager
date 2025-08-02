@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from '@/shared/components/ui/card';
 
-export default function CreatePasswordComponent() {
+export default function ResetPasswordComponent() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -23,7 +23,7 @@ export default function CreatePasswordComponent() {
 
       <CardContent className="p-0 text-gray-800 text-left text-[14px] text-justify space-y-6">
         <p>
-          O primeiro passo é bem simples: crie sua senha para ter acesso ao sistema.
+            Crie uma nova senha para acessar o sistema.
         </p>
 
         <div className="space-y-4">
