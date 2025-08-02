@@ -1,6 +1,6 @@
 import { AcademyLogo } from '@/shared/components/custom/academy-logo';
 import { IconBackground } from '@/shared/components/custom/icon-background';
-import PassworSuccessComponent from '@/features/register/password-success';
+import PasswordSuccessComponent from '@/features/register/password-success';
 
 export default function PasswordSuccessPage() {
   return (
