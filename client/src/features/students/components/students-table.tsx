@@ -42,8 +42,8 @@ import {
   TableRow,
 } from '@/shared/components/ui/table';
 
-import { TerminateStudentDialog } from '@/features/student-profile/components/terminate-student-dialog';
-import { getUsername, translateOptionValue } from '@/shared/lib/formatting';
+import { translateOptionValue } from '@/shared/lib/formatting';
+import { getUsername } from '@/shared/lib/utils';
 import { courseOptions } from '@/shared/models';
 
 import { StudentRegistrationDialog } from '@/features/students/components/student-registration-dialog';
@@ -52,12 +52,16 @@ import {
   tableGlobalFilterFn,
 } from '@/features/students/components/table-filter';
 import Link from 'next/link';
-import { Student } from '@/features/students/models';
+import { type StudentResponseDTO } from '@/api';
 
-export default function StudentsDataTable({ data }: { data: Student[] }) {
+export default function StudentsDataTable({
+  data,
+}: {
+  data: StudentResponseDTO[];
+}) {
   const router = useRouter();
 
-  const columns: ColumnDef<Student>[] = [
+  const columns: ColumnDef<StudentResponseDTO>[] = [
     {
       accessorKey: 'name',
       header: ({ column }) => {
@@ -164,14 +168,8 @@ export default function StudentsDataTable({ data }: { data: Student[] }) {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => {
-        const payment = row.original;
-        const terminateTriggerRef = React.useRef<HTMLDivElement>(null);
-
         return (
           <div onClick={(e) => e.stopPropagation()}>
-            <TerminateStudentDialog name={payment.name} email={payment.email}>
-              <div ref={terminateTriggerRef} />
-            </TerminateStudentDialog>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-8 w-8 p-0">
@@ -188,11 +186,6 @@ export default function StudentsDataTable({ data }: { data: Student[] }) {
                   >
                     Enviar Mensagem
                   </a>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => terminateTriggerRef.current?.click()}
-                >
-                  Desligar aluno
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -1,7 +1,9 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
+import { api, getAuthorizationHeader } from '@/api';
 import { Button } from '@/shared/components/custom/button';
 import {
   Dialog,
@@ -14,7 +16,6 @@ import {
   DialogTrigger,
 } from '@/shared/components/custom/dialog';
 import { FloatingLabelInput } from '@/shared/components/custom/floating-label-input';
-import { terminateStudent } from '../api/terminate-student-req';
 
 enum DialogPage {
   ConfirmName,
@@ -105,6 +106,8 @@ export function TerminateStudentDialog({
   email,
   children,
 }: TerminateStudentDialogProps) {
+  const { data } = useSession();
+
   const [open, _setOpen] = useState(false);
   const [page, setPage] = useState(DialogPage.ConfirmName);
 
@@ -118,7 +121,11 @@ export function TerminateStudentDialog({
   async function handleSend(reason: string) {
     let res;
     try {
-      res = await terminateStudent(email, { terminationReason: reason });
+      res = await api.terminateStudent(
+        email,
+        { terminationReason: reason },
+        { headers: getAuthorizationHeader(data!) },
+      );
     } catch (error) {
       console.error(error);
       toast.error('Erro de conexão com o servidor');

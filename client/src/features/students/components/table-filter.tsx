@@ -37,8 +37,9 @@ import {
 
 import { Filter } from 'lucide-react';
 
-import { Student, FilterData } from '@/features/students/models';
+import { FilterData } from '@/features/students/models';
 import { Badge } from '@/shared/components/ui/badge';
+import { type StudentResponseDTO } from '@/api';
 
 const filterDefaults: FilterData = {
   csCheckbox: true,
@@ -133,7 +134,7 @@ function courseFilter(
   }
 }
 
-const tableGlobalFilterFn: FilterFn<Student> = (row, _, value) => {
+const tableGlobalFilterFn: FilterFn<StudentResponseDTO> = (row, _, value) => {
   // If no action is taken in the form, value is a empty object.
   // If no action is taken, no filters are applied
   if (Object.keys(value).length === 0) {
@@ -141,19 +142,23 @@ const tableGlobalFilterFn: FilterFn<Student> = (row, _, value) => {
   }
 
   // Get the row data
-  const student: Student = row.original;
+  const student = row.original;
 
-  if (!courseFilter(student.course, value.csCheckbox, value.ceCheckbox)) {
+  if (
+    !student.course ||
+    !courseFilter(student.course, value.csCheckbox, value.ceCheckbox)
+  ) {
     return false;
   }
 
   if (
-    value.admissionSemester !== '' &&
-    !admissionSemesterFilter(
-      student.entryPeriod,
-      value.admissionSemester,
-      value.admissionSemestreFilterOption,
-    )
+    !student.entryPeriod ||
+    (value.admissionSemester !== '' &&
+      !admissionSemesterFilter(
+        student.entryPeriod,
+        value.admissionSemester,
+        value.admissionSemestreFilterOption,
+      ))
   ) {
     return false;
   }
