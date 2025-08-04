@@ -30,14 +30,3 @@ export function cn(...inputs: ClassValue[]) {
 export function getUsername(email: string) {
   return email.split('@')[0];
 }
-
-export function enumToStringCourse(course: string) {
-  switch (course) {
-    case 'COMPUTER_ENGINEERING':
-      return 'Engenharia da Computação';
-    case 'COMPUTER_SCIENCE':
-      return 'Ciência da Computação';
-    default:
-      return course;
-  }
-}

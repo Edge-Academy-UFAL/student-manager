@@ -43,8 +43,8 @@ import {
 } from '@/shared/components/ui/table';
 
 import { TerminateStudentDialog } from '@/features/student-profile/components/terminate-student-dialog';
-import { getUsername } from '@/shared/lib/utils';
-import { enumToStringCourse } from '@/shared/lib/utils';
+import { getUsername, translateOptionValue } from '@/shared/lib/formatting';
+import { courseOptions } from '@/shared/models';
 
 import { StudentRegistrationDialog } from '@/features/students/components/student-registration-dialog';
 import {
@@ -108,8 +108,8 @@ export default function StudentsDataTable({ data }: { data: Student[] }) {
         );
       },
       cell: ({ row }) => (
-        <div className="ps-4 capitalize">
-          {enumToStringCourse(row.getValue('course'))}
+        <div className="ps-4">
+          {translateOptionValue(courseOptions, row.getValue('course'))}
         </div>
       ),
     },

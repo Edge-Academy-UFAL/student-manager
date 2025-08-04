@@ -12,7 +12,7 @@ import { useId, useState } from 'react';
 type SimpleSelectProps = {
   id?: string;
   label: string;
-  options: { label: string; value: string }[];
+  options: readonly { label: string; value: string }[];
   onValueChange?: (value: string) => void;
   defaultValue?: string;
   disabled?: boolean;

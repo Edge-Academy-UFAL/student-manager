@@ -21,7 +21,7 @@ import {
   maritalStateOptions,
   pronounsOptions,
   genderOptions,
-} from '../models';
+} from '@/shared/models';
 
 interface PersonalDataFormSectionProps {
   form: UseFormReturn<z.infer<typeof updateProfileFormSchema>>;

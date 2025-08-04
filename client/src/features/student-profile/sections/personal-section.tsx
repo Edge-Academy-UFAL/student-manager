@@ -1,6 +1,13 @@
 import { type StudentResponseDTO } from '@/api';
 import { SimpleCheckbox } from '@/shared/components/custom/checkbox';
 import { ProfileSection } from '@/shared/components/custom/profile-section';
+import { translateOptionValue } from '@/shared/lib/formatting';
+import {
+  genderOptions,
+  maritalStateOptions,
+  pronounsOptions,
+  raceOptions,
+} from '@/shared/models';
 import { ProfileTextItem } from '../components/profile-text-item';
 
 export function PersonalSection({
@@ -25,10 +32,13 @@ export function PersonalSection({
         <ProfileTextItem title="Orgão emissor" value="SSP-AL" />
         <ProfileTextItem
           title="Gênero"
-          value="Feminino"
+          value={translateOptionValue(genderOptions, 'FEMALE')}
           className="col-start-1"
         />
-        <ProfileTextItem title="Pronomes" value="Ela/dela" />
+        <ProfileTextItem
+          title="Pronomes"
+          value={translateOptionValue(pronounsOptions, 'SHE_HER')}
+        />
         <SimpleCheckbox
           label="Pessoa com deficiência"
           defaultChecked={false}
@@ -37,10 +47,13 @@ export function PersonalSection({
         />
         <ProfileTextItem
           title="Raça/etnia"
-          value="Pardo"
+          value={translateOptionValue(raceOptions, 'PARDA')}
           className="col-start-1"
         />
-        <ProfileTextItem title="Estado civil" value="Solteira" />
+        <ProfileTextItem
+          title="Estado civil"
+          value={translateOptionValue(maritalStateOptions, 'SINGLE')}
+        />
       </div>
     </ProfileSection>
   );

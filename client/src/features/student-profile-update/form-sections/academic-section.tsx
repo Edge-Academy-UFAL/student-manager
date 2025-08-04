@@ -14,7 +14,7 @@ import { DateInput } from '@/shared/components/custom/date-input';
 
 import { ProfileSection } from '@/shared/components/custom/profile-section';
 import { updateProfileFormSchema } from '../schema';
-import { academyStudentLevelOptions, courseOptions } from '../models';
+import { academyStudentLevelOptions, courseOptions } from '@/shared/models';
 
 interface AcademicDataFormSectionProps {
   form: UseFormReturn<z.infer<typeof updateProfileFormSchema>>;
