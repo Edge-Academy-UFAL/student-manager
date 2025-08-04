@@ -40,10 +40,6 @@ export default function WelcomeComponent() {
             onClick={handleClick}
             className="bg-[#009DB4] text-white font-semibold px-6 py-4 rounded-2xl uppercase hover:bg-[#009ddd] transition text-[14px]"
           >
-          <button
-            onClick={handleClick}
-            className="bg-[#009DB4] text-white font-semibold px-6 py-4 rounded-2xl uppercase hover:bg-[#009ddd] transition text-[14px]"
-          >
             Iniciar o cadastro
           </button>
         </div>
