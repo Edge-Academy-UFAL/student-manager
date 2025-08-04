@@ -204,17 +204,13 @@ const formSchema = z.object({
       message:
         'O período de ingresso tem padrão ano.semestre (e.g. 2022.2). Os valores do semestre só podem ser 1 ou 2.',
     })
-    .length(6, {
-      message: 'O período de ingresso tem apenas 6 caracteres.',
-    })
+    .length(6, { message: 'O período de ingresso tem apenas 6 caracteres.' })
     .optional()
     .or(z.literal('')),
   admissionSemestreFilterOption: z.nativeEnum(NumberFilteringOption),
   currentSemester: z.coerce
     .number()
-    .min(1, {
-      message: 'Período atual menor que 1 não faz sentido.',
-    })
+    .min(1, { message: 'Período atual menor que 1 não faz sentido.' })
     .max(15, {
       message:
         'O período atual não pode ser maior que 15 (prazo máximo para o curso de Engenharia).',
@@ -224,12 +220,8 @@ const formSchema = z.object({
   currentSemesterFilterOption: z.nativeEnum(NumberFilteringOption),
   ira: z.coerce
     .number()
-    .min(0.1, {
-      message: 'O IRA/CR deve ser maior que 0.1.',
-    })
-    .max(10, {
-      message: 'Não faz sentido o IRA/CR ser maior que 10.',
-    })
+    .min(0.1, { message: 'O IRA/CR deve ser maior que 0.1.' })
+    .max(10, { message: 'Não faz sentido o IRA/CR ser maior que 10.' })
     .optional()
     .or(z.literal('')),
   iraFilterOption: z.nativeEnum(NumberFilteringOption),

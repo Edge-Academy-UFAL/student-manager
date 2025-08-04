@@ -398,10 +398,7 @@ export function StudentRegistrationDialog() {
   const [dialogState, _setDialogState] = useState<{
     page: DialogPage;
     data: Record<string, unknown>;
-  }>({
-    page: DialogPage.Input,
-    data: {},
-  });
+  }>({ page: DialogPage.Input, data: {} });
 
   function setDialogState(page: DialogPage, data?: Record<string, unknown>) {
     if (data) {

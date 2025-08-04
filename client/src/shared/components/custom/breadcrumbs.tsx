@@ -17,9 +17,7 @@ export type BreadcrumbItem = {
   Icon?: LucideIcon;
 };
 
-type BreadcrumbsProps = {
-  items: BreadcrumbItem[];
-};
+type BreadcrumbsProps = { items: BreadcrumbItem[] };
 
 export function Breadcrumbs({ items }: BreadcrumbsProps) {
   if (!items || items.length === 0) {

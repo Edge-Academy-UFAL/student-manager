@@ -3,9 +3,7 @@ import NextAuth, { type User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  pages: {
-    signIn: '/login',
-  },
+  pages: { signIn: '/login' },
   session: {
     strategy: 'jwt',
     maxAge: 60 * 60 * 24, // One day
