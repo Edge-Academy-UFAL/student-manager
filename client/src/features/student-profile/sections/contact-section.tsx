@@ -1,3 +1,4 @@
+import { formatPhoneNumber } from 'react-phone-number-input';
 import { type StudentResponseDTO } from '@/api';
 import { ProfileSection } from '@/shared/components/custom/profile-section';
 import { ProfileTextItem } from '../components/profile-text-item';
@@ -21,8 +22,14 @@ export function ContactSection({
           showCopyButton={true}
           className="col-start-1"
         />
-        <ProfileTextItem title="Telefone" value={studentInfo.phone ?? ''} />
-        <ProfileTextItem title="WhatsApp" value={studentInfo.phone ?? ''} />
+        <ProfileTextItem
+          title="Telefone"
+          value={studentInfo.phone ? formatPhoneNumber(studentInfo.phone) : ''}
+        />
+        <ProfileTextItem
+          title="WhatsApp"
+          value={studentInfo.phone ? formatPhoneNumber(studentInfo.phone) : ''}
+        />
         <div className="col-span-full grid grid-cols-12 gap-[16px]">
           <ProfileTextItem
             title="Código postal"

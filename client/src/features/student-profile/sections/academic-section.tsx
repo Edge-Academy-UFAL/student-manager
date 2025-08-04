@@ -1,3 +1,4 @@
+import { format, parseISO } from 'date-fns';
 import { type StudentResponseDTO } from '@/api';
 import { ProfileSection } from '@/shared/components/custom/profile-section';
 import { translateOptionValue } from '@/shared/lib/formatting';
@@ -9,6 +10,8 @@ export function AcademicSection({
 }: {
   studentInfo: StudentResponseDTO;
 }) {
+  const onboardingDate = '2023-06-20';
+
   return (
     <ProfileSection title="Dados acadêmicos" className="w-full">
       <div className="grid grid-cols-4 gap-[16px]">
@@ -29,7 +32,12 @@ export function AcademicSection({
           title="Turma do Academy"
           value={'Turma ' + studentInfo.studentGroup}
         />
-        <ProfileTextItem title="Ingresso no Academy" value="2023-06-20" />
+        <ProfileTextItem
+          title="Ingresso no Academy"
+          value={
+            onboardingDate ? format(parseISO(onboardingDate), 'dd/MM/yyyy') : ''
+          }
+        />
         <ProfileTextItem
           title="Nível"
           value={translateOptionValue(academyStudentLevelOptions, 'TRAINEE_1')}

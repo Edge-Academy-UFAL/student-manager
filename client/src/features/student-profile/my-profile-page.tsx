@@ -1,3 +1,5 @@
+'use client';
+
 import { PersonalSection } from './sections/personal-section';
 import { ContactSection } from './sections/contact-section';
 import { AcademicSection } from './sections/academic-section';

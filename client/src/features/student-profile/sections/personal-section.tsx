@@ -1,3 +1,4 @@
+import { format, parseISO } from 'date-fns';
 import { type StudentResponseDTO } from '@/api';
 import { SimpleCheckbox } from '@/shared/components/custom/checkbox';
 import { ProfileSection } from '@/shared/components/custom/profile-section';
@@ -15,13 +16,15 @@ export function PersonalSection({
 }: {
   studentInfo: StudentResponseDTO;
 }) {
+  const birthDate = studentInfo.birthDate;
+
   return (
     <ProfileSection title="Dados pessoais" className="w-full">
       <div className="grid grid-cols-3 gap-[16px]">
         <ProfileTextItem title="Nome completo" value={studentInfo.name} />
         <ProfileTextItem
           title="Data de nascimento"
-          value={studentInfo.birthDate ?? ''}
+          value={birthDate ? format(parseISO(birthDate), 'dd/MM/yyyy') : ''}
         />
         <ProfileTextItem
           title="CPF"
