@@ -3,17 +3,15 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/shared/components/ui/card';
+} from '@/shared/components/custom/card';
 
 import { LoginForm } from './login-form';
 
 export function LoginFormCard() {
   return (
-    <Card className="h-fit w-full rounded-md lg:max-w-lg">
+    <Card className="h-fit w-full lg:max-w-lg">
       <CardHeader>
-        <CardTitle className="text-action-950 text-heading-md text-center">
-          Login
-        </CardTitle>
+        <CardTitle className="text-center">Login</CardTitle>
       </CardHeader>
       <CardContent>
         <LoginForm />
