@@ -3,8 +3,9 @@ import { Breadcrumbs } from '@/shared/components/custom/breadcrumbs';
 import { UserRound } from 'lucide-react';
 
 interface StudentProfileUpdatePageProps {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }
+
 export default async function StudentProfileUpdatePage({
   params,
 }: StudentProfileUpdatePageProps) {
@@ -13,11 +14,14 @@ export default async function StudentProfileUpdatePage({
   // Requests for data.
 
   return (
-    <div>
+    <div className="space-y-6">
       <Breadcrumbs
-        Icon={UserRound}
         items={[
-          { label: 'Meu Perfil', href: `/student/${username}/profile` },
+          {
+            label: 'Meu Perfil',
+            href: `/students/${username}/profile`,
+            Icon: UserRound,
+          },
           { label: 'Editar dados cadastrais' },
         ]}
       />
