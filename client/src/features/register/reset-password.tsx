@@ -1,17 +1,19 @@
 'use client';
 
-import { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/shared/components/ui/card';
+import { FloatingLabelPasswordInput } from '@/shared/components/custom/floating-label-password-input';
 
 export default function ResetPasswordComponent() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const router = useRouter();
+  const handleClick = () => {
+    router.push('/password-success'); 
+  };
 
   return (
     <Card className="min-w-[600px] w-[704px] rounded-md bg-white shadow-lg p-6 gap-0 ">
@@ -27,39 +29,14 @@ export default function ResetPasswordComponent() {
         </p>
 
         <div className="space-y-4">
-          <div className="relative">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Senha"
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 " 
-            >
-              {showPassword ? <EyeOff size={20} strokeWidth={3.3} /> : <Eye size={20} strokeWidth={3.3} />} 
-            </button>
-          </div>
-
-          <div className="relative">
-            <input
-              type={showConfirm ? 'text' : 'password'}
-              placeholder="Confirme sua senha"
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button
-              type="button"
-              onClick={() => setShowConfirm(!showConfirm)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-            >
-              {showConfirm ? <EyeOff size={20} strokeWidth={3.3} /> : <Eye size={20} strokeWidth={3.3} />}
-            </button>
-          </div>
+          <FloatingLabelPasswordInput label="Senha" />
+          <FloatingLabelPasswordInput label="Confirme sua senha" />
         </div>
-
         <div className="flex justify-end pt-4">
-          <button className="bg-[#009DB4] text-white font-semibold px-6 py-4 rounded-2xl uppercase hover:bg-[#009ddd] transition text-[14px]">
+        <button
+            onClick={handleClick}
+            className="bg-[#009DB4] text-white font-semibold px-6 py-4 rounded-2xl uppercase hover:bg-[#009ddd] transition text-[14px]"
+          >
             Próximo
           </button>
         </div>
@@ -67,3 +44,6 @@ export default function ResetPasswordComponent() {
     </Card>
   );
 }
+
+
+
