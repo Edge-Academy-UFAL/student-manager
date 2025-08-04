@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -8,7 +9,11 @@ import {
 } from '@/shared/components/ui/card';
 import { FloatingLabelPasswordInput } from '@/shared/components/custom/floating-label-password-input';
 
-export default function CreatePasswordComponent() {
+export default function ResetPasswordComponent() {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push('/password-success'); 
+  };
 
   return (
     <Card className="min-w-[600px] w-[704px] rounded-md bg-white shadow-lg p-6 gap-0 ">
@@ -20,19 +25,18 @@ export default function CreatePasswordComponent() {
 
       <CardContent className="p-0 text-gray-800 text-left text-[14px] text-justify space-y-6">
         <p>
-          O primeiro passo é bem simples: crie sua senha para ter acesso ao sistema.
+            Crie uma nova senha para acessar o sistema.
         </p>
 
         <div className="space-y-4">
-        <div className="space-y-4">
-           <FloatingLabelPasswordInput label="Senha" />
-           <FloatingLabelPasswordInput label="Confirme sua senha" />
-         </div>
-
+          <FloatingLabelPasswordInput label="Senha" />
+          <FloatingLabelPasswordInput label="Confirme sua senha" />
         </div>
-
         <div className="flex justify-end pt-4">
-          <button className="bg-[#009DB4] text-white font-semibold px-6 py-4 rounded-2xl uppercase hover:bg-[#009ddd] transition text-[14px]">
+        <button
+            onClick={handleClick}
+            className="bg-[#009DB4] text-white font-semibold px-6 py-4 rounded-2xl uppercase hover:bg-[#009ddd] transition text-[14px]"
+          >
             Próximo
           </button>
         </div>
@@ -40,3 +44,6 @@ export default function CreatePasswordComponent() {
     </Card>
   );
 }
+
+
+
