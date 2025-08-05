@@ -19,7 +19,7 @@ export default async function StudentProfileUpdatePage({
         items={[
           {
             label: 'Meu Perfil',
-            href: `/students/${username}/profile`,
+            href: `/students/${username}`,
             Icon: UserRound,
           },
           { label: 'Editar dados cadastrais' },

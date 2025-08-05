@@ -81,9 +81,7 @@ export default function StudentsDataTable({ data }: { data: Student[] }) {
             </Avatar>
             <div>
               <Link
-                href={
-                  '/students/' + getUsername(row.original.email) + '/profile'
-                }
+                href={'/students/' + getUsername(row.original.email)}
                 className="text-bold cursor-pointer text-base font-medium hover:font-extrabold hover:underline"
               >
                 {row.getValue('name')}
@@ -237,7 +235,7 @@ export default function StudentsDataTable({ data }: { data: Student[] }) {
   });
 
   function goToStudentPage(studentEmail: string) {
-    router.push('/students/' + getUsername(studentEmail) + '/profile');
+    router.push('/students/' + getUsername(studentEmail));
   }
 
   return (

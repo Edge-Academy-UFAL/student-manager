@@ -27,30 +27,6 @@ export interface StudentInfo {
   about: string;
 }
 
-export interface EditableInfoData {
-  about: string | '';
-  name: string;
-  birthDate: Date;
-  course: 'Ciência da Computação' | 'Engenharia de Computação';
-  phone: string;
-  secondaryPhone: string | '';
-  semester: string;
-  entrySemester: string;
-  registration: string;
-}
-
-export interface StudentEditRequest {
-  name: string;
-  birthDate: string;
-  course: string;
-  registration: string;
-  phone: string;
-  secondaryPhone: string;
-  period: number;
-  entryPeriod: string;
-  about: string;
-}
-
 export const ACTIVITY_TYPES = [
   { code: 'RESEARCH', name: 'Pesquisa' },
   { code: 'TUTORING', name: 'Monitoria' },
