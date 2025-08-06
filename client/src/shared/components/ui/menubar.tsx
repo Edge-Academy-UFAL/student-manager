@@ -165,9 +165,7 @@ function MenubarLabel({
   className,
   inset,
   ...props
-}: React.ComponentProps<typeof MenubarPrimitive.Label> & {
-  inset?: boolean;
-}) {
+}: React.ComponentProps<typeof MenubarPrimitive.Label> & { inset?: boolean }) {
   return (
     <MenubarPrimitive.Label
       data-slot="menubar-label"

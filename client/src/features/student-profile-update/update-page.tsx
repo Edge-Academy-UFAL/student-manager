@@ -61,8 +61,8 @@ export default function StudentProfileUpdatePageComponent() {
   }
 
   return (
-    <main>
-      <div className="my-[24px] flex items-center">
+    <main className="space-y-6">
+      <div className="flex items-center">
         <div className="flex flex-col gap-[8px]">
           <h1 className="text-heading-md text-brand-500 leading-[120%] font-semibold">
             Atualizar dados cadastrais

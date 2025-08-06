@@ -56,4 +56,8 @@ public class S3ServiceImpl implements S3Service {
         s3client.deleteObject(bucketName, keyName);
         log.info("Arquivo '{}' deletado do bucket '{}'.", keyName, bucketName);
     }
+
+    public String getFileUrl(String keyName) {
+        return s3client.getUrl(bucketName, keyName).toString();
+    }
 }

@@ -1,6 +1,5 @@
 package com.academy.edge.studentmanager.security;
 
-import com.academy.edge.studentmanager.exceptions.ExceptionBody;
 import com.academy.edge.studentmanager.services.impl.UserDetailsServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -8,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,13 +18,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor
 public class JWTFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -64,7 +65,7 @@ public class JWTFilter extends OncePerRequestFilter {
     private void handleException(HttpServletResponse response, Exception ex) throws IOException {
         response.setStatus(401);
         response.setContentType("application/json");
-        ExceptionBody exceptionBody = new ExceptionBody(Collections.singletonList(ex.getMessage()), 401);
-        response.getWriter().write(new ObjectMapper().writeValueAsString(exceptionBody));
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        response.getWriter().write(objectMapper.writeValueAsString(problemDetail));
     }
 }

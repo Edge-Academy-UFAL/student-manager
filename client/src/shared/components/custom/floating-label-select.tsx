@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Select,
   SelectContent,
@@ -12,7 +14,7 @@ import { useId, useState } from 'react';
 type SimpleSelectProps = {
   id?: string;
   label: string;
-  options: { label: string; value: string }[];
+  options: readonly { label: string; value: string }[];
   onValueChange?: (value: string) => void;
   defaultValue?: string;
   disabled?: boolean;
@@ -49,7 +51,7 @@ export function FloatingLabelSelect({
           className={cn(
             'peer text-body-md relative h-[48px] w-full cursor-pointer rounded-md border border-neutral-300 px-[16px] py-[4px] font-normal text-neutral-900 not-disabled:bg-white not-disabled:hover:bg-white focus:outline-none focus-visible:ring-neutral-200',
             'aria-invalid:border-destructive',
-            'disabled:bg-neutral-150 disabled:border disabled:border-neutral-300 disabled:text-neutral-300 disabled:opacity-100 disabled:hover:bg-neutral-150',
+            'disabled:bg-neutral-150 disabled:hover:bg-neutral-150 disabled:border disabled:border-neutral-300 disabled:text-neutral-300 disabled:opacity-100',
           )}
           aria-invalid={props['aria-invalid']}
           disabled={disabled}

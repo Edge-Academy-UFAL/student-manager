@@ -49,7 +49,7 @@ Armazena arquivos como um serviço compatível com AWS S3.
 - Os arquivos são armazenados na pasta `./data/minio`.
 
 ### 🔹 **MinIO Client (`mc`)**
-Cliente de linha de comando do MinIO que cria automaticamente o bucket `studentmanager-bucket`.
+Cliente de linha de comando do MinIO que cria automaticamente o bucket `studentmanager-files`.
 
 ### 🔹 **Aplicação (`app`)**
 Backend da aplicação rodando com **Gradle e Spring Boot**.

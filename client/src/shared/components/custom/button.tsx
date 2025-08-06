@@ -1,12 +1,10 @@
-'use client';
-
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { Button } from '@/shared/components/ui/button';
 
 const buttonVariants = cva(
-  'h-12 cursor-pointer px-6 py-2.5 leading-normal uppercase',
+  'h-12 cursor-pointer px-6 py-2.5 leading-normal font-semibold uppercase',
   {
     variants: {
       variant: {

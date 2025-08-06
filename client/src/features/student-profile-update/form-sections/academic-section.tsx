@@ -12,9 +12,9 @@ import { FloatingLabelInput } from '@/shared/components/custom/floating-label-in
 import { FloatingLabelSelect } from '@/shared/components/custom/floating-label-select';
 import { DateInput } from '@/shared/components/custom/date-input';
 
-import FormSection from '../components/form-section';
+import { ProfileSection } from '@/shared/components/custom/profile-section';
 import { updateProfileFormSchema } from '../schema';
-import { academyStudentLevelOptions, courseOptions } from '../models';
+import { academyStudentLevelOptions, courseOptions } from '@/shared/models';
 
 interface AcademicDataFormSectionProps {
   form: UseFormReturn<z.infer<typeof updateProfileFormSchema>>;
@@ -24,11 +24,7 @@ export default function AcademicDataFormSection({
   form,
 }: AcademicDataFormSectionProps) {
   return (
-    <FormSection
-      title="Dados Acadêmicos"
-      ariaLabelledby="academic-info"
-      className="gap-[16px]"
-    >
+    <ProfileSection title="Dados Acadêmicos" aria-labelledby="academic-info">
       <div className="flex w-full gap-[16px]">
         <FormField
           control={form.control}
@@ -140,6 +136,6 @@ export default function AcademicDataFormSection({
           )}
         />
       </div>
-    </FormSection>
+    </ProfileSection>
   );
 }

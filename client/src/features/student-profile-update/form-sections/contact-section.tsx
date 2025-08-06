@@ -11,7 +11,7 @@ import {
 import { FloatingLabelInput } from '@/shared/components/custom/floating-label-input';
 import { FloatingLabelPhoneInput } from '@/shared/components/custom/floating-label-phone-input';
 
-import FormSection from '../components/form-section';
+import { ProfileSection } from '@/shared/components/custom/profile-section';
 import { updateProfileFormSchema } from '../schema';
 
 interface ContactDataFormSectionProps {
@@ -22,11 +22,7 @@ export default function ContactDataFormSection({
   form,
 }: ContactDataFormSectionProps) {
   return (
-    <FormSection
-      title="Dados de Contato"
-      ariaLabelledby="contact-info"
-      className="gap-[16px]"
-    >
+    <ProfileSection title="Dados de Contato" aria-labelledby="contact-info">
       <div className="flex w-full gap-[16px]">
         <FormField
           control={form.control}
@@ -197,6 +193,6 @@ export default function ContactDataFormSection({
           )}
         />
       </div>
-    </FormSection>
+    </ProfileSection>
   );
 }

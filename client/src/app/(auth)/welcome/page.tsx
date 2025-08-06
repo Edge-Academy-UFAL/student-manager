@@ -4,13 +4,13 @@ import WelcomeComponent from '@/features/register/welcome';
 
 export default function WelcomePage() {
   return (
-    <div className="relative min-h-screen flex flex-col items-center p-6">
+    <div className="relative flex min-h-screen flex-col items-center p-6">
       <IconBackground />
 
-      <main className="relative z-10 flex flex-col items-center justify-start gap-12 pt-16 h-full w-full max-w-lg">
+      <main className="relative z-10 flex h-full w-full max-w-lg flex-col items-center justify-start gap-12 pt-16">
         <AcademyLogo height={141} />
         <div className="flex w-full flex-row items-center justify-center">
-          <WelcomeComponent /> 
+          <WelcomeComponent />
         </div>
       </main>
     </div>

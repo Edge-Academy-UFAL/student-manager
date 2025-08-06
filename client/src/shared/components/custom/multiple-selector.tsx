@@ -103,9 +103,7 @@ function transToGroupOption(options: Option[], groupBy?: string) {
     return {};
   }
   if (!groupBy) {
-    return {
-      '': options,
-    };
+    return { '': options };
   }
 
   const groupOption: GroupOption = {};

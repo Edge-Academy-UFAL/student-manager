@@ -1,3 +1,5 @@
+'use client';
+
 import { useId, useRef } from 'react';
 import { cn } from '@/shared/lib/utils';
 

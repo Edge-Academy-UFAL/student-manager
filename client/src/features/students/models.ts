@@ -17,16 +17,3 @@ export enum NumberFilteringOption {
   GreaterOrEqualTo = 'Maior ou igual a',
   LessOrEqualTo = 'Menor ou igual a',
 }
-
-export type Student = {
-  [x: string]: string;
-  id: string;
-  email: string;
-  name: string;
-  studentGroup: string;
-  foto: string;
-  course: string;
-  period: string;
-  entryPeriod: string;
-  ira: string;
-};

@@ -1,5 +1,6 @@
 'use client';
 
+import { api, getAuthorizationHeader } from '@/api';
 import { Button } from '@/shared/components/ui/button';
 import {
   Dialog,
@@ -35,11 +36,6 @@ interface fromData {
   admissionMonth: string;
   admissionYear: string;
   emails: string;
-}
-
-interface BackendResponse {
-  failedEmails: Array<string>;
-  successfulEmails: Array<string>;
 }
 
 enum DialogPage {
@@ -402,10 +398,7 @@ export function StudentRegistrationDialog() {
   const [dialogState, _setDialogState] = useState<{
     page: DialogPage;
     data: Record<string, unknown>;
-  }>({
-    page: DialogPage.Input,
-    data: {},
-  });
+  }>({ page: DialogPage.Input, data: {} });
 
   function setDialogState(page: DialogPage, data?: Record<string, unknown>) {
     if (data) {
@@ -480,30 +473,21 @@ export function StudentRegistrationDialog() {
       studentGroup: Number(formData.studentGroup),
     };
 
-    // Get logged user credentials
-    const token = data?.user.authToken;
-
-    const res = await fetch(`${process.env.SERVER_URL}/api/v1/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(requestData),
+    const res = await api.inviteStudents(requestData, {
+      format: 'json',
+      headers: getAuthorizationHeader(data!),
     });
 
     // Validate response and show appropriate response dialog
     if (res.ok) {
-      const data: BackendResponse = (await res.json()) as BackendResponse;
-
-      if (data.failedEmails.length === 0) {
+      if (Object.keys(res.data.failedEmails).length === 0) {
         setDialogState(DialogPage.BackendResponse, {
           typeOfResponse: BackendResponseType.Success,
         });
       } else {
         setDialogState(DialogPage.BackendResponse, {
           typeOfResponse: BackendResponseType.InvitationSendingError,
-          invalidEmails: data.failedEmails,
+          invalidEmails: res.data.failedEmails,
         });
       }
     } else {

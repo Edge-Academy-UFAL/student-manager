@@ -42,9 +42,9 @@ import {
   TableRow,
 } from '@/shared/components/ui/table';
 
-import { TerminateStudentDialog } from '@/features/student-profile/components/terminate-student-dialog';
+import { translateOptionValue } from '@/shared/lib/formatting';
 import { getUsername } from '@/shared/lib/utils';
-import { enumToStringCourse } from '@/shared/lib/utils';
+import { courseOptions } from '@/shared/models';
 
 import { StudentRegistrationDialog } from '@/features/students/components/student-registration-dialog';
 import {
@@ -52,12 +52,16 @@ import {
   tableGlobalFilterFn,
 } from '@/features/students/components/table-filter';
 import Link from 'next/link';
-import { Student } from '@/features/students/models';
+import { type StudentResponseDTO } from '@/api';
 
-export default function StudentsDataTable({ data }: { data: Student[] }) {
+export default function StudentsDataTable({
+  data,
+}: {
+  data: StudentResponseDTO[];
+}) {
   const router = useRouter();
 
-  const columns: ColumnDef<Student>[] = [
+  const columns: ColumnDef<StudentResponseDTO>[] = [
     {
       accessorKey: 'name',
       header: ({ column }) => {
@@ -76,20 +80,12 @@ export default function StudentsDataTable({ data }: { data: Student[] }) {
           <div className="flex flex-row gap-3 ps-4">
             <Avatar>
               {/* TODO: Add the correct image */}
-              <AvatarImage
-                src={
-                  'http://localhost:4566/student-manager-files/' +
-                  row.original.photoUrl
-                }
-                alt="@shadcn"
-              />
+              <AvatarImage src={row.original.photoUrl} alt="@shadcn" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div>
               <Link
-                href={
-                  '/students/' + getUsername(row.original.email) + '/profile'
-                }
+                href={'/students/' + getUsername(row.original.email)}
                 className="text-bold cursor-pointer text-base font-medium hover:font-extrabold hover:underline"
               >
                 {row.getValue('name')}
@@ -116,8 +112,8 @@ export default function StudentsDataTable({ data }: { data: Student[] }) {
         );
       },
       cell: ({ row }) => (
-        <div className="ps-4 capitalize">
-          {enumToStringCourse(row.getValue('course'))}
+        <div className="ps-4">
+          {translateOptionValue(courseOptions, row.getValue('course'))}
         </div>
       ),
     },
@@ -172,14 +168,8 @@ export default function StudentsDataTable({ data }: { data: Student[] }) {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => {
-        const payment = row.original;
-        const terminateTriggerRef = React.useRef<HTMLDivElement>(null);
-
         return (
           <div onClick={(e) => e.stopPropagation()}>
-            <TerminateStudentDialog name={payment.name} email={payment.email}>
-              <div ref={terminateTriggerRef} />
-            </TerminateStudentDialog>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-8 w-8 p-0">
@@ -196,11 +186,6 @@ export default function StudentsDataTable({ data }: { data: Student[] }) {
                   >
                     Enviar Mensagem
                   </a>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => terminateTriggerRef.current?.click()}
-                >
-                  Desligar aluno
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -243,7 +228,7 @@ export default function StudentsDataTable({ data }: { data: Student[] }) {
   });
 
   function goToStudentPage(studentEmail: string) {
-    router.push('/students/' + getUsername(studentEmail) + '/profile');
+    router.push('/students/' + getUsername(studentEmail));
   }
 
   return (

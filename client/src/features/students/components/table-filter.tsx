@@ -37,8 +37,9 @@ import {
 
 import { Filter } from 'lucide-react';
 
-import { Student, FilterData } from '@/features/students/models';
+import { FilterData } from '@/features/students/models';
 import { Badge } from '@/shared/components/ui/badge';
+import { type StudentResponseDTO } from '@/api';
 
 const filterDefaults: FilterData = {
   csCheckbox: true,
@@ -133,7 +134,7 @@ function courseFilter(
   }
 }
 
-const tableGlobalFilterFn: FilterFn<Student> = (row, _, value) => {
+const tableGlobalFilterFn: FilterFn<StudentResponseDTO> = (row, _, value) => {
   // If no action is taken in the form, value is a empty object.
   // If no action is taken, no filters are applied
   if (Object.keys(value).length === 0) {
@@ -141,19 +142,23 @@ const tableGlobalFilterFn: FilterFn<Student> = (row, _, value) => {
   }
 
   // Get the row data
-  const student: Student = row.original;
+  const student = row.original;
 
-  if (!courseFilter(student.course, value.csCheckbox, value.ceCheckbox)) {
+  if (
+    !student.course ||
+    !courseFilter(student.course, value.csCheckbox, value.ceCheckbox)
+  ) {
     return false;
   }
 
   if (
-    value.admissionSemester !== '' &&
-    !admissionSemesterFilter(
-      student.entryPeriod,
-      value.admissionSemester,
-      value.admissionSemestreFilterOption,
-    )
+    !student.entryPeriod ||
+    (value.admissionSemester !== '' &&
+      !admissionSemesterFilter(
+        student.entryPeriod,
+        value.admissionSemester,
+        value.admissionSemestreFilterOption,
+      ))
   ) {
     return false;
   }
@@ -199,17 +204,13 @@ const formSchema = z.object({
       message:
         'O período de ingresso tem padrão ano.semestre (e.g. 2022.2). Os valores do semestre só podem ser 1 ou 2.',
     })
-    .length(6, {
-      message: 'O período de ingresso tem apenas 6 caracteres.',
-    })
+    .length(6, { message: 'O período de ingresso tem apenas 6 caracteres.' })
     .optional()
     .or(z.literal('')),
   admissionSemestreFilterOption: z.nativeEnum(NumberFilteringOption),
   currentSemester: z.coerce
     .number()
-    .min(1, {
-      message: 'Período atual menor que 1 não faz sentido.',
-    })
+    .min(1, { message: 'Período atual menor que 1 não faz sentido.' })
     .max(15, {
       message:
         'O período atual não pode ser maior que 15 (prazo máximo para o curso de Engenharia).',
@@ -219,12 +220,8 @@ const formSchema = z.object({
   currentSemesterFilterOption: z.nativeEnum(NumberFilteringOption),
   ira: z.coerce
     .number()
-    .min(0.1, {
-      message: 'O IRA/CR deve ser maior que 0.1.',
-    })
-    .max(10, {
-      message: 'Não faz sentido o IRA/CR ser maior que 10.',
-    })
+    .min(0.1, { message: 'O IRA/CR deve ser maior que 0.1.' })
+    .max(10, { message: 'Não faz sentido o IRA/CR ser maior que 10.' })
     .optional()
     .or(z.literal('')),
   iraFilterOption: z.nativeEnum(NumberFilteringOption),

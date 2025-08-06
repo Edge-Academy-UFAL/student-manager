@@ -8,24 +8,23 @@ import {
   FormMessage,
 } from '@/shared/components/ui/form';
 
-import FormSection from '../components/form-section';
+import { ProfileSection } from '@/shared/components/custom/profile-section';
 import { MockFileUpload } from '../components/mock-upload-file';
 
 import { updateProfileFormSchema } from '../schema';
 
-interface DucumentUploadFormSectionProps {
+interface DocumentUploadFormSectionProps {
   form: UseFormReturn<z.infer<typeof updateProfileFormSchema>>;
 }
 
-export default function DucumentUploadFormSection({
+export default function DocumentUploadFormSection({
   form,
-}: DucumentUploadFormSectionProps) {
+}: DocumentUploadFormSectionProps) {
   return (
-    <FormSection
+    <ProfileSection
       title="Documentos"
       description="Envie a documentação necessária em arquivos nos formatos PDF, PNG, JPEG ou JPG, com até 5MB."
-      ariaLabelledby="photo-upload"
-      className="gap-[16px]"
+      aria-labelledby="photo-upload"
     >
       <FormField
         control={form.control}
@@ -91,6 +90,6 @@ export default function DucumentUploadFormSection({
           </FormItem>
         )}
       />
-    </FormSection>
+    </ProfileSection>
   );
 }

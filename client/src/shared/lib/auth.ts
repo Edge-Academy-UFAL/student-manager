@@ -1,12 +1,9 @@
+import { api } from '@/api';
 import NextAuth, { type User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import { getUserInfo } from './api/get-user-info-req';
-import { loginAsUser } from './api/login-as-user-req';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  pages: {
-    signIn: '/login',
-  },
+  pages: { signIn: '/login' },
   session: {
     strategy: 'jwt',
     maxAge: 60 * 60 * 24, // One day
@@ -18,16 +15,28 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const res = await loginAsUser({
-          email: credentials.email as string,
-          password: credentials.password as string,
-        });
+        const res = (
+          await api.signIn(
+            {
+              email: credentials.email as string,
+              password: credentials.password as string,
+            },
+            { format: 'json' },
+          )
+        ).data;
         if (!res) {
           return null;
         }
 
-        const user = await getUserInfo(res.token);
-        return user ? { ...user, authToken: res.token } : null;
+        const user = (
+          await api.getCurrentUser({
+            format: 'json',
+            headers: { Authorization: `Bearer ${res.token}` },
+          })
+        ).data;
+        return user
+          ? { ...user, photoUrl: user.photoUrl ?? null, authToken: res.token }
+          : null;
       },
     }),
   ],
@@ -36,7 +45,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     jwt: async ({ token, trigger, user }) => {
       if (trigger === 'update') {
         // Refetch user information from the backend
-        const info = await getUserInfo(token.authToken);
+        const info = (
+          await api.getCurrentUser({
+            format: 'json',
+            headers: { Authorization: `Bearer ${token.authToken}` },
+          })
+        ).data;
         if (info) {
           user = info as User;
         }

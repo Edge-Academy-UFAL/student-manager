@@ -5,7 +5,7 @@ import com.academy.edge.studentmanager.models.User;
 import com.academy.edge.studentmanager.services.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,20 +17,21 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+    private final ModelMapper modelMapper;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtAuthResponseDTO> signIn(@Valid @RequestBody SignInRequestDTO requestDTO) {
+    public ResponseEntity<SignInResponseDTO> signIn(@Valid @RequestBody SignInRequestDTO requestDTO) {
         String jwt = authService.login(requestDTO);
-        JwtAuthResponseDTO responseDTO = new JwtAuthResponseDTO();
+        var responseDTO = new SignInResponseDTO();
         responseDTO.setToken(jwt);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-    // TODO: temporary endpoint for getting the current user
     @GetMapping("/me")
-    public ResponseEntity<User> me(@AuthenticationPrincipal User user) {
-        user.setPassword(null);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<CurrentUserInfoDTO> getCurrentUser(@AuthenticationPrincipal User user) {
+        var responseDTO = modelMapper.map(user, CurrentUserInfoDTO.class);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @PostMapping("/forgot-password")
