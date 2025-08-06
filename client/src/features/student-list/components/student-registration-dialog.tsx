@@ -22,12 +22,9 @@ import { Label } from '@/shared/components/ui/label';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { ScrollArea } from '@/shared/components/ui/scroll-area';
 import { Badge } from '@/shared/components/ui/badge';
-import { PlusIcon, ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
-import {
-  MonthSelect,
-  YearSelect,
-} from '@/features/students/components/custom-select';
+import { MonthSelect, YearSelect } from './custom-select';
 import { LoadingSpinner } from '@/shared/components/custom/loading-spinner';
 import { useSession } from 'next-auth/react';
 
@@ -382,7 +379,9 @@ function LoadingDialogContent(props: { title: string; message: string }) {
   );
 }
 
-export function StudentRegistrationDialog() {
+export function StudentRegistrationDialog(props: {
+  children: React.ReactNode;
+}) {
   const { data } = useSession();
   const [formData, setFormData] = useState<fromData>({
     studentGroup: '',
@@ -390,7 +389,7 @@ export function StudentRegistrationDialog() {
     admissionYear: '',
     emails: '',
   });
-  const [showDialog, setShowDialog] = useState<boolean>(false);
+  const [showDialog, _setShowDialog] = useState<boolean>(false);
   const [validatedEmails, setValidatedEmails] = useState<
     Array<{ email: string; isValid: boolean }>
   >([]);
@@ -408,18 +407,10 @@ export function StudentRegistrationDialog() {
     }
   }
 
-  function handleDialogOpen(): void {
-    // This is necessary to remove error indicators when re-opening the dialog.
-    setShowDialog(true);
-    setError(false);
-  }
-
-  function onShowDialogChange(): void {
-    // This is necessary, because when the Dialog is closed showDialog
-    // is false. So, everytime showDialog tried to change to true, this
-    // would trigger and the Dialog would never open.
-    if (showDialog) {
-      setShowDialog(false);
+  function setShowDialog(value: boolean) {
+    _setShowDialog(value);
+    if (value) {
+      setError(false);
     }
   }
 
@@ -519,13 +510,8 @@ export function StudentRegistrationDialog() {
   }
 
   return (
-    <Dialog open={showDialog} onOpenChange={onShowDialogChange}>
-      <DialogTrigger asChild>
-        <Button variant="default" onClick={handleDialogOpen}>
-          <PlusIcon />
-          <span className="ml-2">Adicionar alunos</span>
-        </Button>
-      </DialogTrigger>
+    <Dialog open={showDialog} onOpenChange={setShowDialog}>
+      <DialogTrigger asChild>{props.children}</DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         {dialogState.page === DialogPage.Input && (
           <InputDialogContent

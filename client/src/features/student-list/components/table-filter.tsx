@@ -30,14 +30,11 @@ import MultipleSelector, {
   Option,
 } from '@/shared/components/custom/multiple-selector';
 
-import {
-  FilterOptionSelect,
-  NumberFilteringOption,
-} from '@/features/students/components/custom-select';
+import { FilterOptionSelect, NumberFilteringOption } from './custom-select';
 
 import { Filter } from 'lucide-react';
 
-import { FilterData } from '@/features/students/models';
+import { FilterData } from '../models';
 import { Badge } from '@/shared/components/ui/badge';
 import { type StudentResponseDTO } from '@/api';
 
