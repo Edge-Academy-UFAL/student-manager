@@ -10,7 +10,7 @@ import {
 } from '@/shared/components/ui/select';
 
 import { FormControl } from '@/shared/components/ui/form';
-import { NumberFilteringOption } from '@/features/students/models';
+import { NumberFilteringOption } from '../models';
 
 function MonthSelect(props: {
   onChange: (value: string) => void;

@@ -1,5 +1,5 @@
 import { api, getAuthorizationHeader, throwFromResponse } from '@/api';
-import StudentsDataTable from '@/features/students/components/students-table';
+import StudentsDataTable from '@/features/student-list/components/students-table';
 import { auth } from '@/shared/lib/auth';
 
 export default async function StudentSearchPage() {
