@@ -53,6 +53,7 @@ import {
 } from '@/features/students/components/table-filter';
 import Link from 'next/link';
 import { type StudentResponseDTO } from '@/api';
+import StudentsFromSheetDialog from './students-from-sheet-dialog';
 
 export default function StudentsDataTable({
   data,
@@ -233,6 +234,7 @@ export default function StudentsDataTable({
 
   return (
     <div className="w-full max-w-7xl justify-center px-10 py-5">
+      <StudentsFromSheetDialog />
       <div className="flex items-center py-4">
         <Input
           placeholder="Buscar por nome..."
