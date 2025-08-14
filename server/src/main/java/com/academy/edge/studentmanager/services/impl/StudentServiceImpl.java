@@ -8,7 +8,13 @@ import com.academy.edge.studentmanager.repositories.StudentRepository;
 import com.academy.edge.studentmanager.services.InvitationService;
 import com.academy.edge.studentmanager.services.S3Service;
 import com.academy.edge.studentmanager.services.StudentService;
+import com.academy.edge.studentmanager.services.CsvReaderService;
+import com.academy.edge.studentmanager.services.ExcelReaderService;
 import com.academy.edge.studentmanager.dtos.StudentUpdateDTO;
+import com.academy.edge.studentmanager.dtos.StudentImportDTO;
+import com.academy.edge.studentmanager.enums.Course;
+import com.academy.edge.studentmanager.mappers.StudentMapper;
+
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +25,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
+import javax.swing.SingleSelectionModel;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -38,16 +50,22 @@ public class StudentServiceImpl implements StudentService {
 
     final S3Service s3Service;
 
+    final ExcelReaderService excelReaderService;
+
+    final CsvReaderService csvReaderService;
+
     private static final List<String> imageContentTypes = Arrays.asList("image/png", "image/jpeg", "image/jpg");
     private static final String documentContentType = "application/pdf";
 
     @Autowired
-    public StudentServiceImpl(StudentRepository studentRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, InvitationService invitationService, S3Service s3Service) {
+    public StudentServiceImpl(StudentRepository studentRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, InvitationService invitationService, S3Service s3Service, ExcelReaderService excelReaderService, CsvReaderService csvReaderService) {
         this.studentRepository = studentRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.invitationService = invitationService;
         this.s3Service = s3Service;
+        this.excelReaderService = excelReaderService;
+        this.csvReaderService = csvReaderService;
     }
 
     @Override
@@ -95,6 +113,97 @@ public class StudentServiceImpl implements StudentService {
             throw new RuntimeException(e);
         }
         return modelMapper.map(student, StudentResponseDTO.class);
+    }
+
+    @Override
+    @Transactional
+    public Map<String, Object> importStudentsFromExcelOrCsv(MultipartFile file, boolean updateIfExists) {
+        Map<String, Object> result;
+
+        try {
+            if (file.getOriginalFilename().endsWith(".xlsx")) {
+                result = excelReaderService.readExcel(file);
+            } else if (file.getOriginalFilename().endsWith(".csv")) {
+                result = csvReaderService.readCsv(file);
+            } else {
+                throw new ResponseStatusException(BAD_REQUEST, "Formato de arquivo não suportado");
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Erro ao ler arquivo: " + e.getMessage(), e);
+        }
+
+        @SuppressWarnings("unchecked")
+        List<Map<String, String>> importedRows = (List<Map<String, String>>) result.get("imported");
+        List<StudentImportDTO> duplicates = new ArrayList<>();
+        
+        
+        
+        Iterator<Map<String, String>> iterator = importedRows.iterator();
+
+        while (iterator.hasNext()) {
+            Map<String, String> row = iterator.next();
+
+            ModelMapper modelMapperUpdate = new ModelMapper();
+        
+            modelMapperUpdate.typeMap(Student.class, Student.class).addMappings(mapper -> {
+                mapper.skip(Student::setId);
+            });
+
+            Student student = StudentMapper.fromMap(row, passwordEncoder);
+            studentRepository.findByRegistration(student.getRegistration())
+                    .ifPresentOrElse(existingStudent -> {
+                        if (updateIfExists) {
+                            modelMapperUpdate.map(student, existingStudent);
+                            studentRepository.save(existingStudent);
+                        } else {
+                            duplicates.add(StudentMapper.toImportDTO(existingStudent));
+                            iterator.remove();
+                            result.put("total_imported", ((Integer) result.get("total_imported")) - 1);
+                        }
+                    }, () -> {
+                        studentRepository.save(student);
+                    });
+        }
+
+        result.put("duplicates", duplicates);
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public Map<String, Object> updateStudentsFromList(List<Map<String, String>> studentsData) {
+        List<String> updated = new ArrayList<>();
+        List<String> notFound = new ArrayList<>();
+
+        for (Map<String, String> studentMap : studentsData) {
+            String registration = studentMap.get("matricula");
+
+            studentRepository.findByRegistration(registration)
+                .ifPresentOrElse(existingStudent -> {
+                    Student updatedData = StudentMapper.fromMap(studentMap, passwordEncoder);
+
+                    existingStudent.setName(updatedData.getName());
+                    existingStudent.setCpf(updatedData.getCpf());
+                    existingStudent.setBirthDate(updatedData.getBirthDate());
+                    existingStudent.setEmail(updatedData.getEmail());
+                    existingStudent.setPhone(updatedData.getPhone());
+                    existingStudent.setSecondaryPhone(updatedData.getSecondaryPhone());
+                    existingStudent.setCourse(updatedData.getCourse());
+                    existingStudent.setLevel(updatedData.getLevel());
+                    existingStudent.setEntryDate(updatedData.getEntryDate());
+                    existingStudent.setEntryPeriod(updatedData.getEntryPeriod());
+                    existingStudent.setPeriod(updatedData.getPeriod());
+                    existingStudent.setStudentGroup(updatedData.getStudentGroup());
+
+                    studentRepository.save(existingStudent);
+                    updated.add(registration);
+                }, () -> notFound.add(registration));
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("updated", updated);
+        result.put("not_found", notFound);
+        return result;
     }
 
     @Override

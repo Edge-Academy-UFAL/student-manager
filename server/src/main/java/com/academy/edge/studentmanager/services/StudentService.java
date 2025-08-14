@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface StudentService {
@@ -23,4 +24,9 @@ public interface StudentService {
     void deleteStudent(String email);
 
     StudentResponseDTO updateStudentAcademicRecord(String email, MultipartFile file);
+
+    public Map<String, Object> importStudentsFromExcelOrCsv(MultipartFile file, boolean updateIfExists);
+    
+    Map<String, Object> updateStudentsFromList(List<Map<String, String>> studentsData);
+
 }

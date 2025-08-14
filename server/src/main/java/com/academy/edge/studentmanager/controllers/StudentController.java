@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/students")
@@ -74,5 +75,20 @@ public class StudentController {
         StudentResponseDTO studentResponseDTO = studentService.updateStudentAcademicRecord(email, file);
 
         return new ResponseEntity<>(studentResponseDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<Map<String, Object>> importStudents(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(name = "updateIfExists", defaultValue = "false") boolean updateIfExists
+    ) {
+        Map<String, Object> result = studentService.importStudentsFromExcelOrCsv(file, updateIfExists);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/update-list")
+    public ResponseEntity<Map<String, Object>> updateStudentsFromList(
+            @RequestBody List<Map<String, String>> studentsData) {
+        return ResponseEntity.ok(studentService.updateStudentsFromList(studentsData));
     }
 }
