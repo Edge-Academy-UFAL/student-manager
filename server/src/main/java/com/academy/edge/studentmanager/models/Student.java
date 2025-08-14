@@ -39,6 +39,9 @@ public class Student extends User{
     private String secondaryPhone;
 
     @Column(nullable = false)
+    private String cpf;
+
+    @Column(nullable = false) 
     private int period;
 
     @Column(nullable = false)
@@ -52,6 +55,9 @@ public class Student extends User{
 
     @Column(nullable = false)
     private LocalDate entryDate;
+
+    @Column()
+    private String level;
 
     /* This formula calculates the IRA based in a weighted average of the Student grades
         and the workload of the subjects of this grades
