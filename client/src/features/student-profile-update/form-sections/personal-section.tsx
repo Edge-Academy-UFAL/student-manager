@@ -110,7 +110,7 @@ export default function PersonalDataFormSection({
                 <FloatingLabelSelect
                   options={genderOptions}
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value}
                   label="Gênero *"
                 />
               </FormControl>
@@ -127,7 +127,7 @@ export default function PersonalDataFormSection({
                 <FloatingLabelSelect
                   options={pronounsOptions}
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value}
                   label="Pronomes"
                 />
               </FormControl>
@@ -164,7 +164,7 @@ export default function PersonalDataFormSection({
                 <FloatingLabelSelect
                   options={raceOptions}
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value}
                   label="Raça/Etnia *"
                 />
               </FormControl>
@@ -181,7 +181,7 @@ export default function PersonalDataFormSection({
                 <FloatingLabelSelect
                   options={maritalStateOptions}
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value}
                   label="Estado Civil *"
                 />
               </FormControl>

@@ -47,7 +47,7 @@ export default function AcademicDataFormSection({
                 <FloatingLabelSelect
                   options={courseOptions}
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value}
                   label="Curso *"
                 />
               </FormControl>
@@ -126,7 +126,7 @@ export default function AcademicDataFormSection({
                 <FloatingLabelSelect
                   options={academyStudentLevelOptions}
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value}
                   label="Nível *"
                   disabled
                 />
