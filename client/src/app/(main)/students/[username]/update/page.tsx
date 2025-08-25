@@ -1,5 +1,5 @@
 import StudentProfileUpdatePageComponent from '@/features/student-profile-update/update-page';
-import { Breadcrumbs } from '@/shared/components/custom/breadcrumbs';
+import { SimpleBreadcrumbs } from '@/shared/components/custom/simple-breadcrumbs';
 import { UserRound } from 'lucide-react';
 
 interface StudentProfileUpdatePageProps {
@@ -15,7 +15,7 @@ export default async function StudentProfileUpdatePage({
 
   return (
     <div className="space-y-6">
-      <Breadcrumbs
+      <SimpleBreadcrumbs
         items={[
           {
             label: 'Meu Perfil',

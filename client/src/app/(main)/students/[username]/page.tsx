@@ -1,7 +1,7 @@
 import { UserRound } from 'lucide-react';
 import { api, getAuthorizationHeader, throwFromResponse } from '@/api';
 import { MyProfileComponent } from '@/features/student-profile/my-profile-page';
-import { Breadcrumbs } from '@/shared/components/custom/breadcrumbs';
+import { SimpleBreadcrumbs } from '@/shared/components/custom/simple-breadcrumbs';
 import { auth } from '@/shared/lib/auth';
 
 export default async function StudentProfilePage({
@@ -17,7 +17,7 @@ export default async function StudentProfilePage({
 
   return (
     <div className="space-y-6">
-      <Breadcrumbs items={[{ label: 'Meu Perfil', Icon: UserRound }]} />
+      <SimpleBreadcrumbs items={[{ label: 'Meu Perfil', Icon: UserRound }]} />
       <MyProfileComponent studentInfo={res.data} />
     </div>
   );
