@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
+@Table(name = "password_reset_tokens")
 public class PasswordResetToken {
 
     private static final int EXPIRATION_MINUTES = 60;
