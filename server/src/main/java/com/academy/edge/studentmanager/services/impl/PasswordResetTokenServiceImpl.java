@@ -20,27 +20,21 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
     @Override
     @Transactional
     public String createPasswordResetTokenForUser(User user) {
+        tokenRepository.deleteAllByUser(user);
+        tokenRepository.flush();
+
         var tokenValue = UUID.randomUUID().toString();
-
-        var existingToken = tokenRepository.findByUser(user);
-
-        if (existingToken.isPresent()) {
-            tokenRepository.delete(existingToken.get());
-            tokenRepository.flush();
-        }
-
         var passwordResetToken = new PasswordResetToken(tokenValue, user);
-
         tokenRepository.save(passwordResetToken);
-        return tokenValue;
 
+        return tokenValue;
     }
 
     @Override
     @Transactional
     public PasswordResetToken getValidPasswordResetToken(String token) {
         var passToken = tokenRepository.findByToken(token)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token"));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token"));
 
         if (passToken.isExpired()) {
             tokenRepository.delete(passToken);
