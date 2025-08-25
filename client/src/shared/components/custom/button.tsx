@@ -15,7 +15,7 @@ const buttonVariants = cva(
         ghost:
           'text-primary hover:text-primary disabled:border-muted-foreground disabled:text-muted-foreground hover:bg-[#6750A4]/8 active:bg-[#125667]/25 disabled:bg-[#494E55]/25',
       },
-      size: { default: 'h-12 px-6 py-2.5 has-[>svg]:px-6' },
+      size: { default: 'h-12 px-6 py-2.5 has-[>svg]:px-6', icon: 'size-6 p-0' },
     },
     defaultVariants: { variant: 'default', size: 'default' },
   },
