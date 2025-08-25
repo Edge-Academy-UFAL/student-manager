@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import z from 'zod';
 
 import { Button } from '@/shared/components/custom/button';
 import {
@@ -17,17 +18,17 @@ import {
 import { FloatingLabelInput } from '@/shared/components/custom/floating-label-input';
 import { FloatingLabelPasswordInput } from '@/shared/components/custom/floating-label-password-input';
 
-import { LoginFormSchema } from './schemas';
+import { loginFormSchema } from './schemas';
 
 export function LoginForm() {
   const router = useRouter();
 
-  const form = useForm({
-    resolver: zodResolver(LoginFormSchema),
+  const form = useForm<z.infer<typeof loginFormSchema>>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: { email: '', password: '' },
   });
 
-  async function onSubmit(data: LoginFormSchema) {
+  async function onSubmit(data: z.infer<typeof loginFormSchema>) {
     const res = await signIn('credentials', {
       email: data.email,
       password: data.password,
