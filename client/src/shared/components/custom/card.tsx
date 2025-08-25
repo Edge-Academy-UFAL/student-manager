@@ -13,7 +13,9 @@ function CardWrapper({
   className,
   ...props
 }: React.ComponentProps<typeof Card>) {
-  return <Card className={cn('rounded-md', className)} {...props} />;
+  return (
+    <Card className={cn('rounded-md border-none', className)} {...props} />
+  );
 }
 
 function CardTitleWrapper({

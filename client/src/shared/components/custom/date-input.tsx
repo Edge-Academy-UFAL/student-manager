@@ -4,7 +4,7 @@ import * as React from 'react';
 import { CalendarIcon } from 'lucide-react';
 
 import { Button } from '@/shared/components/ui/button';
-import { Calendar } from '@/shared/components/custom/calendar';
+import { Calendar } from './calendar';
 import {
   Popover,
   PopoverContent,

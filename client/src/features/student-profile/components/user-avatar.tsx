@@ -10,7 +10,7 @@ export function UserAvatar({ name, src }: UserAvatarProps) {
   return (
     <Avatar className="size-32 bg-neutral-200">
       <AvatarImage src={src} />
-      <AvatarFallback className="text-6xl">
+      <AvatarFallback className="bg-transparent text-6xl">
         {getNameInitials(name)}
       </AvatarFallback>
     </Avatar>
