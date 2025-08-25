@@ -39,12 +39,12 @@ public class AdministratorServiceImpl implements AdministratorService {
     final private ModelMapper modelMapper;
 
     public AdministratorServiceImpl(
-            AdministratorRepository administratorRepository,
-            EmailService emailService,
-            PasswordEncoder passwordEncoder,
-            ApplicationProperties applicationProperties,
-            @Value("classpath:emails/admin-invitation.html") Resource invitationEmail,
-            ModelMapper modelMapper
+        AdministratorRepository administratorRepository,
+        EmailService emailService,
+        PasswordEncoder passwordEncoder,
+        ApplicationProperties applicationProperties,
+        @Value("classpath:emails/admin-invitation.html") Resource invitationEmail,
+        ModelMapper modelMapper
     ) {
         this.administratorRepository = administratorRepository;
         this.emailService = emailService;
@@ -85,18 +85,14 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public AdministratorResponseDTO getAdministratorByEmail(String email) {
-        Administrator administrator = administratorRepository
-                .findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Administrator not found"));
+        var administrator = this.getAdministratorEntityByEmail(email);
         return modelMapper.map(administrator, AdministratorResponseDTO.class);
     }
 
     @Override
     @Transactional
     public AdministratorResponseDTO updateAdministrator(String email, AdministratorUpdateDTO administratorUpdateDTO) {
-        Administrator administrator = administratorRepository
-                .findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Administrator not found with email: " + email));
+        var administrator = this.getAdministratorEntityByEmail(email);
 
         modelMapper.map(administratorUpdateDTO, administrator);
         administratorRepository.save(administrator);
@@ -107,9 +103,14 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Override
     @Transactional
     public void deleteAdministrator(String email) {
-        Administrator administrator = administratorRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Administrator not found"));
+        var administrator = this.getAdministratorEntityByEmail(email);
         administrator.setDeleted(true);
         administratorRepository.save(administrator);
+    }
+
+    private Administrator getAdministratorEntityByEmail(String email) {
+        return administratorRepository.findByEmail(email)
+            .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Administrator not found"));
     }
 
     private void sendInvitationEmail(String email, String password) throws MessagingException, IOException {
