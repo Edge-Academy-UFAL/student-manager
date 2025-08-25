@@ -10,7 +10,7 @@ import {
 
 import { FloatingLabelInput } from '@/shared/components/custom/floating-label-input';
 import { FloatingLabelSelect } from '@/shared/components/custom/floating-label-select';
-import { SimpleCheckbox } from '@/shared/components/custom/checkbox';
+import { LabeledCheckbox } from '@/shared/components/custom/labeled-checkbox';
 import { DateInput } from '@/shared/components/custom/date-input';
 
 import { ProfileSection } from '@/shared/components/custom/profile-section';
@@ -142,7 +142,7 @@ export default function PersonalDataFormSection({
             return (
               <FormItem className="flex h-[48px] basis-2/4 flex-row items-center gap-2">
                 <FormControl>
-                  <SimpleCheckbox
+                  <LabeledCheckbox
                     label="Pessoa com deficiência?"
                     checked={field.value}
                     onCheckedChange={field.onChange}
