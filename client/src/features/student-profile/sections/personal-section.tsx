@@ -1,6 +1,6 @@
 import { format, parseISO } from 'date-fns';
 import { type StudentResponseDTO } from '@/api';
-import { SimpleCheckbox } from '@/shared/components/custom/checkbox';
+import { LabeledCheckbox } from '@/shared/components/custom/labeled-checkbox';
 import { ProfileSection } from '@/shared/components/custom/profile-section';
 import { translateOptionValue } from '@/shared/lib/formatting';
 import {
@@ -42,7 +42,7 @@ export function PersonalSection({
           title="Pronomes"
           value={translateOptionValue(pronounsOptions, 'SHE_HER')}
         />
-        <SimpleCheckbox
+        <LabeledCheckbox
           label="Pessoa com deficiência"
           defaultChecked={false}
           disabled={true}
