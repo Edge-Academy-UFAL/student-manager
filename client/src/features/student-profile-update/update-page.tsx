@@ -4,7 +4,7 @@ import z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Button } from '@/shared/components/ui/button';
+import { Button } from '@/shared/components/custom/button';
 
 import StudentUpdateProfileFormComponent from './update-form';
 import { updateProfileFormSchema } from './schema';
@@ -72,17 +72,10 @@ export default function StudentProfileUpdatePageComponent() {
           </p>
         </div>
         <div className="ml-auto flex gap-[16px]">
-          <Button
-            className="text-brand-400 hover:bg-neutral-150 rounded-md bg-neutral-100 hover:cursor-pointer"
-            onClick={onCancel}
-          >
+          <Button variant="ghost" onClick={onCancel}>
             Cancelar
           </Button>
-          <Button
-            className="rounded-md hover:cursor-pointer"
-            type="submit"
-            onClick={form.handleSubmit(onSubmit)}
-          >
+          <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
             Enviar Solicitação
           </Button>
         </div>
