@@ -4,7 +4,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from '@/shared/components/ui/avatar';
-import { getNameInitials } from '../utils';
+import { getNameInitials } from '@/shared/lib/formatting';
 
 export function UserAvatar({ name, src }: UserAvatarProps) {
   return (
