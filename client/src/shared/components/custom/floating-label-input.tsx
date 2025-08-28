@@ -32,12 +32,7 @@ export function FloatingLabelInput({
       <Label.Root
         htmlFor={inputId}
         data-slot="label"
-        className={cn(
-          'text-body-md peer-focus:text-action-950 peer-aria-invalid:text-danger-300 pointer-events-none absolute start-3 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 text-neutral-300 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-1',
-          'peer-disabled:text-body-md peer-disabled:peer-placeholder-shown:bg-neutral-150',
-          'peer-disabled:not-peer-placeholder-shown:label-background-2-colors',
-          'max-w-full truncate',
-        )}
+        className="text-body-md peer-focus:text-action-950 peer-aria-invalid:text-danger-300 peer-disabled:peer-placeholder-shown:bg-neutral-150 peer-disabled:not-peer-placeholder-shown:label-background-2-colors pointer-events-none absolute start-3 top-1 z-10 max-w-full origin-[0] -translate-y-4 scale-75 transform truncate bg-white px-1 text-neutral-300 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75"
       >
         {label}
       </Label.Root>
