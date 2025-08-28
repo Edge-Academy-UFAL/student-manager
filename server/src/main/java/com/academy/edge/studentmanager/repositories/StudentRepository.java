@@ -13,4 +13,6 @@ public interface StudentRepository extends CrudRepository<Student, String> {
     void deleteByEmail(String email);
 
     boolean existsByEmail(String email);
+
+    boolean existsBy();
 }
