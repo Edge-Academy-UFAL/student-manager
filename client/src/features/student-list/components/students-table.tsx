@@ -1,9 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { PlusIcon } from '@radix-ui/react-icons';
 import {
   ColumnFiltersState,
   SortingState,
@@ -17,38 +14,34 @@ import {
 } from '@tanstack/react-table';
 
 import { type StudentResponseDTO } from '@/api';
-import { Button } from '@/shared/components/ui/button';
-import { Input } from '@/shared/components/ui/input';
 import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableHeader,
   TableRow,
-} from '@/shared/components/ui/table';
-import { getUsername } from '@/shared/lib/utils';
+} from '@/shared/components/custom/table';
 
 import { columns } from './columns';
-import { StudentRegistrationDialog } from './student-registration-dialog';
-import { TableFiltersDropdown, tableGlobalFilterFn } from './table-filter';
+import { DataTablePagination } from '../../../shared/components/custom/data-table-pagination';
 
-export default function StudentsDataTable({
-  data,
-}: {
+interface StudentsTableProps {
   data: StudentResponseDTO[];
-}) {
-  const router = useRouter();
+}
 
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+export function StudentsTable({ data }: StudentsTableProps) {
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { id: 'name', desc: false },
+  ]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-  const [globalFilter, setGlobalFilter] = React.useState({});
-
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [globalFilter, setGlobalFilter] = React.useState({});
 
   const table = useReactTable({
     data,
@@ -62,7 +55,7 @@ export default function StudentsDataTable({
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: tableGlobalFilterFn,
+    globalFilterFn: () => true,
     state: {
       sorting,
       columnFilters,
@@ -72,74 +65,19 @@ export default function StudentsDataTable({
     },
   });
 
-  function goToStudentPage(studentEmail: string) {
-    router.push('/students/' + getUsername(studentEmail));
-  }
-
   return (
-    <div className="w-full max-w-7xl justify-center px-10 py-5">
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Buscar por nome..."
-          value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('name')?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <div className="ml-auto flex gap-2.5">
-          {/* <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-2">
-                Filtro de Coluna <ChevronDownIcon className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id === 'studentGroup' ? 'Turma' : column.id}
-                    </DropdownMenuCheckboxItem>
-                  )
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu> */}
-          <TableFiltersDropdown
-            setGlobalFilter={setGlobalFilter}
-            studentGroups={Array.from(
-              new Set(
-                data.map((obj) => {
-                  return Number(obj.studentGroup);
-                }),
-              ),
-            )}
-          />
-          <StudentRegistrationDialog>
-            <Button variant="default">
-              <PlusIcon />
-              <span className="ml-2">Adicionar alunos</span>
-            </Button>
-          </StudentRegistrationDialog>
-        </div>
-      </div>
-      <div className="rounded-md border">
+    <div className="space-y-4">
+      <TableContainer>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      style={{ width: header.getSize() }}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -158,12 +96,11 @@ export default function StudentsDataTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
-                  className={'cursor-pointer'}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      onClick={() => goToStudentPage(row.original.email)}
+                      style={{ width: cell.column.getSize() }}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -177,39 +114,16 @@ export default function StudentsDataTable({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="text-body-lg h-24 text-center text-black"
                 >
-                  Nenhum aluno foi adicionado.
+                  Sem resultados.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        {/* <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{' '}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div> */}
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+      </TableContainer>
+      <DataTablePagination table={table} />
     </div>
   );
 }

@@ -42,3 +42,11 @@ export const academyStudentLevelOptions = [
   { label: 'Trainee III', value: 'TRAINEE_3' },
   { label: 'Trainee IV', value: 'TRAINEE_4' },
 ] as const;
+
+export const academyStatusOptions = [
+  { label: 'Em projeto', value: 'IN_PROJECT' },
+  { label: 'Projeto interno', value: 'INTERNAL_PROJECT' },
+  { label: 'Formação básica', value: 'BASIC_TRAINING' },
+  { label: 'Sem projeto', value: 'NO_PROJECT' },
+  { label: 'Desligado', value: 'TERMINATED' },
+] as const;
