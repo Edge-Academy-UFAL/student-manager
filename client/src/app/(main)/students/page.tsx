@@ -1,5 +1,7 @@
+import { UserRound } from 'lucide-react';
 import { api, getAuthorizationHeader, throwFromResponse } from '@/api';
-import StudentsDataTable from '@/features/student-list/components/students-table';
+import { AllStudentsPage } from '@/features/student-list/all-students-page';
+import { SimpleBreadcrumbs } from '@/shared/components/custom/simple-breadcrumbs';
 import { auth } from '@/shared/lib/auth';
 
 export default async function StudentSearchPage() {
@@ -9,5 +11,15 @@ export default async function StudentSearchPage() {
   });
   throwFromResponse(res);
 
-  return <StudentsDataTable data={res.data} />;
+  return (
+    <div className="space-y-6">
+      <SimpleBreadcrumbs
+        items={[
+          { label: 'Alunos', Icon: UserRound, href: 'students' },
+          { label: 'Todos os alunos' },
+        ]}
+      />
+      <AllStudentsPage data={res.data} />
+    </div>
+  );
 }
