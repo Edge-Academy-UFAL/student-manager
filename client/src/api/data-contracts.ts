@@ -50,7 +50,10 @@ export interface GradeUpdateDTO {
   subjectId: string;
   /** @format int32 */
   period: number;
-  /** @minLength 1 */
+  /**
+   * @format email
+   * @minLength 1
+   */
   studentEmail: string;
 }
 
@@ -87,7 +90,10 @@ export interface ActivityUpdateDTO {
   activityId: string;
   /** @minLength 1 */
   name: string;
-  /** @minLength 1 */
+  /**
+   * @format email
+   * @minLength 1
+   */
   studentEmail: string;
   /** @minLength 1 */
   description: string;
@@ -155,7 +161,10 @@ export interface InvitationSendResponseDTO {
 export interface GradeCreateDTO {
   /** @minLength 1 */
   subjectCode: string;
-  /** @minLength 1 */
+  /**
+   * @format email
+   * @minLength 1
+   */
   studentEmail: string;
   /**
    * @format int32
@@ -183,7 +192,10 @@ export interface ResetPasswordRequestDTO {
 }
 
 export interface SignInRequestDTO {
-  /** @minLength 1 */
+  /**
+   * @format email
+   * @minLength 1
+   */
   email: string;
   /**
    * @minLength 8
@@ -198,7 +210,10 @@ export interface SignInResponseDTO {
 }
 
 export interface ForgotPasswordRequestDTO {
-  /** @minLength 1 */
+  /**
+   * @format email
+   * @minLength 1
+   */
   email: string;
 }
 
@@ -214,6 +229,7 @@ export interface ChangePasswordRequestDTO {
 
 export interface AdministratorCreateDTO {
   name: string;
+  /** @format email */
   email: string;
   about: string;
 }
@@ -222,7 +238,10 @@ export interface ActivityCreateDTO {
   activityType: 'RESEARCH' | 'TUTORING' | 'INTERNSHIP' | 'OTHERS';
   /** @minLength 1 */
   name: string;
-  /** @minLength 1 */
+  /**
+   * @format email
+   * @minLength 1
+   */
   studentEmail: string;
   /** @minLength 1 */
   description: string;
@@ -309,7 +328,10 @@ export interface CurrentUserInfoDTO {
 export interface GradeDeleteDTO {
   /** @minLength 1 */
   subjectCode: string;
-  /** @minLength 1 */
+  /**
+   * @format email
+   * @minLength 1
+   */
   studentEmail: string;
   /**
    * @format int32
@@ -322,6 +344,9 @@ export interface GradeDeleteDTO {
 export interface ActivityDeleteDTO {
   /** @minLength 1 */
   activityId: string;
-  /** @minLength 1 */
+  /**
+   * @format email
+   * @minLength 1
+   */
   studentEmail: string;
 }
