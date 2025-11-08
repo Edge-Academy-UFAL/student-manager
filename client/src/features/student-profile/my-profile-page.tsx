@@ -3,6 +3,8 @@
 import { PersonalSection } from './sections/personal-section';
 import { ContactSection } from './sections/contact-section';
 import { AcademicSection } from './sections/academic-section';
+import { GradesSection } from './sections/grades-section';
+import { ChartSection } from './sections/chart-section';
 import {
   Tabs,
   TabsContent,
@@ -49,7 +51,12 @@ export function MyProfileComponent({
         </TabsContent>
         <TabsContent value="projects"></TabsContent>
         <TabsContent value="reviews"></TabsContent>
-        <TabsContent value="grades"></TabsContent>
+        <TabsContent value="grades">
+          <div className="flex flex-col gap-6">
+            <GradesSection studentInfo={studentInfo} />
+            <ChartSection studentInfo={studentInfo} />
+          </div>
+        </TabsContent>
         <TabsContent value="history"></TabsContent>
       </Tabs>
     </main>
