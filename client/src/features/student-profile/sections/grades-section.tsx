@@ -1,6 +1,14 @@
 import React from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/shared/components/ui/table';
 
 const mockGrades = [
   {
@@ -92,73 +100,51 @@ export function GradesSection({ studentInfo }: { studentInfo?: any }) {
       </div>
 
       <div className="overflow-x-auto px-2">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b">
-              <th className="text-left py-3 px-4 text-sm font-bold">
-                Disciplina
-              </th>
-              <th className="text-center py-3 px-4 text-sm font-bold">
-                Carga Horária
-              </th>
-              <th className="text-center py-3 px-4 text-sm font-bold">
-                Período
-              </th>
-              <th className="text-center py-3 px-4 text-sm font-bold">
-                Nota final
-              </th>
-              <th className="text-center py-3 px-4 text-sm font-bold">
-                Status
-              </th>
-              <th className="text-center py-3 px-4 text-sm font-bold">
-                Ações
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {mockGrades.map((grade, idx) => (
-            <tr key={grade.id} className={`${mockGrades.length-1 != idx && 'border-b'} border-gray-200 hover:bg-blue-50`}>
-                <td className="py-4 px-4">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="text-left">Disciplina</TableHead>
+              <TableHead className="text-center">Carga Horária</TableHead>
+              <TableHead className="text-center">Período</TableHead>
+              <TableHead className="text-center">Nota final</TableHead>
+              <TableHead className="text-center">Status</TableHead>
+              <TableHead className="text-center">Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {mockGrades.map((grade) => (
+              <TableRow key={grade.id}>
+                <TableCell>
                   <div className="flex flex-col">
                     <span className="font-normal">
                       {grade.code} - {grade.name}
                     </span>
                   </div>
-                </td>
-                <td className="p-4 text-center">{grade.hours}</td>
-                <td className="p-4 text-center">{grade.period}</td>
-                <td className="p-4 text-center">
+                </TableCell>
+                <TableCell className="text-center">{grade.hours}</TableCell>
+                <TableCell className="text-center">{grade.period}</TableCell>
+                <TableCell className="text-center">
                   {grade.finalGrade.toFixed(2)}
-                </td>
-                <td className="p-4 text-center">
-                  <span
-                    className={getStatusColor(
-                      grade.status
-                    )}
-                  >
+                </TableCell>
+                <TableCell className="text-center">
+                  <span className={getStatusColor(grade.status)}>
                     {grade.status}
                   </span>
-                </td>
-                <td className="p-4">
+                </TableCell>
+                <TableCell>
                   <div className="flex gap-2 justify-center">
-                    <Button
-                      variant="ghost"
-                      aria-label="Editar"
-                    >
+                    <Button variant="ghost" aria-label="Editar">
                       <Pencil className="size-4 text-gray-600" />
                     </Button>
-                    <Button
-                      variant="ghost"
-                      aria-label="Deletar"
-                    >
+                    <Button variant="ghost" aria-label="Deletar">
                       <Trash2 className="size-4 text-gray-600" />
                     </Button>
                   </div>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

@@ -40,7 +40,6 @@ export function ChartSection({ studentInfo }: { studentInfo?: any }) {
       <h2 className="text-heading-xs text-action-500 mb-6">Histórico do Rendimento acadêmico</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* IRA por período */}
         <div className="border rounded-md p-6">
           <h3 className="text-center text-sm font-semibold text-gray-700 mb-4">
             IRA do aluno por período
@@ -92,7 +91,6 @@ export function ChartSection({ studentInfo }: { studentInfo?: any }) {
           </ResponsiveContainer>
         </div>
 
-        {/* IRA acumulado */}
         <div className="border rounded-md p-6">
           <h3 className="text-center text-sm font-semibold text-gray-700 mb-4">
             IRA acumulado por período
