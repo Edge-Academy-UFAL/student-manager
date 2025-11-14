@@ -33,7 +33,7 @@ import {
 import { ChevronDown } from "lucide-react";
 
 const menuItems = [
-  { title: "Dashboard", icon: DashboardIcon, url: "/" },
+  { title: "Dashboard", icon: DashboardIcon, url: "/dashboard" },
   {
     title: "Alunos",
     icon: GroupIcon,
