@@ -1,10 +1,79 @@
+"use client";
+
+import { SideMenu } from "@/shared/components/custom/side-menu";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/shared/components/ui/sidebar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/shared/components/ui/breadcrumb";
+import { usePathname } from "next/navigation";
+import { Separator } from "@/shared/components/ui/separator";
+
 export default function MainLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const pathname = usePathname();
+  
+  const generateBreadcrumbs = () => {
+    const paths = pathname.split("/").filter(Boolean);
+    
+    return paths.map((path, index) => {
+      const href = `/${paths.slice(0, index + 1).join("/")}`;
+      const label = path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, " ");
+      const isLast = index === paths.length - 1;
+      
+      return { href, label, isLast };
+    });
+  };
+
+  const breadcrumbs = generateBreadcrumbs();
+
   return (
-    <div className="flex h-[100vh]">
-      <aside className="bg-action-100 px-[16px] py-[24px]">EA</aside>
-      <div className="grow overflow-y-scroll p-[24px]">{children}</div>
-    </div>
+    <SidebarProvider>
+      <SideMenu />
+
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+          <SidebarTrigger className="-ml-1" />
+          <Separator
+            orientation="vertical"
+            className="mr-2 data-[orientation=vertical]:h-4"
+          />
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Início</BreadcrumbLink>
+              </BreadcrumbItem>
+              {breadcrumbs.length > 0 && <BreadcrumbSeparator />}
+              {breadcrumbs.map((crumb, index) => (
+                <BreadcrumbItem key={crumb.href}>
+                  {crumb.isLast ? (
+                    <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                  ) : (
+                    <>
+                      <BreadcrumbLink href={crumb.href}>
+                        {crumb.label}
+                      </BreadcrumbLink>
+                      <BreadcrumbSeparator />
+                    </>
+                  )}
+                </BreadcrumbItem>
+              ))}
+            </BreadcrumbList>
+          </Breadcrumb>
+        </header>
+        <main className="flex flex-1 flex-col gap-4 p-6 overflow-y-auto">
+          {children}
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
