@@ -1,6 +1,6 @@
 "use client";
 
-import { SideMenu } from "@/shared/components/custom/side-menu";
+import { AppSidebar } from "@/shared/components/custom/app-sidebar";
 import {
   SidebarInset,
   SidebarProvider,
@@ -38,7 +38,7 @@ export default function MainLayout({
 
   return (
     <SidebarProvider>
-      <SideMenu />
+      <AppSidebar />
 
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">

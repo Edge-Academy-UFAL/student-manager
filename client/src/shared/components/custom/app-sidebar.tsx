@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Sidebar,
   SidebarContent,
@@ -31,6 +29,7 @@ import {
   CollapsibleTrigger,
 } from "@/shared/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 const menuItems = [
   { title: "Dashboard", icon: DashboardIcon, url: "/dashboard" },
@@ -52,7 +51,12 @@ const footerItems = [
   { title: "Sair do sistema", icon: LogoutIcon, url: "/" },
 ];
 
-export function SideMenu() {
+export function AppSidebar() {
+  const { data: session } = useSession();
+
+  console.log(session?.user.dtype);
+  // Administrator or Student
+
   const sidebar = useSidebar();
   const isCollapsed = sidebar.state === "collapsed";
 
@@ -60,13 +64,13 @@ export function SideMenu() {
     <Sidebar
       collapsible="icon"
     >
-      <SidebarHeader className="py-6 flex items-center justify-center">
+      <SidebarHeader className="py-6 flex">
         {isCollapsed ? (
-          <div className="flex justify-center items-center">
+          <div className="flex">
             <AcademyIcon height={36} />
           </div>
         ) : (
-          <div className="flex justify-center items-center">
+          <div className="flex px-16">
             <AcademyLogo height={61} />
           </div>
         )}
