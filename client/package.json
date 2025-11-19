@@ -12,7 +12,11 @@
     "generate-api": "swagger-typescript-api generate --disable-throw-on-error --modular --output src/api --path http://localhost:8080/v3/api-docs"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@hookform/resolvers": "^5.2.1",
+    "@mui/icons-material": "^7.3.5",
+    "@mui/material": "^7.3.5",
     "@next/env": "^15.3.3",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
