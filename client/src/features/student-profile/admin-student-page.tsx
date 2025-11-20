@@ -7,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/shared/components/ui/aler
 import { Edit, Download, ExternalLink, AlertTriangle, FileText } from "lucide-react";
 import { StudentResponseDTO } from "@/api";
 import Link from "next/link";
+import { RequestUpdateDialog } from "./components/request-update-dialog";
 
 const studentData = {
   name: "Estudante Legal",
@@ -64,12 +65,7 @@ export default function AdminStudentPage({ studentInfo }: { studentInfo: Student
           <p className="text-sm text-muted-foreground font-sans">Detalhes do aluno</p>
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            className="rounded-md text-cyan-600 hover:bg-cyan-50 hover:text-cyan-700 font-sans"
-          >
-            SOLICITAR ATUALIZAÇÃO
-          </Button>
+          <RequestUpdateDialog />
           <Button 
             className="rounded-md bg-cyan-600 hover:bg-cyan-700 font-sans my-auto"
           >
@@ -122,7 +118,7 @@ export default function AdminStudentPage({ studentInfo }: { studentInfo: Student
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <FieldDisplay label="Nome completo" value={studentData.name} />
                   <FieldDisplay label="Data de nascimento" value={studentData.birthDate} />
                   <FieldDisplay label="CPF" value={studentData.cpf} />
@@ -204,7 +200,7 @@ export default function AdminStudentPage({ studentInfo }: { studentInfo: Student
                       >
                         {studentData.linkedin}
                       </Link>
-                      <ExternalLink className="text-cyan-600 size-3 shrink-0" />
+                      <ExternalLink className="text-cyan-600 size-3 shri" />
                     </div>
                   </div>
                   <div className="space-y-1 col-start-3 col-end-5">
@@ -218,7 +214,7 @@ export default function AdminStudentPage({ studentInfo }: { studentInfo: Student
                       >
                         {studentData.lattes}
                       </Link>
-                      <ExternalLink className="text-cyan-600 size-3 shrink-0" />
+                      <ExternalLink className="text-cyan-600 size-3 shri" />
                     </div>
                   </div>
                 </div>
