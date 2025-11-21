@@ -29,41 +29,86 @@ import {
   CollapsibleTrigger,
 } from "@/shared/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-const menuItems = [
-  { title: "Dashboard", icon: DashboardIcon, url: "/dashboard" },
-  {
-    title: "Alunos",
-    icon: GroupIcon,
-    url: "/students",
-    items: [
-      { title: "Todos os Alunos", url: "/" },
-      { title: "Alterações Cadastrais", url: "/" },
-    ],
-  },
-  { title: "Formulários", icon: FormIcon, url: "/" },
-];
+const getMenuItemsByUserType = (userType: string) => {
+  const adminItems = [
+    { 
+      title: "Dashboard", 
+      icon: DashboardIcon, 
+      action: "/dashboard" 
+    },
+    {
+      title: "Alunos",
+      icon: GroupIcon,
+      action: "/students",
+      items: [
+        { title: "Todos os Alunos", action: "/students" },
+        { title: "Alterações Cadastrais", action: "/students/changes" },
+      ],
+    },
+    { 
+      title: "Formulários", 
+      icon: FormIcon, 
+      action: "/forms" 
+    },
+  ];
 
-const footerItems = [
-  { title: "Notificações", icon: BellIcon, url: "/" },
-  { title: "Meu perfil", icon: UserIcon, url: "/" },
-  { title: "Sair do sistema", icon: LogoutIcon, url: "/" },
+  const studentItems = [
+    {
+      title: "Alunos",
+      icon: GroupIcon,
+      action: "/students/profile",
+      items: [
+        { title: "Alterações Cadastrais", action: "/students/changes" },
+      ],
+    },
+    { 
+      title: "Formulários", 
+      icon: FormIcon, 
+      action: "/forms" 
+    },
+  ];
+
+  return userType === "Administrator" ? adminItems : studentItems;
+};
+
+const getFooterItems = (handleLogout: () => void) => [
+  { title: "Notificações", icon: BellIcon, action: "/notifications" },
+  { title: "Meu perfil", icon: UserIcon, action: "/profile" },
+  { title: "Sair do sistema", icon: LogoutIcon, action: handleLogout },
 ];
 
 export function AppSidebar() {
   const { data: session } = useSession();
-
-  console.log(session?.user.dtype);
-  // Administrator or Student
-
+  const router = useRouter();
   const sidebar = useSidebar();
   const isCollapsed = sidebar.state === "collapsed";
 
+  const userType = session?.user?.dtype || "Student";
+  const menuItems = getMenuItemsByUserType(userType);
+
+  const handleNavigation = (path: string) => {
+    router.push(path);
+  };
+
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: "/login" });
+  };
+
+  const footerItems = getFooterItems(handleLogout);
+
+  const handleAction = (action: string | (() => void)) => {
+    if (typeof action === "function") {
+      action();
+    } else {
+      handleNavigation(action);
+    }
+  };
+
   return (
-    <Sidebar
-      collapsible="icon"
-    >
+    <Sidebar collapsible="icon">
       <SidebarHeader className="py-6 flex">
         {isCollapsed ? (
           <div className="flex">
@@ -100,14 +145,12 @@ export function AppSidebar() {
                           {item.items.map((subItem) => (
                             <SidebarMenuSubItem key={subItem.title}>
                               <SidebarMenuSubButton
-                                asChild
-                                className="text-action-950 hover:bg-slate-100"
+                                onClick={() => handleAction(subItem.action)}
+                                className="text-action-950 hover:bg-slate-100 cursor-pointer"
                               >
-                                <a href={subItem.url}>
-                                  <span className="font-sans">
-                                    {subItem.title}
-                                  </span>
-                                </a>
+                                <span className="font-sans">
+                                  {subItem.title}
+                                </span>
                               </SidebarMenuSubButton>
                             </SidebarMenuSubItem>
                           ))}
@@ -116,14 +159,12 @@ export function AppSidebar() {
                     </Collapsible>
                   ) : (
                     <SidebarMenuButton
-                      asChild
+                      onClick={() => handleAction(item.action)}
                       tooltip={item.title}
-                      className="text-action-950 hover:bg-slate-100"
+                      className="text-action-950 hover:bg-slate-100 cursor-pointer"
                     >
-                      <a href={item.url}>
-                        <item.icon className="fill-action-300" />
-                        <span className="font-sans">{item.title}</span>
-                      </a>
+                      <item.icon className="fill-action-300" />
+                      <span className="font-sans">{item.title}</span>
                     </SidebarMenuButton>
                   )}
                 </SidebarMenuItem>
@@ -138,14 +179,12 @@ export function AppSidebar() {
           {footerItems.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
-                asChild
+                onClick={() => handleAction(item.action)}
                 tooltip={item.title}
-                className="text-action-950 hover:bg-slate-100"
+                className="text-action-950 hover:bg-slate-100 cursor-pointer"
               >
-                <a href={item.url}>
-                  <item.icon className="fill-action-300" />
-                  <span className="font-sans">{item.title}</span>
-                </a>
+                <item.icon className="fill-action-300" />
+                <span className="font-sans">{item.title}</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

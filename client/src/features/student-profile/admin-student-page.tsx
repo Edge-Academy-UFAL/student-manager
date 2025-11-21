@@ -200,7 +200,7 @@ export default function AdminStudentPage({ studentInfo }: { studentInfo: Student
                       >
                         {studentData.linkedin}
                       </Link>
-                      <ExternalLink className="text-cyan-600 size-3 shri" />
+                      <ExternalLink className="text-cyan-600 size-3 shrink-0" />
                     </div>
                   </div>
                   <div className="space-y-1 col-start-3 col-end-5">
@@ -214,7 +214,7 @@ export default function AdminStudentPage({ studentInfo }: { studentInfo: Student
                       >
                         {studentData.lattes}
                       </Link>
-                      <ExternalLink className="text-cyan-600 size-3 shri" />
+                      <ExternalLink className="text-cyan-600 size-3 shrink-0" />
                     </div>
                   </div>
                 </div>
