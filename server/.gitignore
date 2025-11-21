@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# jsons gerados pelo python-service e pdfs 
+python-service/output/*.json
+python-service/*.pdf
+python-service/__pycache__/*.pyc
