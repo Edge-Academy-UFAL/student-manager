@@ -22,6 +22,8 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/components/custom/dropdown-menu';
 
+import { BatchUpdateDialog } from './components/batch-update-dialog'; 
+
 interface AllStudentsPageProps {
   data: StudentResponseDTO[];
 }
@@ -37,9 +39,8 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
     return groups.sort((a, b) => a - b);
   }, [data]);
 
-  // TODO
   const uniqueLevel = useMemo(() => {
-    return [];
+    return []; // TODO
   }, [data]);
 
   const filteredData = useMemo(() => {
@@ -59,7 +60,7 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
   }, [data, searchName, selectedGroup, selectedLevel, selectedSituation]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-2">
           <span className="text-action-950 text-heading-md leading-tight font-semibold">
@@ -70,7 +71,12 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
           </span>
         </div>
         <div className="flex gap-4">
-          <Button variant="outline">Solicitar atualização em lote</Button>
+          <BatchUpdateDialog 
+            triggerButton={
+              <Button variant="outline">Solicitar atualização em lote</Button>
+            } 
+          />
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button>
@@ -112,7 +118,6 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
               ))}
             </SelectContent>
           </Select>
-
 
           <Select onValueChange={setSelectedLevel}>
             <SelectTrigger

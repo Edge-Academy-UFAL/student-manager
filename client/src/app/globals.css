@@ -60,6 +60,9 @@
   --color-chart-600: #007e90;
   --color-chart-800: #004f5a;
 
+  --color-tag-bg-blue: rgba(18, 86, 103, 0.16);
+  --color-tag-bg-yellow: rgba(251, 160, 52, 0.16);
+
   /* Keep synchronized with customTwMerge in utils.ts */
   --text-heading-xl: 32px;
   --text-heading-lg: 28px;
@@ -125,7 +128,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300;
   }
   body {
     @apply bg-background text-foreground;
