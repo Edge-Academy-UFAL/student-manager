@@ -1,13 +1,12 @@
 import { api, getAuthorizationHeader, throwFromResponse } from '@/api';
-import AdminStudentPage from '@/features/student-profile/admin-student-page';
-import { MyProfileComponent } from '@/features/student-profile/my-profile-page';
+import StudentPage from '@/features/student-profile/student-page';
 import { auth } from '@/shared/lib/auth';
 
 export default async function StudentProfilePage({
   params,
 }: StudentProfilePageProps) {
-  const session = await auth();
-  const userType = session?.user?.dtype; // "Administrator" | "Student"
+  // const session = await auth();
+  // const userType = session?.user?.dtype; // "Administrator" | "Student"
 
   const { username } = await params;
 
@@ -17,11 +16,8 @@ export default async function StudentProfilePage({
   });
   throwFromResponse(res);
   
-  if (userType === "Administrator") {
-    return <AdminStudentPage studentInfo={res.data}/>;
-  }
-
-  return <MyProfileComponent studentInfo={res.data} />;
+  return <StudentPage studentInfo={res.data}/>;
+  
 }
 
 interface StudentProfilePageProps {

@@ -3,8 +3,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
-import { Alert, AlertDescription, AlertTitle } from "@/shared/components/ui/alert";
-import { Edit, Download, ExternalLink, AlertTriangle, FileText } from "lucide-react";
+import { Edit, Download, ExternalLink, FileText } from "lucide-react";
 import { StudentResponseDTO } from "@/api";
 import Link from "next/link";
 import { RequestUpdateDialog } from "./components/request-update-dialog";
@@ -49,8 +48,8 @@ const studentData = {
   ],
 };
 
-export default function AdminStudentPage({ studentInfo }: { studentInfo: StudentResponseDTO }) {
-  const FieldDisplay = ({ label, value }: any) => (
+export default function StudentPage({ studentInfo }: { studentInfo: StudentResponseDTO }) {
+  const FieldDisplay = ({ label, value }: { label: string, value: string }) => (
     <div className="space-y-1">
       <p className="text-xs text-muted-foreground font-sans">{label}</p>
       <p className="text-sm font-medium font-sans">{value}</p>
@@ -273,30 +272,6 @@ export default function AdminStudentPage({ studentInfo }: { studentInfo: Student
           </div>
         </TabsContent>
       </Tabs>
-
-
-      {/* <Alert variant="destructive" className="mt-6">
-        <AlertTriangle className="h-5 w-5" />
-        <div className="flex-1">
-          <AlertTitle className="text-base font-bold mb-3 font-sans">
-            Zona de perigo
-          </AlertTitle>
-          <div className="flex justify-between items-center gap-4 flex-wrap">
-            <div className="flex-1 min-w-[250px]">
-              <p className="font-bold text-sm mb-1 font-sans">DESLIGAR ALUNO</p>
-              <AlertDescription className="text-xs font-sans">
-                O aluno ficará inativo e não será possível modificar ou referenciá-lo.
-              </AlertDescription>
-            </div>
-            <Button 
-              variant="destructive" 
-              className="rounded-md px-4 py-3 font-sans"
-            >
-              DESLIGAR ALUNO
-            </Button>
-          </div>
-        </div>
-      </Alert> */}
     </div>
   );
 }

@@ -31,16 +31,12 @@ interface AllStudentsPageProps {
 export function AllStudentsPage({ data }: AllStudentsPageProps) {
   const [searchName, setSearchName] = useState('');
   const [selectedGroup, setSelectedGroup] = useState<string>('all');
-  const [selectedLevel, setSelectedLevel] = useState<string>('all');
+  //const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [selectedSituation, setSelectedSituation] = useState<string>('all');
 
   const uniqueGroups = useMemo(() => {
     const groups = [...new Set(data.map((student) => student.studentGroup))];
     return groups.sort((a, b) => a - b);
-  }, [data]);
-
-  const uniqueLevel = useMemo(() => {
-    return []; // TODO
   }, [data]);
 
   const filteredData = useMemo(() => {
@@ -57,7 +53,7 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
 
       return matchesName && matchesGroup && matchesSituation;
     });
-  }, [data, searchName, selectedGroup, selectedLevel, selectedSituation]);
+  }, [data, searchName, selectedGroup, selectedSituation]);
 
   return (
     <div className="space-y-6 font-sans">
@@ -74,7 +70,8 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
           <BatchUpdateDialog 
             triggerButton={
               <Button variant="outline">Solicitar atualização em lote</Button>
-            } 
+            }
+            data={data}
           />
 
           <DropdownMenu>
@@ -119,7 +116,7 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
             </SelectContent>
           </Select>
 
-          <Select onValueChange={setSelectedLevel}>
+          {/* <Select onValueChange={setSelectedLevel}>
             <SelectTrigger
               className="font-sans w-[180px] border border-neutral-300"
             >
@@ -133,7 +130,7 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </Select> */}
 
           <Select onValueChange={setSelectedSituation}>
             <SelectTrigger

@@ -54,7 +54,7 @@ export default function MainLayout({
               </BreadcrumbItem>
               {breadcrumbs.length > 0 && <BreadcrumbSeparator />}
               {breadcrumbs.map((crumb, index) => (
-                <BreadcrumbItem key={crumb.href}>
+                <BreadcrumbItem key={crumb.href} id={`${index}`}>
                   {crumb.isLast ? (
                     <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
                   ) : (

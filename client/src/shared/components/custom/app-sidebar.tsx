@@ -31,9 +31,10 @@ import {
 import { ChevronDown } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import React from "react";
 
-const getMenuItemsByUserType = (userType: string) => {
-  const adminItems = [
+function getMenuItemsByUserType(userType: string): SidebarItem[] {
+  const adminItems: SidebarItem[] = [
     { 
       title: "Dashboard", 
       icon: DashboardIcon, 
@@ -55,14 +56,11 @@ const getMenuItemsByUserType = (userType: string) => {
     },
   ];
 
-  const studentItems = [
+  const studentItems: SidebarItem[] = [
     {
       title: "Alunos",
       icon: GroupIcon,
-      action: "/students/profile",
-      items: [
-        { title: "Alterações Cadastrais", action: "/students/changes" },
-      ],
+      action: "/students",
     },
     { 
       title: "Formulários", 
@@ -192,4 +190,13 @@ export function AppSidebar() {
       </SidebarFooter>
     </Sidebar>
   );
+}
+
+interface SidebarItem {
+  title: string,
+  icon: React.ElementType,
+  action: string | (() => void),
+  items?: Array<
+    { title: string, action: string | (() => void) }
+  >
 }

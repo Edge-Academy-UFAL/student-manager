@@ -7,9 +7,7 @@ interface StudentProfileUpdatePageProps {
 export default async function StudentProfileUpdatePage({
   params,
 }: StudentProfileUpdatePageProps) {
-  const { username } = await params;
-
-  // Requests for data.
+  const {  } = await params;
 
   return (
     <StudentProfileUpdatePageComponent />
