@@ -1,0 +1,41 @@
+name: CI - Client (Lint & Format)
+
+on:
+  push:
+    branches: [ "dev", "main" ]
+  pull_request:
+    branches: [ "dev", "main" ]
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./client
+
+    steps:
+      # 1. Baixa o código do repositório
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Instala o Node.js e configura cache do npm para ser mais rápido
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Use a versão LTS que seu projeto usa (18, 20, etc.)
+          cache: 'npm'
+
+      # 3. Instala as dependências (npm ci é mais seguro que npm install para CI)
+      - name: Install Dependencies
+        run: npm ci
+
+      # 4. Roda o Prettier (modo check)
+      # Se encontrar algo fora do padrão, o pipeline falha
+      - name: Check Formatting (Prettier)
+        run: npx prettier --check .
+
+      # 5. Roda o ESLint
+      # Se encontrar erros de lint, o pipeline falha
+      - name: Check Linting (ESLint)
+        run: npx eslint .
