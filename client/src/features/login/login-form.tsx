@@ -69,6 +69,7 @@ export function LoginForm() {
         <FormField
           control={form.control}
           name="email"
+          key="email"
           render={({ field }) => (
             <FormItem>
               <FormControl>
@@ -81,6 +82,7 @@ export function LoginForm() {
         <FormField
           control={form.control}
           name="password"
+          key="password"
           render={({ field }) => (
             <FormItem>
               <FormControl>

@@ -24,7 +24,7 @@ export const columns: ColumnDef<StudentResponseDTO>[] = [
   {
     accessorKey: 'academyStudentLevel',
     header: 'Nível',
-    cell: (info) => (
+    cell: () => (
       <>
         {/*translateOptionValue(academyStudentLevelOptions, info.getValue())*/}
         {translateOptionValue(academyStudentLevelOptions, 'TRAINEE_1')}
@@ -34,7 +34,7 @@ export const columns: ColumnDef<StudentResponseDTO>[] = [
   {
     accessorKey: 'academyStatus',
     header: 'Situação',
-    cell: (info) => (
+    cell: () => (
       <Badge>
         {/*translateOptionValue(academyStatusOptions, info.getValue())*/}
         {translateOptionValue(academyStatusOptions, 'BASIC_TRAINING')}
