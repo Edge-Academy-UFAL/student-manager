@@ -25,6 +25,7 @@ jobs:
         with:
           node-version: '20' # Use a versão LTS que seu projeto usa (18, 20, etc.)
           cache: 'npm'
+          cache-dependency-path: client/package-lock.json
 
       # 3. Instala as dependências (npm ci é mais seguro que npm install para CI)
       - name: Install Dependencies
