@@ -20,9 +20,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/shared/components/custom/dropdown-menu';
+} from '@/shared/components/ui/dropdown-menu';
 
 import { BatchUpdateDialog } from './components/batch-update-dialog'; 
+import { NewStudentDialog } from './components/new-student-dialog';
 
 interface AllStudentsPageProps {
   data: StudentResponseDTO[];
@@ -81,7 +82,11 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>Via Email</DropdownMenuItem>
+              <NewStudentDialog 
+                triggerButton={
+                  <Button variant="ghost">Via Email</Button>
+                }
+              />
               <DropdownMenuItem>Via Planilha</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
