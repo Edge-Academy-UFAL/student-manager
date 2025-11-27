@@ -1,10 +1,11 @@
-caminho_pdf = "server/python-service/historico_d.pdf" #Insira o caminho aqui!
+caminho_pdf = "python_service/input/historico_d.pdf" #Insira o caminho aqui!
 import numpy
 import re
 import PyPDF2
 import historico_para_json
 WARNING = '\033[31m'
 RESET = '\033[0m'
+
 
 
 def extrair_texto_pdf(caminho_pdf):
@@ -50,30 +51,30 @@ def extrair_texto_pdf(caminho_pdf):
     return texto_completo
 
 print ("\n---------\n")
-Mat = extrair_texto_pdf(caminho_pdf)
-matricula_index = re.search(r"Matrícula:\s*(\d+)", Mat) # Obtendo a matrícula 
+mat = extrair_texto_pdf(caminho_pdf)
+matricula_index = re.search(r"Matrícula:\s*(\d+)", mat) # Obtendo a matrícula 
 if matricula_index:
-    Matrícula = matricula_index.group(1)
-    print("Matrícula: ",Matrícula)
+    matricula = matricula_index.group(1)
+    print("Matrícula: ",matricula)
 else:
-    Matrícula = "Erro ao obter matrícula"
+    matricula = "Erro ao obter matrícula"
 
-nome_index = re.search(r"Nome:\s*(.+)", Mat) # Obtendo o nome
+nome_index = re.search(r"Nome:\s*(.+)", mat) # Obtendo o nome
 if nome_index:
     Nome = nome_index.group(1)
     Nome = Nome.removesuffix("Dados Pessoais")
     print("Nome: ",Nome)
 else:
-    Matrícula = "Erro ao obter matrícula"
+    matricula = "Erro ao obter matrícula"
 pdf_title = "Componentes Curriculares Cursados/Cursando"
-Mindex = Mat.find(pdf_title) + len(pdf_title) # Cortamos o texto até o início do histórico
+Mindex = mat.find(pdf_title) + len(pdf_title) # Cortamos o texto até o início do histórico
 if Mindex == -1:
     raise ValueError("Cabeçalho não encontrado no texto extraído.")
 
-Mat = Mat[Mindex:]
-Mindex = Mat.find("Componentes Curriculares Obrigatórios Pendentes") # Cortamos os componentes curriculares pendentes.
-Mat = Mat[:Mindex]
-table_list = re.split(r'(20\d{2}\.\d)',Mat)
+mat = mat[Mindex:]
+Mindex = mat.find("Componentes Curriculares Obrigatórios Pendentes") # Cortamos os componentes curriculares pendentes.
+mat = mat[:Mindex]
+table_list = re.split(r'(20\d{2}\.\d)',mat)
 
 
 
@@ -83,8 +84,8 @@ l.pop(0) #Remove a aba do ENADE.
 
 Histórico = {
     "Aluno":Nome,
-    "Matrícula": Matrícula,
-    "Matérias":[]
+    "Matrícula": matricula,
+    "materias":[]
 }
 
 for i in range(0,len(l)):
@@ -92,33 +93,33 @@ for i in range(0,len(l)):
 
 
 '''
-Aqui armazenamos a lista de palavras-chave para a variável "Situação".
+Aqui armazenamos a lista de palavras-chave para a variável "situacao".
 APR, APRM, CANC, DISP, MATR, REC, REP, REPF, REPMF, TRANC, TRANS, INCORP, CUMP
 '''
 
-Situação_Keywords = ["APRM","APR", "CANC", "DISP", "MATRICULADO", "REC","REPMF","REPF", "REP", "TRANCADO", "TRANS", "INCORP", "CUMPRIU"]
+situacao_keywords = ["APRM","APR", "CANC", "DISP", "MATRICULADO", "REC","REPMF","REPF", "REP", "TRANCADO", "TRANS", "INCORP", "CUMPRIU"]
 
 
 print("\n-----------------------------\n")
 for i in range(len(l)):
     try:
-        Período = str(l[i][0])
+        periodo = str(l[i][0])
         j = re.split(r"\n|\s+--",l[i][1],maxsplit= 1)
-        Matéria = j[0]
-        Matéria = Matéria.removeprefix(" ")
+        materia = j[0]
+        materia = materia.removeprefix(" ")
         # Busca o professor.
         j = j[1]
         try:
             j = j.rsplit(")", maxsplit=1)
-            Professor = j[0] + ")"
+            professor = j[0] + ")"
             j = j[1]
             j = re.split(r"([\S]{1,2})",j,maxsplit=1)
-            Turma = j[1]
+            turma = j[1]
             j = j[2]
         except:
             print(WARNING + "Possível erro ao encontrar um professor... Tentando formatação alternativa" + RESET)
-            Professor = "N/A"
-            Turma = "--"
+            professor = "N/A"
+            turma = "--"
             j = j[0]
 
         # Removendo line breaks da string:
@@ -133,19 +134,19 @@ for i in range(len(l)):
                     index = j.rfind("\n") 
         except:
             print( WARNING + "Erro ao tentar formatar a String..." + RESET)
-        # Obtém a situação da matéria:
+        # Obtém a situacao da materia:
  
         try:
-            Situação = "N/A"
-            for k in Situação_Keywords:
+            situacao = "N/A"
+            for k in situacao_keywords:
                 if k in j:
                     j = j.split(k)
-                    Situação = k
+                    situacao = k
         except:
-            print(WARNING + "Erro ao obter situação!" + RESET)
-            Situação = "Situação não encontrada"
+            print(WARNING + "Erro ao obter situacao!" + RESET)
+            situacao = "situacao não encontrada"
         
-        # Obtém o ID da matéria:
+        # Obtém o ID da materia:
 
         try:
             j[1] = j[1].split(" ", maxsplit= 3) 
@@ -153,58 +154,58 @@ for i in range(len(l)):
             if j[0] == '': #remove os espaços inúteis
                 j.pop(0)
             id = j[0]
-            CH = j[1]
+            ch = j[1]
             j.pop(0)
             j.pop(0)
         except:
-            print(WARNING + "Erro ao tentar obter o ID ou CH." + RESET)
+            print(WARNING + "Erro ao tentar obter o ID ou ch." + RESET)
             id = "ID não encontrado"
-            CH = "CH não encontrado"
-        # Obtendo frequência e realizando a separação de nota x frequência:
+            ch = "ch não encontrado"
+        # Obtendo frequencia e realizando a separação de nota x frequencia:
         try:
             if len(j[0]) > 5:
                 j = re.split(r'(?<=\d{2},\d)', j[0],maxsplit=1)
-            Frequência = j[0]
+            frequencia = j[0]
             j.pop(0)
         except:
-            print(WARNING + "Erro de frequência ou formatação" + RESET)
-            Frequência = "Frequência não encontrada"
+            print(WARNING + "Erro de frequencia ou formatação" + RESET)
+            frequencia = "frequencia não encontrada"
         # FORMATANDO NOTA:
         try:
             j = j[0].split(" ")
             if j[0] == '': #remove os espaços inúteis
                 j.pop(0)
-            Média = j[0]
+            media = j[0]
         except: 
-            print(WARNING + "Erro ao obter médias." + RESET)
-            Média = "Média não encontrada"
+            print(WARNING + "Erro ao obter medias." + RESET)
+            media = "media não encontrada"
         # Obtendo o tipo de componente:
         try:
             if (len(j) == 2):
                 j.insert(1,"N/A")
-            Componente = j[1]
-            Hora_aula = j[2]
+            componente = j[1]
+            hora_aula = j[2]
         except:
-            print(WARNING + "Erro ao obter Componente/Hora_Aula." + RESET)
-            Componente = "Componente não encontrada"
-            Hora_aula = "Hora/aula não encontrada"
-        Historico_Matéria = {
-            "Matéria": Matéria,
-            "Período": Período,
-            "Professor": Professor,
+            print(WARNING + "Erro ao obter componente/hora_aula." + RESET)
+            componente = "componente não encontrada"
+            hora_aula = "Hora/aula não encontrada"
+        Historico_materia = {
+            "Matéria": materia,
+            "Período": periodo,
+            "Professor": professor,
             "id": id,
-            "Horas de aula": Hora_aula,
-            "CH": CH,
-            "Turma": Turma,
-            "Frequência": Frequência,
-            "Média": Média,
-            "Situação": Situação,
-            "Componente": Componente
+            "Horas de aula": hora_aula,
+            "CH": ch,
+            "Turma": turma,
+            "Frequência": frequencia,
+            "Média": media,
+            "Situação": situacao,
+            "Componente": componente
         }
-        Histórico["Matérias"].append(Historico_Matéria)
+        Histórico["materias"].append(Historico_materia)
     except:
-        Historico_Matéria = WARNING + ("Erro inesperado ao ler os dados. Dados lidos incorretamente:\n" +  str(l[i])) + RESET
-    print(Historico_Matéria)
+        Historico_materia = WARNING + ("Erro inesperado ao ler os dados. Dados lidos incorretamente:\n" +  str(l[i])) + RESET
+    print(Historico_materia)
 
 
-historico_para_json.converter_histórico(Histórico)
+historico_para_json.converter_historico(Histórico)
