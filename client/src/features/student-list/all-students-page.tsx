@@ -32,8 +32,8 @@ interface AllStudentsPageProps {
 export function AllStudentsPage({ data }: AllStudentsPageProps) {
   const [searchName, setSearchName] = useState('');
   const [selectedGroup, setSelectedGroup] = useState<string>('all');
-  //const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [selectedSituation, setSelectedSituation] = useState<string>('all');
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const uniqueGroups = useMemo(() => {
     const groups = [...new Set(data.map((student) => student.studentGroup))];
@@ -82,11 +82,9 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <NewStudentDialog 
-                triggerButton={
-                  <Button variant="ghost">Via Email</Button>
-                }
-              />
+              <DropdownMenuItem onClick={() => setDialogOpen(true)}>
+                Via Email
+              </DropdownMenuItem>
               <DropdownMenuItem>Via Planilha</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -105,14 +103,14 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
         </div>
 
         <div className="flex gap-4">
-          <Select onValueChange={setSelectedGroup}>
+          <Select value={selectedGroup} onValueChange={setSelectedGroup} defaultValue="all">
             <SelectTrigger
               className="font-sans w-[180px] border border-neutral-300"
             >
               <SelectValue placeholder="Turma" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all" >Todas</SelectItem>
+              <SelectItem value="all">Todas</SelectItem>
               {uniqueGroups.map((group) => (
                 <SelectItem key={group} value={String(group)}>
                   Turma {group}
@@ -121,23 +119,7 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
             </SelectContent>
           </Select>
 
-          {/* <Select onValueChange={setSelectedLevel}>
-            <SelectTrigger
-              className="font-sans w-[180px] border border-neutral-300"
-            >
-              <SelectValue placeholder="Nível" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos</SelectItem>
-              {uniqueLevel.map((level) => (
-                <SelectItem key={level} value={String(level)}>
-                  Trainee {level}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select> */}
-
-          <Select onValueChange={setSelectedSituation}>
+          <Select value={selectedSituation} onValueChange={setSelectedSituation} defaultValue="all">
             <SelectTrigger
               className="font-sans w-[180px] border border-neutral-300"
             >
@@ -154,6 +136,11 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
       </div>
 
       <StudentsTable data={filteredData} />
+      
+      <NewStudentDialog 
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
     </div>
   );
 }
