@@ -24,6 +24,7 @@ import {
 
 import { BatchUpdateDialog } from './components/batch-update-dialog'; 
 import { NewStudentDialog } from './components/new-student-dialog';
+import { ImportStudentsDialog } from './components/import-students-dialog';
 
 interface AllStudentsPageProps {
   data: StudentResponseDTO[];
@@ -35,6 +36,7 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
   const [selectedSituation, setSelectedSituation] = useState<string>('all');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [spreadsheetDialogOpen, setSpreadsheetDialogOpen] = useState(false);
 
   const uniqueGroups = useMemo(() => {
     const groups = [...new Set(data.map((student) => student.studentGroup))];
@@ -91,7 +93,15 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
               >
                 Via Email
               </DropdownMenuItem>
-              <DropdownMenuItem className="py-4 px-6">Via Planilha</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setSpreadsheetDialogOpen(true);
+                  setDropdownOpen(false);
+                }}
+                className="py-4 px-6"
+              >
+                Via Planilha
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -146,6 +156,11 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
       <NewStudentDialog 
         open={dialogOpen}
         onOpenChange={setDialogOpen}
+      />
+
+      <ImportStudentsDialog
+        open={spreadsheetDialogOpen}
+        onOpenChange={setSpreadsheetDialogOpen}
       />
     </div>
   );
