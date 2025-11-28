@@ -3,6 +3,7 @@ package com.academy.edge.studentmanager.controllers;
 import com.academy.edge.studentmanager.dtos.AdministratorCreateDTO;
 import com.academy.edge.studentmanager.models.Administrator;
 import com.academy.edge.studentmanager.repositories.AdministratorRepository;
+import com.amazonaws.services.s3.AmazonS3;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icegreen.greenmail.configuration.GreenMailConfiguration;
 import com.icegreen.greenmail.junit5.GreenMailExtension;
@@ -19,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,6 +32,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 public class AdministratorControllerTests {
+    @MockitoBean
+    private AmazonS3 s3client;
+
     @Autowired
     private MockMvc mockMvc;
 
