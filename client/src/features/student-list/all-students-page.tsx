@@ -34,6 +34,7 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
   const [selectedGroup, setSelectedGroup] = useState<string>('all');
   const [selectedSituation, setSelectedSituation] = useState<string>('all');
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const uniqueGroups = useMemo(() => {
     const groups = [...new Set(data.map((student) => student.studentGroup))];
@@ -75,17 +76,22 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
             data={data}
           />
 
-          <DropdownMenu>
+          <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
             <DropdownMenuTrigger asChild>
               <Button>
                 Novo aluno <ChevronDownIcon />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => setDialogOpen(true)}>
+            <DropdownMenuContent className="w-41" align="start">
+              <DropdownMenuItem onClick={() => {
+                  setDialogOpen(true);
+                  setDropdownOpen(false);
+                }}
+                className="py-4 px-6"
+              >
                 Via Email
               </DropdownMenuItem>
-              <DropdownMenuItem>Via Planilha</DropdownMenuItem>
+              <DropdownMenuItem className="py-4 px-6">Via Planilha</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

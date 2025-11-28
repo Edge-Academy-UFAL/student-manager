@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,6 +15,7 @@ import { Field, FieldGroup, FieldSet } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { inviteStudent } from "@/app/actions/student-actions";
+import { toast } from "sonner";
 
 const newStudentSchema = z.object({
   email: z.string().email("Email inválido").min(1, "Insira um email"),
@@ -30,14 +30,13 @@ interface NewStudentDialogProps {
 }
 
 export function NewStudentDialog({ open, onOpenChange }: NewStudentDialogProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
     handleSubmit,
     setValue,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<NewStudentSchema>({
     resolver: zodResolver(newStudentSchema),
     defaultValues: {
@@ -47,24 +46,18 @@ export function NewStudentDialog({ open, onOpenChange }: NewStudentDialogProps) 
   });
 
   const onSubmit = async (data: NewStudentSchema) => {
-    setIsSubmitting(true);
-
     try {
       await inviteStudent({
         email: data.email,
         studentGroup: Number(data.studentGroup),
       });
 
-      alert("Aluno convidado com sucesso!");
+      toast.success("Aluno convidado com sucesso!");
       reset();
       onOpenChange(false);
-      
-      window.location.reload();
     } catch (error) {
       console.error("Error inviting student:", error);
-      alert(`Erro ao convidar aluno: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
-    } finally {
-      setIsSubmitting(false);
+      toast.error(`Erro ao convidar aluno: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
     }
   };
 
