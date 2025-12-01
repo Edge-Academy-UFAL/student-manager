@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface InvitationRepository extends CrudRepository<Invitation, String> {
     Optional<Invitation> findByCode(String invitationId);
+    Optional<Invitation> findByEmail(String email);
 }

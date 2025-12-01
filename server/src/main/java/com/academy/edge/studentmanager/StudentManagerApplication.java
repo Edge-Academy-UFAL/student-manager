@@ -1,6 +1,8 @@
 package com.academy.edge.studentmanager;
 
 import com.academy.edge.studentmanager.configs.ApplicationProperties;
+import com.academy.edge.studentmanager.configs.EmailConfig;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -9,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
-@EnableConfigurationProperties(ApplicationProperties.class)
+@EnableConfigurationProperties({ApplicationProperties.class, EmailConfig.class})
 public class StudentManagerApplication {
 
     @Bean
