@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@/shared/lib/auth';
-import { api, getAuthorizationHeader, InvitationRequestDTO, throwFromResponse } from '@/api';
+import { api, getAuthorizationHeader, getErrorMessage, InvitationRequestDTO, throwFromResponse } from '@/api';
 
 export async function inviteStudent(data: {
   email: string;
@@ -24,7 +24,15 @@ export async function inviteStudent(data: {
     headers: getAuthorizationHeader(session),
   });
 
-  throwFromResponse(res);
+  if (!res.ok) {
+    throw new Error(getErrorMessage(res));
+  }
+
+  const responseData = res.data as any;
+  if (responseData?.failedEmails && responseData.failedEmails[data.email]) {
+    const error = responseData.failedEmails[data.email];
+    throw new Error(`Convite falhou: ${error.message || error.error}`);
+  }
 
   return { success: true };
 }
@@ -44,13 +52,24 @@ export async function inviteStudentsBatch(data: {
     studentGroup: data.studentGroup,
     entryDate: new Date().toISOString().split("T")[0],
   };
-
+  console.log("Inviting students batch:", payload);
   const res = await api.inviteStudents(payload, {
     format: "json",
     headers: getAuthorizationHeader(session),
   });
 
-  throwFromResponse(res);
+  if (!res.ok) {
+    throw new Error(getErrorMessage(res));
+  }
 
-  return { success: true, count: data.emails.length };
+  const responseData = res.data as any;
+  if (responseData?.failedEmails && Object.keys(responseData.failedEmails).length > 0) {
+    const failedEmails = Object.entries(responseData.failedEmails)
+      .map(([email, error]: any) => `${email}: ${error.message || error.error}`)
+      .join('\n');
+    
+    throw new Error(`Alguns convites falharam:\n${failedEmails}`);
+  }
+
+  return { success: true, count: responseData?.successfulEmails?.length ?? data.emails.length };
 }

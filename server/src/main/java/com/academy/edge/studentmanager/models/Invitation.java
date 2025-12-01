@@ -19,8 +19,8 @@ public class Invitation {
     private String code;
 
     @CreationTimestamp
-    @Column(nullable = false)
-    Instant createdAt;
+    @Column(nullable = false, updatable = false)
+    private Instant createdAt;
 
     @Column(nullable = false)
     private int studentGroup;
