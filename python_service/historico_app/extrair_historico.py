@@ -1,4 +1,4 @@
-caminho_pdf = "python_service/input/historico_d.pdf" #Insira o caminho aqui!
+caminho_pdf = "python_service/input/historico_e.pdf" #Insira o caminho aqui!
 import numpy
 import re
 import PyPDF2
@@ -109,18 +109,17 @@ for i in range(len(l)):
         materia = materia.removeprefix(" ")
         # Busca o professor.
         j = j[1]
+
         try:
             j = j.rsplit(")", maxsplit=1)
             professor = j[0] + ")"
             j = j[1]
-            j = re.split(r"([\S]{1,2})",j,maxsplit=1)
-            turma = j[1]
-            j = j[2]
+
         except:
             print(WARNING + "Possível erro ao encontrar um professor... Tentando formatação alternativa" + RESET)
             professor = "N/A"
-            turma = "--"
             j = j[0]
+
 
         # Removendo line breaks da string:
         try:
@@ -135,22 +134,29 @@ for i in range(len(l)):
         except:
             print( WARNING + "Erro ao tentar formatar a String..." + RESET)
         # Obtém a situacao da materia:
- 
-        try:
-            situacao = "N/A"
-            for k in situacao_keywords:
-                if k in j:
-                    j = j.split(k)
-                    situacao = k
-        except:
-            print(WARNING + "Erro ao obter situacao!" + RESET)
-            situacao = "situacao não encontrada"
-        
-        # Obtém o ID da materia:
+
+        situacao = "N/A"
 
         try:
-            j[1] = j[1].split(" ", maxsplit= 3) 
-            j = j[1]
+            for kw in situacao_keywords:
+                regex = r"\s*".join(list(kw))   # gera regex flexível
+                m = re.search(regex, j)
+                if m:
+                    situacao = kw               # guarda a palavra original
+                    j = re.split(kw,j)
+                    turma = j[0]
+                    j = j[1]
+                    break
+            if situacao == "N/A":
+                print(WARNING +"ERROOOU" + RESET)
+        except Exception as e:
+            print(WARNING + f"Erro ao obter situacao! ({e})" + RESET)
+            situacao = "situacao não encontrada"
+            turma = "turma não encontrada"
+        # Obtém o ID da materia:
+        try:
+            j = j.lstrip()
+            j = j.split(" ") 
             if j[0] == '': #remove os espaços inúteis
                 j.pop(0)
             id = j[0]
@@ -161,34 +167,39 @@ for i in range(len(l)):
             print(WARNING + "Erro ao tentar obter o ID ou ch." + RESET)
             id = "ID não encontrado"
             ch = "ch não encontrado"
+
+
         # Obtendo frequencia e realizando a separação de nota x frequencia:
+
         try:
             if len(j[0]) > 5:
-                j = re.split(r'(?<=\d{2},\d)', j[0],maxsplit=1)
-            frequencia = j[0]
+                j1 = re.split(r'(?<=\d{2},\d)', j[0],maxsplit=1)
+                frequencia = j1[0]
+                #print("j1: ",j1,"\n----\n")
+                media = j1[1]
+            else:
+                #print("j:",j,"\n----\n" )
+                frequencia = j[0]
+                media = j[1]
+                j.pop(0)
             j.pop(0)
         except:
             print(WARNING + "Erro de frequencia ou formatação" + RESET)
             frequencia = "frequencia não encontrada"
-        # FORMATANDO NOTA:
-        try:
-            j = j[0].split(" ")
-            if j[0] == '': #remove os espaços inúteis
-                j.pop(0)
-            media = j[0]
-        except: 
-            print(WARNING + "Erro ao obter medias." + RESET)
-            media = "media não encontrada"
+ 
         # Obtendo o tipo de componente:
         try:
             if (len(j) == 2):
-                j.insert(1,"N/A")
-            componente = j[1]
-            hora_aula = j[2]
+                componente = j[0]
+                j.pop(0)
+            else:
+                componente = "N/A"
+            hora_aula = j[0]
         except:
             print(WARNING + "Erro ao obter componente/hora_aula." + RESET)
             componente = "componente não encontrada"
             hora_aula = "Hora/aula não encontrada"
+
         Historico_materia = {
             "Matéria": materia,
             "Período": periodo,
