@@ -73,7 +73,7 @@ jobs:
       - name: Build JAR
         run: |
           chmod +x gradlew
-          ./gradlew bootJar -x test -x checkstyleMain -x pmdMain -x spotbugsMain
+          ./gradlew bootJar -x test
 
       # 3. Instala a CLI da DigitalOcean (doctl)
       - name: Install doctl
