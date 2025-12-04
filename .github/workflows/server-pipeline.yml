@@ -44,7 +44,7 @@ jobs:
 
       # Roda testes e valida compilação
       - name: Validate Build
-        run: ./gradlew test bootJar -x checkstyleMain -x pmdMain -x spotbugsMain
+        run: ./gradlew test bootJar
 
   # -----------------------------------------------------------------
   # JOB 2: CD (Entrega e Deploy)
