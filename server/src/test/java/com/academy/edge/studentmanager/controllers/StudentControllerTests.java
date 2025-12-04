@@ -40,9 +40,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @Testcontainers
 public class StudentControllerTests {
-    @MockitoBean
-    private AmazonS3 s3client;
-
     @Container
     static LocalStackContainer localStack = new LocalStackContainer(
         DockerImageName.parse("localstack/localstack:3.0")
