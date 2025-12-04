@@ -12,8 +12,6 @@ import java.util.List;
 
 @PreAuthorize("isAuthenticated()")
 @RestController
-@SpringBootTest
-@ActiveProfiles("test") 
 @RequestMapping("/api/v1/administrators")
 public class AdministratorController {
 

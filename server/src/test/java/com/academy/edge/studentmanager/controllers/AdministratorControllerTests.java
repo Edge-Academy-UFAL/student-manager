@@ -1,18 +1,13 @@
 package com.academy.edge.studentmanager.controllers;
 
-import com.academy.edge.studentmanager.configs.S3Config;
 import com.academy.edge.studentmanager.dtos.AdministratorCreateDTO;
 import com.academy.edge.studentmanager.models.Administrator;
 import com.academy.edge.studentmanager.repositories.AdministratorRepository;
-import com.academy.edge.studentmanager.services.S3Service;
-import com.academy.edge.studentmanager.services.impl.S3ServiceImpl;
-import com.amazonaws.services.s3.AmazonS3;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icegreen.greenmail.configuration.GreenMailConfiguration;
 import com.icegreen.greenmail.junit5.GreenMailExtension;
 import com.icegreen.greenmail.user.UserException;
 import com.icegreen.greenmail.util.ServerSetupTest;
-import jakarta.mail.internet.InternetAddress;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -25,7 +20,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.junit.jupiter.Container;
