@@ -58,7 +58,7 @@ jobs:
   # -----------------------------------------------------------------
   build-push-deploy:
     needs: check-code # Só roda se o Job 1 passar
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     
     defaults:
