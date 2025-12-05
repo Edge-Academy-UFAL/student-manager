@@ -93,8 +93,7 @@ jobs:
           images: ${{ env.REGISTRY }}/soap
           tags: |
             type=raw,value=backend-latest,enable=${{ github.ref == 'refs/heads/main' }}
-            type=raw,value=backend-dev
-      # ,enable=${{ github.ref == 'refs/heads/dev' }}
+            type=raw,value=backend-dev,enable=${{ github.ref != 'refs/heads/main' }}
 
       # 6. Build e Push da Imagem
       - name: Build and Push Docker image

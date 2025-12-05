@@ -1,4 +1,4 @@
-name: CI - Client
+name: CI/CD - Client (Build Docker Image & Deploy)
 
 on:
   push:
@@ -10,17 +10,25 @@ on:
     paths:
       - 'client/**'
 
-jobs:
-  build-check:
-    runs-on: ubuntu-latest
+env:
+  # O mesmo Registry
+  REGISTRY: registry.digitalocean.com/soap-registry
+  # Define o contexto de execução
+  working-directory: ./client
 
+jobs:
+  # -----------------------------------------------------------------
+  # JOB 1: CI (Validação do Build)
+  # Garante que o React/Vue/Angular compila sem erros antes de tentar criar Docker
+  # -----------------------------------------------------------------
+  check-code:
+    runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./client
+        working-directory: ${{ env.working-directory }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -32,5 +40,75 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build Project
+      # Roda o build para ver se não tem erro de sintaxe ou TS
+      - name: Validate Build
         run: npm run build
+
+  # -----------------------------------------------------------------
+  # JOB 2: CD (Docker & Deploy)
+  # -----------------------------------------------------------------
+  build-push-deploy:
+    needs: check-code
+    # Se quiser rodar deploy só no push (e não no PR), descomente a linha abaixo:
+    # if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ${{ env.working-directory }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1. Instala doctl
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_API_TOKEN }}
+
+      # 2. Login no Registry
+      - name: Log in to DO Container Registry
+        run: doctl registry login --expiry-seconds 600
+
+      # 3. Define as TAGS (frontend-latest ou frontend-dev)
+      # Mantendo a lógica de usar o repo 'soap' mas mudando o prefixo da tag
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/soap
+          tags: |
+            type=raw,value=frontend-latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=raw,value=frontend-dev,enable=${{ github.ref != 'refs/heads/main' }}
+
+      # 4. Build e Push
+      # IMPORTANTE: O Dockerfile deve estar dentro da pasta ./client
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ env.working-directory }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+
+      # 5. Deploy via SSH
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            # Login no registry
+            docker login registry.digitalocean.com -u ${{ secrets.DO_API_TOKEN }} -p ${{ secrets.DO_API_TOKEN }}
+
+            # Entra na pasta do projeto
+            cd /home/${{ secrets.SSH_USERNAME }}/student-manager
+
+            # Baixa a nova imagem do frontend (Assumindo que o serviço chama 'frontend')
+            docker compose -f docker-compose.prod.yml pull frontend
+
+            # Recria o container
+            docker compose -f docker-compose.prod.yml up -d frontend
+
+            # Limpeza
+            docker image prune -f
