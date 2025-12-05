@@ -116,7 +116,7 @@ jobs:
             docker login registry.digitalocean.com -u ${{ secrets.DO_API_TOKEN }} -p ${{ secrets.DO_API_TOKEN }}
 
             # Entra na pasta onde está o docker-compose.prod.yml
-            cd /home/${{ secrets.SSH_USERNAME }}/student-manager
+            cd /${{ secrets.SSH_USERNAME }}/student-manager
 
             # Baixa a nova imagem
             docker compose -f docker-compose.prod.yml pull backend
