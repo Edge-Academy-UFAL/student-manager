@@ -1,4 +1,4 @@
-caminho_pdf = "python_service/input/historico_e.pdf" #Insira o caminho aqui!
+caminho_pdf = "python_service/input/historico_a.pdf" #Insira o caminho aqui!
 import numpy
 import re
 import PyPDF2
@@ -214,6 +214,7 @@ for i in range(len(l)):
             "Componente": componente
         }
         Histórico["materias"].append(Historico_materia)
+
     except:
         Historico_materia = WARNING + ("Erro inesperado ao ler os dados. Dados lidos incorretamente:\n" +  str(l[i])) + RESET
     print(Historico_materia)
