@@ -9,6 +9,12 @@ on:
     branches: [ "dev", "main" ]
     paths:
       - 'client/**'
+  workflow_dispatch:
+      inputs:
+        reason:
+          description: 'Motivo da execução manual'
+          required: false
+          default: 'Teste manual'
 
 env:
   # O mesmo Registry
