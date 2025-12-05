@@ -20,9 +20,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/shared/components/custom/dropdown-menu';
+} from '@/shared/components/ui/dropdown-menu';
 
 import { BatchUpdateDialog } from './components/batch-update-dialog'; 
+import { NewStudentDialog } from './components/new-student-dialog';
+import { ImportStudentsDialog } from './components/import-students-dialog';
 
 interface AllStudentsPageProps {
   data: StudentResponseDTO[];
@@ -31,8 +33,10 @@ interface AllStudentsPageProps {
 export function AllStudentsPage({ data }: AllStudentsPageProps) {
   const [searchName, setSearchName] = useState('');
   const [selectedGroup, setSelectedGroup] = useState<string>('all');
-  //const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [selectedSituation, setSelectedSituation] = useState<string>('all');
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [spreadsheetDialogOpen, setSpreadsheetDialogOpen] = useState(false);
 
   const uniqueGroups = useMemo(() => {
     const groups = [...new Set(data.map((student) => student.studentGroup))];
@@ -74,15 +78,30 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
             data={data}
           />
 
-          <DropdownMenu>
+          <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
             <DropdownMenuTrigger asChild>
               <Button>
                 Novo aluno <ChevronDownIcon />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Via Email</DropdownMenuItem>
-              <DropdownMenuItem>Via Planilha</DropdownMenuItem>
+            <DropdownMenuContent className="w-41" align="start">
+              <DropdownMenuItem onClick={() => {
+                  setDialogOpen(true);
+                  setDropdownOpen(false);
+                }}
+                className="py-4 px-6"
+              >
+                Via Email
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setSpreadsheetDialogOpen(true);
+                  setDropdownOpen(false);
+                }}
+                className="py-4 px-6"
+              >
+                Via Planilha
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -100,14 +119,14 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
         </div>
 
         <div className="flex gap-4">
-          <Select onValueChange={setSelectedGroup}>
+          <Select value={selectedGroup} onValueChange={setSelectedGroup} defaultValue="all">
             <SelectTrigger
               className="font-sans w-[180px] border border-neutral-300"
             >
               <SelectValue placeholder="Turma" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all" >Todas</SelectItem>
+              <SelectItem value="all">Todas</SelectItem>
               {uniqueGroups.map((group) => (
                 <SelectItem key={group} value={String(group)}>
                   Turma {group}
@@ -116,23 +135,7 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
             </SelectContent>
           </Select>
 
-          {/* <Select onValueChange={setSelectedLevel}>
-            <SelectTrigger
-              className="font-sans w-[180px] border border-neutral-300"
-            >
-              <SelectValue placeholder="Nível" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos</SelectItem>
-              {uniqueLevel.map((level) => (
-                <SelectItem key={level} value={String(level)}>
-                  Trainee {level}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select> */}
-
-          <Select onValueChange={setSelectedSituation}>
+          <Select value={selectedSituation} onValueChange={setSelectedSituation} defaultValue="all">
             <SelectTrigger
               className="font-sans w-[180px] border border-neutral-300"
             >
@@ -149,6 +152,16 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
       </div>
 
       <StudentsTable data={filteredData} />
+      
+      <NewStudentDialog 
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
+
+      <ImportStudentsDialog
+        open={spreadsheetDialogOpen}
+        onOpenChange={setSpreadsheetDialogOpen}
+      />
     </div>
   );
 }
