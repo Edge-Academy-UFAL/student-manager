@@ -39,14 +39,10 @@ services:
       - studentmanager-network
 
   server:
-    image: gradle:8.5-jdk21-alpine
     container_name: studentmanager_server
-    working_dir: /app
-    volumes:
-      - ./server:/app
+    build: ./server
     ports:
       - "8080:8080"
-    command: [ "gradle", "bootRun" ]
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/student-manager
       SPRING_DATASOURCE_USERNAME: postgres
@@ -66,15 +62,11 @@ services:
 
   client:
     container_name: studentmanager_client
-    build:
-      context: .
-      dockerfile: ./client/Dockerfile
+    build: ./client
     ports:
       - "3000:3000"
-    volumes:
-      - ./client/src:/app/src
-      - ./client/public:/app/public
     environment:
+      AUTH_TRUST_HOST: true
       NEXT_PUBLIC_SERVER_URL: http://server:8080
       NEXTAUTH_SECRET: my_ultra_secure_nextauth_secret
       NEXTAUTH_URL: http://localhost:3000
