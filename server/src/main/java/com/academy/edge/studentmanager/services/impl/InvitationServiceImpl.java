@@ -63,6 +63,8 @@ public class InvitationServiceImpl implements InvitationService {
     @Override
     @Transactional
     public InvitationSendResponseDTO sendInvitations(List<String> emails, int studentGroup, LocalDate entryDate) {
+        // FIXME: Erro quando já existe um convite para o mesmo email
+        // FIXME: Salvar o invite antes de enviar o email, e enviar de forma assíncrona
         var uniqueEmails = new LinkedHashSet<>(emails);
         var successfulEmails = new ArrayList<String>();
         var failedEmails = new HashMap<String, InvitationErrorDTO>();
@@ -81,7 +83,9 @@ public class InvitationServiceImpl implements InvitationService {
             }
 
             var code = RandomStringUtils.secureStrong().nextAlphanumeric(64);
-            var invitation = new Invitation();
+            
+            var invitation = invitationRepository.findByEmail(email).orElse(new Invitation());
+
             invitation.setEmail(email);
             invitation.setStudentGroup(studentGroup);
             invitation.setEntryDate(entryDate);

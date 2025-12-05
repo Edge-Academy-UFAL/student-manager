@@ -39,7 +39,7 @@ services:
       - studentmanager-network
 
   server:
-    image: gradle:8.5-jdk17-alpine
+    image: gradle:8.5-jdk21-alpine
     container_name: studentmanager_server
     working_dir: /app
     volumes:
