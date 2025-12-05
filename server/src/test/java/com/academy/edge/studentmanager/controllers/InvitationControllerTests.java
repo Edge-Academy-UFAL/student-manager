@@ -24,7 +24,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -42,7 +48,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Transactional
+@Testcontainers
 public class InvitationControllerTests {
+    @Container
+    static LocalStackContainer localStack = new LocalStackContainer(
+        DockerImageName.parse("localstack/localstack:3.0")
+    );
+
+    @DynamicPropertySource
+    static void overrideProperties(DynamicPropertyRegistry registry) {
+        registry.add("aws.access.key", () -> localStack.getAccessKey());
+        registry.add("aws.secret.key", () -> localStack.getSecretKey());
+        registry.add("aws.s3.region", () -> localStack.getRegion());
+        registry.add("aws.s3.bucket", () -> "studentmanager-files");
+        registry.add("aws.s3.endpoint", () -> localStack.getEndpointOverride(LocalStackContainer.Service.S3).toString());
+    }
+
     @Autowired
     private MockMvc mockMvc;
 
