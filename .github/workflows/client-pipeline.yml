@@ -102,7 +102,7 @@ jobs:
             docker login registry.digitalocean.com -u ${{ secrets.DO_API_TOKEN }} -p ${{ secrets.DO_API_TOKEN }}
 
             # Entra na pasta do projeto
-            cd /${{ secrets.SSH_USERNAME }}/student-manager
+            cd /root/student-manager
 
             # Baixa a nova imagem do frontend (Assumindo que o serviço chama 'frontend')
             docker compose -f docker-compose.prod.yml pull frontend
