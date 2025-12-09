@@ -1,9 +1,9 @@
 import CreatePasswordComponent from "@/features/student-create-password/create-password-page";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function CreatePasswordPage({ params }: PageProps) {
