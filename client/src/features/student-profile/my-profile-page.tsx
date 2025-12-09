@@ -3,6 +3,7 @@
 import { PersonalSection } from './sections/personal-section';
 import { ContactSection } from './sections/contact-section';
 import { AcademicSection } from './sections/academic-section';
+import { CalendarPage } from '@/features/calendar/calendar-page';
 import {
   Tabs,
   TabsContent,
@@ -39,6 +40,7 @@ export function MyProfileComponent({
           <TabsTrigger value="reviews">Avaliações</TabsTrigger>
           <TabsTrigger value="grades">Notas</TabsTrigger>
           <TabsTrigger value="history">Histórico</TabsTrigger>
+          <TabsTrigger value="calendar">Calendário</TabsTrigger>
         </TabsList>
         <TabsContent value="registration">
           <div className="flex flex-col gap-6">
@@ -46,6 +48,9 @@ export function MyProfileComponent({
             <ContactSection studentInfo={studentInfo} />
             <AcademicSection studentInfo={studentInfo} />
           </div>
+        </TabsContent>
+        <TabsContent value="calendar">
+          <CalendarPage />
         </TabsContent>
         <TabsContent value="projects"></TabsContent>
         <TabsContent value="reviews"></TabsContent>
