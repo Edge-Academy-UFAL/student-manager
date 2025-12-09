@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/components/ui/card';
+import Link from 'next/link';
 
 interface WelcomeComponentProps {
   invitationId: string;
@@ -26,9 +27,9 @@ export default function WelcomeComponent({ invitationId }: WelcomeComponentProps
 
         <div className="flex justify-end pt-4">
           <Button variant="default" size="default">
-            <a href={`/create-password/${invitationId}`}>
-              Completar cadastro
-            </a>
+            <Link href={`/create-password/${invitationId}`}>
+              Completar Cadastro
+            </Link>
           </Button>
         </div>
       </CardContent>

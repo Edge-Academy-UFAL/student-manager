@@ -11,7 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/shared/co
 import { Button } from '@/shared/components/ui/button';
 import { api, StudentCreateDTO } from '@/api';
 import { toast } from 'sonner';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 interface CreatePasswordFormProps {
   invitationId: string;
