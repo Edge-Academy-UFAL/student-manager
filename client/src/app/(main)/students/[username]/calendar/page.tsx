@@ -1,17 +1,19 @@
 import { CalendarPage } from '@/features/calendar/calendar-page';
 import { SimpleBreadcrumbs } from '@/shared/components/custom/simple-breadcrumbs';
 
-export default function StudentCalendar({
+export default async function StudentCalendar({
   params,
 }: {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }) {
+  const { username } = await params;
+  
   return (
     <div className="space-y-6">
       <SimpleBreadcrumbs
         items={[
           { label: 'Alunos', href: '/students' },
-          { label: params.username, href: `/students/${params.username}` },
+          { label: username, href: `/students/${username}` },
           { label: 'Calendário' },
         ]}
       />
