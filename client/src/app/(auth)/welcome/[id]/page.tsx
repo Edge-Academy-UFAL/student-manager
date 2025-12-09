@@ -3,9 +3,9 @@ import { IconBackground } from '@/shared/components/custom/icon-background';
 import WelcomeComponent from '@/features/register/welcome';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function WelcomePage({ params }: PageProps) {
