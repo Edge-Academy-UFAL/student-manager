@@ -81,7 +81,7 @@ public class InvitationControllerTests {
 
     @RegisterExtension
     private static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP_IMAP).withConfiguration(
-            GreenMailConfiguration.aConfig().withUser("academy@edge.ufal.br", "test", "test"));
+            GreenMailConfiguration.aConfig().withUser("academy@soap.rvaf.tech", "test", "test"));
 
     @Test
     @WithMockUser(roles = "ADMIN")
@@ -102,7 +102,7 @@ public class InvitationControllerTests {
 
         var firstMessage = receivedMessages[0];
         assertThat(firstMessage.getAllRecipients()).containsExactly(new InternetAddress(emails.get(0)));
-        assertThat((String)firstMessage.getContent()).contains(this.applicationProperties.frontendUrl() + "/register/");
+        assertThat((String)firstMessage.getContent()).contains(this.applicationProperties.frontendUrl() + "/welcome/");
     }
 
     @Test
@@ -245,7 +245,7 @@ public class InvitationControllerTests {
 
     String extractActivationCode(MimeMessage message) throws IOException, MessagingException {
         var content = (String)message.getContent();
-        var matcher = Pattern.compile("/register/([^\"']+)").matcher(content);
+        var matcher = Pattern.compile("/welcome/([^\"']+)").matcher(content);
         assertThat(matcher.find()).isTrue();
         return matcher.group(1);
     }

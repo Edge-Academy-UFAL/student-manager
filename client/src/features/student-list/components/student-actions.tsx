@@ -10,14 +10,14 @@ interface StudentActionsProps {
 }
 
 export function StudentActions({ studentInfo }: StudentActionsProps) {
-  const username = getUsername(studentInfo.email);
+  const id = studentInfo.id;
 
   return (
     <div className="text-brand-400 flex justify-center gap-2 px-4 py-2">
-      <Link href={`students/${username}`}>
+      <Link href={`students/${id}`}>
         <EyeIcon className="size-4.5" />
       </Link>
-      <Link href={`students/${username}/update`}>
+      <Link href={`students/${id}/update`}>
         <PencilIcon className="size-4.5" />
       </Link>
       <FileText className="size-4.5" />
