@@ -4,6 +4,7 @@ import com.academy.edge.studentmanager.dtos.StudentTerminateDTO;
 import com.academy.edge.studentmanager.dtos.StudentUpdateDTO;
 import com.academy.edge.studentmanager.enums.Course;
 import com.academy.edge.studentmanager.models.Student;
+import com.academy.edge.studentmanager.models.User;
 import com.academy.edge.studentmanager.repositories.StudentRepository;
 import com.amazonaws.services.s3.AmazonS3;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,6 +34,7 @@ import java.time.LocalDate;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -89,29 +91,41 @@ public class StudentControllerTests {
     void adminCanAccessStudent() throws Exception {
         var student1 = studentRepository.save(getTestStudent(1));
 
-        mockMvc.perform(get("/api/v1/students/{email}", student1.getEmail()))
+        mockMvc.perform(get("/api/v1/students/{id}", student1.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isString())
-                .andExpect(jsonPath("$.email").value(student1.getEmail()));
+                .andExpect(jsonPath("$.id").value(student1.getId()));
     }
 
     @Test
-    @WithMockUser(roles = "STUDENT", username = "student1@email.com")
     void studentCanAccessOwnResource() throws Exception {
         var student1 = studentRepository.save(getTestStudent(1));
 
-        mockMvc.perform(get("/api/v1/students/{email}", student1.getEmail()))
+        var principal = new User();
+        principal.setId(student1.getId());
+        principal.setEmail(student1.getEmail());
+        principal.setPassword(student1.getPassword());
+        principal.setDtype("Student");
+
+        mockMvc.perform(get("/api/v1/students/{id}", student1.getId())
+                .with(user(principal)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isString())
-                .andExpect(jsonPath("$.email").value(student1.getEmail()));
+                .andExpect(jsonPath("$.id").value(student1.getId()));
     }
 
     @Test
-    @WithMockUser(roles = "STUDENT", username = "student1@email.com")
     void studentCannotAccessAnotherResource() throws Exception {
+        var student1 = studentRepository.save(getTestStudent(1));
         var student2 = studentRepository.save(getTestStudent(2));
 
-        mockMvc.perform(get("/api/v1/students/{email}", student2.getEmail())).andExpect(status().isForbidden());
+        var principal = new User();
+        principal.setId(student2.getId());
+        principal.setEmail(student2.getEmail());
+        principal.setPassword(student2.getPassword());
+        principal.setDtype("Student");
+
+        mockMvc.perform(get("/api/v1/students/{id}", student1.getId())
+            .with(user(principal)))
+            .andExpect(status().isForbidden());
     }
 
     @Test
@@ -125,13 +139,22 @@ public class StudentControllerTests {
     }
 
     @Test
-    @WithMockUser(roles = "STUDENT", username = "student1@email.com")
     void studentCannotDeleteAccount() throws Exception {
         var student1 = studentRepository.save(getTestStudent(1));
 
-        mockMvc.perform(delete("/api/v1/students/{email}", student1.getEmail())).andExpect(status().isForbidden());
+        var principal = new User();
+        principal.setId(student1.getId());
+        principal.setEmail(student1.getEmail());
+        principal.setPassword(student1.getPassword());
+        principal.setDtype("Student");
 
-        mockMvc.perform(get("/api/v1/students/{email}", student1.getEmail())).andExpect(status().isOk());
+        mockMvc.perform(delete("/api/v1/students/{email}", student1.getEmail())
+            .with(user(principal)))
+            .andExpect(status().isForbidden());
+
+        mockMvc.perform(get("/api/v1/students/{id}", student1.getId())
+            .with(user(principal)))
+            .andExpect(status().isOk());
     }
 
     @Test
@@ -150,18 +173,23 @@ public class StudentControllerTests {
     }
 
     @Test
-    @WithMockUser(roles = "STUDENT", username = "student1@email.com")
     void studentCannotTerminateAccount() throws Exception {
         var student1 = studentRepository.save(getTestStudent(1));
         var requestDTO = new StudentTerminateDTO("Comeu toda a pipoca.");
+
+        var principal = new User();
+        principal.setId(student1.getId());
+        principal.setEmail(student1.getEmail());
+        principal.setPassword(student1.getPassword());
+        principal.setDtype("Student");
 
         mockMvc.perform(post(
                 "/api/v1/students/{email}/terminate",
                 student1.getEmail()
         ).contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDTO))).andExpect(status().isForbidden());
+                .content(objectMapper.writeValueAsString(requestDTO)).with(user(principal))).andExpect(status().isForbidden());
 
-        mockMvc.perform(get("/api/v1/students/{email}", student1.getEmail())).andExpect(status().isOk());
+        mockMvc.perform(get("/api/v1/students/{id}", student1.getId()).with(user(principal))).andExpect(status().isOk());
     }
 
     @Test
