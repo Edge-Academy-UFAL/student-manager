@@ -22,6 +22,7 @@ export default function MainLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const pathname = usePathname();
   
+  // FIXME: Adjust breadcrumb generation to handle dynamic routes and edge cases
   const generateBreadcrumbs = () => {
     const paths = pathname.split("/").filter(Boolean);
     

@@ -20,7 +20,7 @@ export async function middleware(request: NextRequest) {
 }
 
 function isAuthenticationRoute(path: string) {
-  return ['/login', '/register'].some((route) => path.startsWith(route));
+  return ['/login', '/welcome', '/create-password'].some((route) => path.startsWith(route));
 }
 
 export const config = {

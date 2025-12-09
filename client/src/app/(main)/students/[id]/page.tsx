@@ -8,9 +8,10 @@ export default async function StudentProfilePage({
   // const session = await auth();
   // const userType = session?.user?.dtype; // "Administrator" | "Student"
 
-  const { username } = await params;
+  // FIXME: MUDAR ISSO PRA ID PLMDS
+  const { id } = await params;
 
-  const res = await api.getStudent(`${username}@edge.ufal.br`, {
+  const res = await api.getStudent(id, {
     format: 'json',
     headers: getAuthorizationHeader((await auth())!),
   });
@@ -21,5 +22,5 @@ export default async function StudentProfilePage({
 }
 
 interface StudentProfilePageProps {
-  params: Promise<{ username: string }>;
+  params: Promise<{ id: string }>;
 }

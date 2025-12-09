@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { getSession, signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
@@ -34,8 +34,23 @@ export function LoginForm() {
       password: data.password,
       redirect: false,
     });
+    
     if (!res) {
       toast.error('Erro de conexão com o servidor');
+      return;
+    }
+
+    if (res.ok) {
+      const session = await getSession();
+
+      
+      if (session?.user?.dtype === 'Student') {
+        router.push(`/students/${session.user.id}`);
+      } else {
+        router.push('/students');
+      }
+
+      router.refresh();
       return;
     }
 

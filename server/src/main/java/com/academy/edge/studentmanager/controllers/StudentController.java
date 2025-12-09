@@ -29,10 +29,10 @@ public class StudentController {
         return new ResponseEntity<>(studentService.getStudents(), HttpStatus.OK);
     }
 
-    @GetMapping({"/{email}"})
-    @PreAuthorize("hasAnyRole('ADMIN') or authentication.name == #email")
-    public ResponseEntity<StudentResponseDTO> getStudent(@PathVariable String email){
-        return new ResponseEntity<>(studentService.getStudentByEmail(email), HttpStatus.OK);
+    @GetMapping({"/{id}"})
+    @PreAuthorize("hasAnyRole('ADMIN') or authentication.principal.id == #id")
+    public ResponseEntity<StudentResponseDTO> getStudent(@PathVariable String id){
+        return new ResponseEntity<>(studentService.getStudentById(id), HttpStatus.OK);
     }
 
     @PostMapping

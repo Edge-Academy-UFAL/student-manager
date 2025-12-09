@@ -57,6 +57,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public StudentResponseDTO getStudentById(String id) {
+        Student student = this.getStudentEntityById(id);
+        return modelMapper.map(student, StudentResponseDTO.class);
+    }
+
+    @Override
     @Transactional
     public StudentResponseDTO createStudent(StudentCreateDTO studentCreateDTO) {
         var invitation = invitationService.getValidInvitation(studentCreateDTO.getActivationCode());
@@ -176,6 +182,11 @@ public class StudentServiceImpl implements StudentService {
 
     private Student getStudentEntityByEmail(String email) {
         return studentRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
+    }
+
+    private Student getStudentEntityById(String id) {
+        return studentRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Student not found"));
     }
 }
