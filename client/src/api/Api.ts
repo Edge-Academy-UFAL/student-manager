@@ -402,19 +402,6 @@ export class Api<
    * No description
    *
    * @tags student-controller
-   * @name GetStudent
-   * @request GET:/api/v1/students/{email}
-   */
-  getStudent = (email: string, params: RequestParams = {}) =>
-    this.request<StudentResponseDTO, any>({
-      path: `/api/v1/students/${email}`,
-      method: "GET",
-      ...params,
-    });
-  /**
-   * No description
-   *
-   * @tags student-controller
    * @name DeleteStudent
    * @request DELETE:/api/v1/students/{email}
    */
@@ -453,6 +440,19 @@ export class Api<
   getAllSubjects = (params: RequestParams = {}) =>
     this.request<SubjectResponseDTO[], any>({
       path: `/api/v1/subjects`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags student-controller
+   * @name GetStudent
+   * @request GET:/api/v1/students/{id}
+   */
+  getStudent = (id: string, params: RequestParams = {}) =>
+    this.request<StudentResponseDTO, any>({
+      path: `/api/v1/students/${id}`,
       method: "GET",
       ...params,
     });
