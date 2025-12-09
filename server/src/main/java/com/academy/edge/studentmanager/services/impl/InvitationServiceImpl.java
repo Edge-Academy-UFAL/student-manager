@@ -63,7 +63,6 @@ public class InvitationServiceImpl implements InvitationService {
     @Override
     @Transactional
     public InvitationSendResponseDTO sendInvitations(List<String> emails, int studentGroup, LocalDate entryDate) {
-        // FIXME: Erro quando já existe um convite para o mesmo email
         // FIXME: Salvar o invite antes de enviar o email, e enviar de forma assíncrona
         var uniqueEmails = new LinkedHashSet<>(emails);
         var successfulEmails = new ArrayList<String>();
@@ -114,7 +113,7 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     private void sendInvitationEmail(String email, String code) throws MessagingException, IOException {
-        var registerUrl = this.applicationProperties.frontendUrl() + "/register/" + code;
+        var registerUrl = this.applicationProperties.frontendUrl() + "/welcome/" + code;
         var replacements = Map.of("[[URL]]", registerUrl);
         emailService.sendEmailFromTemplate(email, "Bem vindo ao Academy!", this.invitationEmail, replacements);
     }

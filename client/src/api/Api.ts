@@ -36,8 +36,8 @@ import {
   StudentTerminateDTO,
   StudentUpdateDTO,
   SubjectResponseDTO,
-} from './data-contracts';
-import { ContentType, HttpClient, RequestParams } from './http-client';
+} from "./data-contracts";
+import { ContentType, HttpClient, RequestParams } from "./http-client";
 
 export class Api<
   SecurityDataType = unknown,
@@ -59,7 +59,7 @@ export class Api<
   ) =>
     this.request<StudentResponseDTO, any>({
       path: `/api/v1/students/${email}/record`,
-      method: 'PUT',
+      method: "PUT",
       body: data,
       type: ContentType.FormData,
       ...params,
@@ -81,7 +81,7 @@ export class Api<
   ) =>
     this.request<StudentResponseDTO, any>({
       path: `/api/v1/students/${email}/photo`,
-      method: 'PUT',
+      method: "PUT",
       body: data,
       type: ContentType.FormData,
       ...params,
@@ -96,7 +96,7 @@ export class Api<
   updateGrade = (data: GradeUpdateDTO, params: RequestParams = {}) =>
     this.request<GradeResponseDTO, any>({
       path: `/api/v1/grades`,
-      method: 'PUT',
+      method: "PUT",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -111,7 +111,7 @@ export class Api<
   saveGrade = (data: GradeCreateDTO, params: RequestParams = {}) =>
     this.request<GradeResponseDTO, any>({
       path: `/api/v1/grades`,
-      method: 'POST',
+      method: "POST",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -126,7 +126,7 @@ export class Api<
   deleteGrade = (data: GradeDeleteDTO, params: RequestParams = {}) =>
     this.request<void, any>({
       path: `/api/v1/grades`,
-      method: 'DELETE',
+      method: "DELETE",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -141,7 +141,7 @@ export class Api<
   getAdministrator = (email: string, params: RequestParams = {}) =>
     this.request<AdministratorResponseDTO, any>({
       path: `/api/v1/administrators/${email}`,
-      method: 'GET',
+      method: "GET",
       ...params,
     });
   /**
@@ -158,7 +158,7 @@ export class Api<
   ) =>
     this.request<AdministratorResponseDTO, any>({
       path: `/api/v1/administrators/${email}`,
-      method: 'PUT',
+      method: "PUT",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -173,7 +173,7 @@ export class Api<
   deleteAdministrator = (email: string, params: RequestParams = {}) =>
     this.request<void, any>({
       path: `/api/v1/administrators/${email}`,
-      method: 'DELETE',
+      method: "DELETE",
       ...params,
     });
   /**
@@ -186,7 +186,7 @@ export class Api<
   updateActivity = (data: ActivityUpdateDTO, params: RequestParams = {}) =>
     this.request<ActivityResponseDTO, any>({
       path: `/api/v1/activities`,
-      method: 'PUT',
+      method: "PUT",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -201,7 +201,7 @@ export class Api<
   saveActivity = (data: ActivityCreateDTO, params: RequestParams = {}) =>
     this.request<ActivityResponseDTO, any>({
       path: `/api/v1/activities`,
-      method: 'POST',
+      method: "POST",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -216,7 +216,7 @@ export class Api<
   deleteActivity = (data: ActivityDeleteDTO, params: RequestParams = {}) =>
     this.request<void, any>({
       path: `/api/v1/activities`,
-      method: 'DELETE',
+      method: "DELETE",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -231,7 +231,7 @@ export class Api<
   getAllStudents = (params: RequestParams = {}) =>
     this.request<StudentResponseDTO[], any>({
       path: `/api/v1/students`,
-      method: 'GET',
+      method: "GET",
       ...params,
     });
   /**
@@ -244,7 +244,7 @@ export class Api<
   registerStudent = (data: StudentCreateDTO, params: RequestParams = {}) =>
     this.request<StudentResponseDTO, any>({
       path: `/api/v1/students`,
-      method: 'POST',
+      method: "POST",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -263,7 +263,7 @@ export class Api<
   ) =>
     this.request<void, any>({
       path: `/api/v1/students/${email}/terminate`,
-      method: 'POST',
+      method: "POST",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -278,7 +278,7 @@ export class Api<
   inviteStudents = (data: InvitationRequestDTO, params: RequestParams = {}) =>
     this.request<InvitationSendResponseDTO, any>({
       path: `/api/v1/register`,
-      method: 'POST',
+      method: "POST",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -299,7 +299,7 @@ export class Api<
   ) =>
     this.request<string, any>({
       path: `/api/v1/files/upload`,
-      method: 'POST',
+      method: "POST",
       body: data,
       type: ContentType.FormData,
       ...params,
@@ -314,7 +314,7 @@ export class Api<
   resetPassword = (data: ResetPasswordRequestDTO, params: RequestParams = {}) =>
     this.request<void, any>({
       path: `/api/v1/auth/reset-password`,
-      method: 'POST',
+      method: "POST",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -329,7 +329,7 @@ export class Api<
   signIn = (data: SignInRequestDTO, params: RequestParams = {}) =>
     this.request<SignInResponseDTO, any>({
       path: `/api/v1/auth/login`,
-      method: 'POST',
+      method: "POST",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -347,7 +347,7 @@ export class Api<
   ) =>
     this.request<void, any>({
       path: `/api/v1/auth/forgot-password`,
-      method: 'POST',
+      method: "POST",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -365,7 +365,7 @@ export class Api<
   ) =>
     this.request<void, any>({
       path: `/api/v1/auth/change-password`,
-      method: 'POST',
+      method: "POST",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -380,7 +380,7 @@ export class Api<
   getAllAdministrators = (params: RequestParams = {}) =>
     this.request<AdministratorResponseDTO[], any>({
       path: `/api/v1/administrators`,
-      method: 'GET',
+      method: "GET",
       ...params,
     });
   /**
@@ -393,7 +393,7 @@ export class Api<
   register = (data: AdministratorCreateDTO, params: RequestParams = {}) =>
     this.request<void, any>({
       path: `/api/v1/administrators`,
-      method: 'POST',
+      method: "POST",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -408,7 +408,7 @@ export class Api<
   getStudent = (email: string, params: RequestParams = {}) =>
     this.request<StudentResponseDTO, any>({
       path: `/api/v1/students/${email}`,
-      method: 'GET',
+      method: "GET",
       ...params,
     });
   /**
@@ -421,7 +421,7 @@ export class Api<
   deleteStudent = (email: string, params: RequestParams = {}) =>
     this.request<void, any>({
       path: `/api/v1/students/${email}`,
-      method: 'DELETE',
+      method: "DELETE",
       ...params,
     });
   /**
@@ -438,7 +438,7 @@ export class Api<
   ) =>
     this.request<StudentResponseDTO, any>({
       path: `/api/v1/students/${email}`,
-      method: 'PATCH',
+      method: "PATCH",
       body: data,
       type: ContentType.Json,
       ...params,
@@ -453,7 +453,7 @@ export class Api<
   getAllSubjects = (params: RequestParams = {}) =>
     this.request<SubjectResponseDTO[], any>({
       path: `/api/v1/subjects`,
-      method: 'GET',
+      method: "GET",
       ...params,
     });
   /**
@@ -466,7 +466,7 @@ export class Api<
   checkInvitation = (invitationId: string, params: RequestParams = {}) =>
     this.request<void, any>({
       path: `/api/v1/register/${invitationId}`,
-      method: 'GET',
+      method: "GET",
       ...params,
     });
   /**
@@ -479,7 +479,7 @@ export class Api<
   getStudentGrades = (email: string, params: RequestParams = {}) =>
     this.request<StudentGradesDTO[], any>({
       path: `/api/v1/grades/${email}`,
-      method: 'GET',
+      method: "GET",
       ...params,
     });
   /**
@@ -492,7 +492,7 @@ export class Api<
   getStudentIraPerPeriod = (email: string, params: RequestParams = {}) =>
     this.request<number[], any>({
       path: `/api/v1/grades/${email}/ira`,
-      method: 'GET',
+      method: "GET",
       ...params,
     });
   /**
@@ -508,7 +508,7 @@ export class Api<
   ) =>
     this.request<number[], any>({
       path: `/api/v1/grades/${email}/average`,
-      method: 'GET',
+      method: "GET",
       ...params,
     });
   /**
@@ -521,7 +521,7 @@ export class Api<
   download = (fileName: string, params: RequestParams = {}) =>
     this.request<string, any>({
       path: `/api/v1/files/download/${fileName}`,
-      method: 'GET',
+      method: "GET",
       ...params,
     });
   /**
@@ -534,7 +534,7 @@ export class Api<
   getCurrentUser = (params: RequestParams = {}) =>
     this.request<CurrentUserInfoDTO, any>({
       path: `/api/v1/auth/me`,
-      method: 'GET',
+      method: "GET",
       ...params,
     });
   /**
@@ -547,7 +547,7 @@ export class Api<
   getAllActivities = (email: string, params: RequestParams = {}) =>
     this.request<ActivityResponseDTO[], any>({
       path: `/api/v1/activities/${email}`,
-      method: 'GET',
+      method: "GET",
       ...params,
     });
   /**
@@ -560,7 +560,7 @@ export class Api<
   delete = (fileName: string, params: RequestParams = {}) =>
     this.request<string, any>({
       path: `/api/v1/files/delete/${fileName}`,
-      method: 'DELETE',
+      method: "DELETE",
       ...params,
     });
 }

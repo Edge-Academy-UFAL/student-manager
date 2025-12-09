@@ -8,6 +8,7 @@ export default async function StudentProfilePage({
   // const session = await auth();
   // const userType = session?.user?.dtype; // "Administrator" | "Student"
 
+  // FIXME: MUDAR ISSO PRA ID PLMDS
   const { username } = await params;
 
   const res = await api.getStudent(`${username}@edge.ufal.br`, {

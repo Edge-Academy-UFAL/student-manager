@@ -20,7 +20,7 @@ export interface StudentResponseDTO {
   about?: string;
   /** @format date */
   birthDate?: string;
-  course?: 'COMPUTER_SCIENCE' | 'COMPUTER_ENGINEERING';
+  course?: "COMPUTER_SCIENCE" | "COMPUTER_ENGINEERING";
   registration?: string;
   phone?: string;
   secondaryPhone?: string;
@@ -43,7 +43,7 @@ export interface StudentResponseDTO {
 }
 
 export interface GradeUpdateDTO {
-  subjectStatus: 'ENROLLED' | 'APPROVED' | 'REPROVED';
+  subjectStatus: "ENROLLED" | "APPROVED" | "REPROVED";
   /** @format double */
   finalGrade: number;
   /** @minLength 1 */
@@ -58,7 +58,7 @@ export interface GradeUpdateDTO {
 }
 
 export interface GradeResponseDTO {
-  subjectStatus?: 'ENROLLED' | 'APPROVED' | 'REPROVED';
+  subjectStatus?: "ENROLLED" | "APPROVED" | "REPROVED";
   /** @format double */
   finalGrade?: number;
   subjectCode?: string;
@@ -86,7 +86,7 @@ export interface AdministratorResponseDTO {
 }
 
 export interface ActivityUpdateDTO {
-  activityType: 'RESEARCH' | 'TUTORING' | 'INTERNSHIP' | 'OTHERS';
+  activityType: "RESEARCH" | "TUTORING" | "INTERNSHIP" | "OTHERS";
   activityId: string;
   /** @minLength 1 */
   name: string;
@@ -112,7 +112,7 @@ export interface ActivityUpdateDTO {
 
 export interface ActivityResponseDTO {
   activityId?: string;
-  activityType?: 'RESEARCH' | 'TUTORING' | 'INTERNSHIP' | 'OTHERS';
+  activityType?: "RESEARCH" | "TUTORING" | "INTERNSHIP" | "OTHERS";
   name?: string;
   description?: string;
   /** @format int32 */
@@ -149,7 +149,7 @@ export interface InvitationRequestDTO {
 }
 
 export interface InvitationErrorDTO {
-  error?: 'ALREADY_REGISTERED' | 'SMTP_ERROR';
+  error?: "ALREADY_INVITED" | "ALREADY_REGISTERED" | "SMTP_ERROR";
   cause?: string;
 }
 
@@ -178,7 +178,7 @@ export interface GradeCreateDTO {
    * @max 10
    */
   finalGrade?: number;
-  subjectStatus: 'ENROLLED' | 'APPROVED' | 'REPROVED';
+  subjectStatus: "ENROLLED" | "APPROVED" | "REPROVED";
 }
 
 export interface ResetPasswordRequestDTO {
@@ -235,7 +235,7 @@ export interface AdministratorCreateDTO {
 }
 
 export interface ActivityCreateDTO {
-  activityType: 'RESEARCH' | 'TUTORING' | 'INTERNSHIP' | 'OTHERS';
+  activityType: "RESEARCH" | "TUTORING" | "INTERNSHIP" | "OTHERS";
   /** @minLength 1 */
   name: string;
   /**
@@ -262,7 +262,7 @@ export interface StudentUpdateDTO {
   name: string;
   /** @format date */
   birthDate: string;
-  course: 'COMPUTER_SCIENCE' | 'COMPUTER_ENGINEERING';
+  course: "COMPUTER_SCIENCE" | "COMPUTER_ENGINEERING";
   /**
    * @minLength 8
    * @maxLength 8
@@ -303,7 +303,7 @@ export interface SubjectResponseDTO {
 
 export interface StudentGradesDTO {
   subjectCode?: string;
-  subjectStatus?: 'ENROLLED' | 'APPROVED' | 'REPROVED';
+  subjectStatus?: "ENROLLED" | "APPROVED" | "REPROVED";
   studentId?: string;
   /** @format int32 */
   period?: number;
