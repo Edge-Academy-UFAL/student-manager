@@ -2,7 +2,6 @@
 
 import z from 'zod';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/custom/card"
 import { FloatingLabelPasswordInput } from "@/shared/components/custom/floating-label-password-input"
 import { useForm } from 'react-hook-form';
 import { createPasswordFormSchema } from './schemas';
