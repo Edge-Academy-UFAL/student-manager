@@ -33,8 +33,6 @@ export function CreatePasswordForm({ invitationId }: CreatePasswordFormProps) {
     }
 
     const res = await api.registerStudent(studentCreateDTO);
-    console.log('Registration response:', res);
-
     if (!res.ok) {
       toast.error('Não foi possível criar a senha. Tente novamente mais tarde.');
       return;
