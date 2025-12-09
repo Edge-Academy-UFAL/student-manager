@@ -43,7 +43,6 @@ export function LoginForm() {
     if (res.ok) {
       const session = await getSession();
 
-      console.log(session?.user?.dtype);
       
       if (session?.user?.dtype === 'Student') {
         router.push(`/students/${session.user.id}`);
