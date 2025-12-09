@@ -10,6 +10,6 @@ export default async function CreatePasswordPage({ params }: PageProps) {
   const { id: invitationId } = await params;
 
   return (
-    CreatePasswordComponent({ invitationId })
+    <CreatePasswordComponent invitationId={invitationId} />
   );
 }
