@@ -15,6 +15,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -62,6 +63,8 @@ public class InvitationServiceImpl implements InvitationService {
     @Override
     @Transactional
     public InvitationSendResponseDTO sendInvitations(List<String> emails, int studentGroup, LocalDate entryDate) {
+        // FIXME: Erro quando já existe um convite para o mesmo email
+        // FIXME: Salvar o invite antes de enviar o email, e enviar de forma assíncrona
         var uniqueEmails = new LinkedHashSet<>(emails);
         var successfulEmails = new ArrayList<String>();
         var failedEmails = new HashMap<String, InvitationErrorDTO>();
@@ -72,13 +75,31 @@ public class InvitationServiceImpl implements InvitationService {
                 continue;
             }
 
+            if (invitationRepository.existsByEmail(email)) {
+                failedEmails.put(email, new InvitationErrorDTO(
+                    InvitationErrorType.ALREADY_INVITED, "Este e-mail já possui um convite ativo."
+                ));
+                continue;
+            }
+
             var code = RandomStringUtils.secureStrong().nextAlphanumeric(64);
-            var invitation = new Invitation();
+            
+            var invitation = invitationRepository.findByEmail(email).orElse(new Invitation());
+
             invitation.setEmail(email);
             invitation.setStudentGroup(studentGroup);
             invitation.setEntryDate(entryDate);
             invitation.setCode(code);
-            invitationRepository.save(invitation);
+
+            try {
+                invitationRepository.save(invitation);
+            } catch (DataIntegrityViolationException e) {
+                log.error("Failed to save invitation - duplicate email", e);
+                failedEmails.put(email, new InvitationErrorDTO(
+                    InvitationErrorType.ALREADY_INVITED, "Este e-mail já possui um convite ativo."
+                ));
+                continue;
+            }
 
             try {
                 this.sendInvitationEmail(email, code);

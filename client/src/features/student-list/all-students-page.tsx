@@ -1,7 +1,18 @@
-import { ChevronDownIcon } from 'lucide-react';
+"use client";
+
+import { ChevronDownIcon, Search } from 'lucide-react';
+import { useState, useMemo } from 'react';
 
 import { type StudentResponseDTO } from '@/api';
 import { Button } from '@/shared/components/custom/button';
+import { Input } from '@/shared/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/components/ui/select';
 
 import { StudentsTable } from './components/students-table';
 import {
@@ -9,15 +20,47 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/shared/components/custom/dropdown-menu';
+} from '@/shared/components/ui/dropdown-menu';
+
+import { BatchUpdateDialog } from './components/batch-update-dialog'; 
+import { NewStudentDialog } from './components/new-student-dialog';
+import { ImportStudentsDialog } from './components/import-students-dialog';
 
 interface AllStudentsPageProps {
   data: StudentResponseDTO[];
 }
 
 export function AllStudentsPage({ data }: AllStudentsPageProps) {
+  const [searchName, setSearchName] = useState('');
+  const [selectedGroup, setSelectedGroup] = useState<string>('all');
+  const [selectedSituation, setSelectedSituation] = useState<string>('all');
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [spreadsheetDialogOpen, setSpreadsheetDialogOpen] = useState(false);
+
+  const uniqueGroups = useMemo(() => {
+    const groups = [...new Set(data.map((student) => student.studentGroup))];
+    return groups.sort((a, b) => a - b);
+  }, [data]);
+
+  const filteredData = useMemo(() => {
+    return data.filter((student) => {
+      const matchesName = student.name
+        .toLowerCase()
+        .includes(searchName.toLowerCase());
+      
+      const matchesGroup =
+        selectedGroup === 'all' ||
+        student.studentGroup === parseInt(selectedGroup);
+
+      const matchesSituation = selectedSituation === 'all';
+
+      return matchesName && matchesGroup && matchesSituation;
+    });
+  }, [data, searchName, selectedGroup, selectedSituation]);
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-2">
           <span className="text-action-950 text-heading-md leading-tight font-semibold">
@@ -28,21 +71,97 @@ export function AllStudentsPage({ data }: AllStudentsPageProps) {
           </span>
         </div>
         <div className="flex gap-4">
-          <Button variant="outline">Solicitar atualização em lote</Button>
-          <DropdownMenu>
+          <BatchUpdateDialog 
+            triggerButton={
+              <Button variant="outline">Solicitar atualização em lote</Button>
+            }
+            data={data}
+          />
+
+          <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
             <DropdownMenuTrigger asChild>
               <Button>
                 Novo aluno <ChevronDownIcon />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Via Email</DropdownMenuItem>
-              <DropdownMenuItem>Via Planilha</DropdownMenuItem>
+            <DropdownMenuContent className="w-41" align="start">
+              <DropdownMenuItem onClick={() => {
+                  setDialogOpen(true);
+                  setDropdownOpen(false);
+                }}
+                className="py-4 px-6"
+              >
+                Via Email
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setSpreadsheetDialogOpen(true);
+                  setDropdownOpen(false);
+                }}
+                className="py-4 px-6"
+              >
+                Via Planilha
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
-      <StudentsTable data={data} />
+
+      <div className="flex gap-4 justify-between">
+        <div className="relative w-full max-w-xs">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500" />
+          <Input
+            placeholder="Buscar"
+            value={searchName}
+            onChange={(e) => setSearchName(e.target.value)}
+            className="font-sans pl-10 border border-neutral-300"
+          />
+        </div>
+
+        <div className="flex gap-4">
+          <Select value={selectedGroup} onValueChange={setSelectedGroup} defaultValue="all">
+            <SelectTrigger
+              className="font-sans w-[180px] border border-neutral-300"
+            >
+              <SelectValue placeholder="Turma" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas</SelectItem>
+              {uniqueGroups.map((group) => (
+                <SelectItem key={group} value={String(group)}>
+                  Turma {group}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={selectedSituation} onValueChange={setSelectedSituation} defaultValue="all">
+            <SelectTrigger
+              className="font-sans w-[180px] border border-neutral-300"
+            >
+              <SelectValue placeholder="Situação"/>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas</SelectItem>
+              <SelectItem value="in_project">Em projeto</SelectItem>
+              <SelectItem value="active">Ativo</SelectItem>
+              <SelectItem value="inactive">Inativo</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <StudentsTable data={filteredData} />
+      
+      <NewStudentDialog 
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
+
+      <ImportStudentsDialog
+        open={spreadsheetDialogOpen}
+        onOpenChange={setSpreadsheetDialogOpen}
+      />
     </div>
   );
 }

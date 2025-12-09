@@ -1,0 +1,134 @@
+name: CI/CD - Server (Build Docker Image & Deploy)
+
+on:
+  push:
+    branches: [ "dev", "main" ]
+    paths:
+      - 'server/**'
+  pull_request:
+    branches: [ "dev", "main" ]
+    paths:
+      - 'server/**'
+  workflow_dispatch:
+      inputs:
+        reason:
+          description: 'Motivo da execução manual'
+          required: false
+          default: 'Teste manual'
+
+env:
+  # Nome do seu Registry na DigitalOcean
+  REGISTRY: registry.digitalocean.com/soap-registry
+  # Nome da imagem
+  IMAGE_NAME: backend
+  # Pasta do backend
+  working-directory: ./server
+
+jobs:
+  # -----------------------------------------------------------------
+  # JOB 1: CI (Validação)
+  # Roda em PRs e Pushes. Serve para bloquear código ruim.
+  # -----------------------------------------------------------------
+  check-code:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.working-directory }}
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # Roda testes e valida compilação
+      - name: Validate Build
+        run: ./gradlew test bootJar
+
+  # -----------------------------------------------------------------
+  # JOB 2: CD (Entrega e Deploy)
+  # Roda APENAS no evento 'push'. PRs são ignorados aqui para segurança.
+  # -----------------------------------------------------------------
+  build-push-deploy:
+    needs: check-code # Só roda se o Job 1 passar
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ${{ env.working-directory }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      # 2. Gera o .jar (Pula testes pois já rodaram no job anterior)
+      - name: Build JAR
+        run: |
+          chmod +x gradlew
+          ./gradlew bootJar -x test
+
+      # 3. Instala a CLI da DigitalOcean (doctl)
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_API_TOKEN }}
+
+      # 4. Login no Registry da DO
+      - name: Log in to DO Container Registry
+        run: doctl registry login --expiry-seconds 600
+
+      # 5. Define a TAG baseada na branch (main -> latest, dev -> dev)
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/soap
+          tags: |
+            type=raw,value=backend-latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=raw,value=backend-dev,enable=${{ github.ref != 'refs/heads/main' }}
+
+      # 6. Build e Push da Imagem
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ env.working-directory }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+
+      # 7. Conecta no servidor via SSH e atualiza
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          # O script abaixo roda DENTRO do seu servidor
+          script: |
+            # Login no registry dentro do servidor para poder baixar a imagem privada
+            docker login registry.digitalocean.com -u ${{ secrets.DO_API_TOKEN }} -p ${{ secrets.DO_API_TOKEN }}
+
+            # Entra na pasta onde está o docker-compose.prod.yml
+            cd /root/student-manager
+
+            # Baixa a nova imagem
+            docker compose -f docker-compose.prod.yml pull backend
+
+            # Recria o container (quase zero downtime)
+            docker compose -f docker-compose.prod.yml up -d backend
+
+            # Limpa imagens velhas para não lotar o disco
+            docker image prune -f

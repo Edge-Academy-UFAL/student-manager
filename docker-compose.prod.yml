@@ -1,0 +1,81 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: student-manager
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  frontend:
+    image: registry.digitalocean.com/soap-registry/soap:frontend-dev
+    restart: always
+    environment:
+      AUTH_TRUST_HOST: true
+      NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      NEXTAUTH_URL_INTERNAL: ${NEXTAUTH_URL_INTERNAL}
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+  backend:
+    image: registry.digitalocean.com/soap-registry/soap:backend-dev
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/student-manager
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      
+      # --- SECURITY ---
+      APPLICATION_JWT_SECRET: ${JWT_SECRET}
+      
+      # --- EMAIL (Use Resend ou SendGrid aqui) ---
+      SPRING_MAIL_HOST: ${SMTP_HOST}
+      SPRING_MAIL_PORT: ${SMTP_PORT}
+      SPRING_MAIL_USERNAME: ${SMTP_USERNAME}
+      SPRING_MAIL_PASSWORD: ${SMTP_PASSWORD}
+      
+      # --- AWS S3 ---
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+      AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+      AWS_S3_ENDPOINT: ${AWS_ENDPOINT}
+      AWS_S3_BUCKET: ${AWS_BUCKET_NAME}
+      AWS_S3_REGION: ${AWS_REGION}
+      
+      APPLICATION_FRONTEND_URL: ${FRONTEND_URL}
+      
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:latest
+    restart: always
+    depends_on:
+      - frontend
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

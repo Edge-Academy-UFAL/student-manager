@@ -8,7 +8,7 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 
-import defaultEvents, { CalendarEvent } from '../data/default-events';
+import defaultEvents, { CalendarEvent } from '../calendar-data/default-events';
 
 moment.locale('pt-br');
 const DragAndDropCalendar = withDragAndDrop(Calendar);

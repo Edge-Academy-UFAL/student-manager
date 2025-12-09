@@ -30,7 +30,6 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Log4j2
 @Service
 public class AdministratorServiceImpl implements AdministratorService {
-
     private final AdministratorRepository administratorRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;

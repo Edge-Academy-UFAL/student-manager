@@ -1,5 +1,6 @@
 package com.academy.edge.studentmanager.services.impl;
 
+import com.academy.edge.studentmanager.configs.EmailConfig;
 import com.academy.edge.studentmanager.services.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -16,15 +17,15 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
-
     private final JavaMailSender emailSender;
+    private final EmailConfig emailConfig;
 
     @Override
     public void sendEmail(String to, String subject, String text) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
 
-        helper.setFrom("academy@edge.ufal.br");
+        helper.setFrom(emailConfig.emailSender());
         helper.setTo(to);
         helper.setSubject(subject);
 
