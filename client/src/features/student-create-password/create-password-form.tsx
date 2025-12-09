@@ -2,7 +2,6 @@
 
 import z from 'zod';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/custom/card"
 import { FloatingLabelPasswordInput } from "@/shared/components/custom/floating-label-password-input"
 import { useForm } from 'react-hook-form';
 import { createPasswordFormSchema } from './schemas';
@@ -33,8 +32,6 @@ export function CreatePasswordForm({ invitationId }: CreatePasswordFormProps) {
     }
 
     const res = await api.registerStudent(studentCreateDTO);
-    console.log('Registration response:', res);
-
     if (!res.ok) {
       toast.error('Não foi possível criar a senha. Tente novamente mais tarde.');
       return;
