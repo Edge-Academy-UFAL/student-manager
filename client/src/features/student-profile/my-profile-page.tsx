@@ -50,7 +50,7 @@ export function MyProfileComponent({
           </div>
         </TabsContent>
         <TabsContent value="calendar">
-          <CalendarPage />
+          <CalendarPage studentInfo={studentInfo} />
         </TabsContent>
         <TabsContent value="projects"></TabsContent>
         <TabsContent value="reviews"></TabsContent>
