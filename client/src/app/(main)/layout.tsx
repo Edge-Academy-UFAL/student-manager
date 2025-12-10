@@ -38,7 +38,7 @@ export default function MainLayout({
   const breadcrumbs = generateBreadcrumbs();
 
   return (
-    <SidebarProvider>
+    <SidebarProvider >
       <AppSidebar />
 
       <SidebarInset>
