@@ -6,6 +6,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
 import DashboardOverview from "@/features/dashboard/overview";
+import DashboardDetails from "@/features/dashboard/details";
 
 export default function DashboardPage() {
   const iraPerPeriodoData = [
@@ -27,11 +28,12 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen font-sans p-4">
+    <div className="min-h-screen font-sans">
       <Tabs defaultValue="dashboard" className="w-full">
         <TabsList className="mb-6">
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="visao-geral">Visão Geral</TabsTrigger>
+          <TabsTrigger value="detalhes">Detalhes Acadêmicos</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-6">
@@ -203,6 +205,10 @@ export default function DashboardPage() {
 
         <TabsContent value="visao-geral">
           <DashboardOverview />
+        </TabsContent>
+
+        <TabsContent value="detalhes">
+          <DashboardDetails />
         </TabsContent>
       </Tabs>
     </div>
