@@ -1,0 +1,4 @@
+output/*.json
+input/*.pdf
+historico_app/__pycache__
+venv

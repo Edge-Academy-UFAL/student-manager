@@ -1,7 +1,7 @@
 import numpy
 import re
 import PyPDF2
-import historico_para_json
+from historico_app import historico_para_json
 
 WARNING = '\033[31m'
 RESET = '\033[0m'
@@ -251,7 +251,3 @@ class PDFHistoricoService:
 
 
 
-if __name__ == "__main__":
-    caminho_pdf = "python_service/input/historico_a.pdf" # Futuramente substituído pela entrada do FastAPI
-    service = PDFHistoricoService(caminho_pdf)
-    resultado = service.executar()

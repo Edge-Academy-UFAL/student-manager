@@ -3,8 +3,3 @@ build/
 .idea/
 
 
-# jsons gerados pelo python-service e pdfs 
-python_service/output/*.json
-python_service/input/*.pdf
-python_service/historico_app/__pycache__
-
