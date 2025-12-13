@@ -173,7 +173,7 @@ export default function DashboardDetails() {
                           {data.reprovacoes.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={index === 3 ? "#0ea5e9" : "#dbeafe"} />
                           ))}
-                          <LabelList dataKey="value" position="top" formatter={(val: number) => `${val}%`} style={{ fill: '#334155', fontSize: '12px', fontWeight: 'bold' }} />
+                          <LabelList dataKey="value" position="top" style={{ fill: '#334155', fontSize: '12px', fontWeight: 'bold' }} />
                         </Bar>
                       </BarChart>
                     </ResponsiveContainer>
@@ -192,7 +192,7 @@ export default function DashboardDetails() {
                           {data.reprovacoes.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={index === 3 ? "#1e3a8a" : "#cbd5e1"} />
                           ))}
-                          <LabelList dataKey="value" position="top" formatter={(val: number) => `${val}%`} style={{ fill: '#334155', fontSize: '12px', fontWeight: 'bold' }} />
+                          <LabelList dataKey="value" position="top" style={{ fill: '#334155', fontSize: '12px', fontWeight: 'bold' }} />
                         </Bar>
                       </BarChart>
                     </ResponsiveContainer>
@@ -268,7 +268,7 @@ export default function DashboardDetails() {
                         dot={{ fill: "#0ea5e9", r: 4 }} 
                         activeDot={{ r: 8 }}
                       >
-                          <LabelList dataKey="value" position="bottom" offset={10} formatter={(val: number) => `${val}%`} style={{ fill: '#0ea5e9', fontSize: '12px', fontWeight: 'bold' }} />
+                        <LabelList dataKey="value" position="bottom" offset={10} style={{ fill: '#0ea5e9', fontSize: '12px', fontWeight: 'bold' }} />
                       </Line>
                     </LineChart>
                   </ResponsiveContainer>
