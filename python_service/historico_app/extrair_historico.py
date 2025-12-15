@@ -250,7 +250,7 @@ class PDFHistoricoService:
         l = self.processar_dados_do_pdf(mat)
         self.materias_parser(l)
 
-        # Salva JSON já validado
+  
         historico_para_json.converter_historico(self.historico)
 
         return self.historico

@@ -2,7 +2,11 @@ import json
 from pydantic import BaseModel
 
 def converter_historico(historico):
-    # Se for objeto Pydantic, converte para dict
+    '''
+    Docstring for converter_historico
+    Converte o histórico em um json.
+    :param historico: Histórico de um aluno (pode ser um dicionário ou um objeto).
+    '''
     if isinstance(historico, BaseModel):
         historico = historico.model_dump()
 

@@ -2,6 +2,9 @@ from pydantic import BaseModel, Field, field_validator
 from typing import List, Optional
 
 class Materia(BaseModel):
+    """
+    Classe que representa a matéria.
+    """
     Matéria: str
     Período: str
     Professor: Optional[str] = "N/A"
@@ -10,7 +13,7 @@ class Materia(BaseModel):
     CH: str
     Turma: Optional[str] = "N/A"
     Frequência: str
-    Média: float  # veja abaixo
+    Média: float 
     Situação: str
     Componente: Optional[str] = "N/A"
 
@@ -19,6 +22,9 @@ class Materia(BaseModel):
 
 
 class Historico(BaseModel):
+    """
+    Classe que representa o histórico completo do aluno. Atualmente em desuso...
+    """
     Aluno: str
     Matrícula: int
     materias: List[Materia]
