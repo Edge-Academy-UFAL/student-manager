@@ -68,8 +68,8 @@ services:
       AUTH_TRUST_HOST: true
       NEXT_PUBLIC_SERVER_URL: http://backend:8080
       NEXTAUTH_SECRET: secret_key_here
-      NEXTAUTH_URL: http://localhost:3000
-      NEXTAUTH_URL_INTERNAL: http://frontend:3000
+      NEXTAUTH_URL: http://backend:3000
+      NEXTAUTH_URL_INTERNAL: http://backend:3000
     networks:
       - studentmanager-network
 

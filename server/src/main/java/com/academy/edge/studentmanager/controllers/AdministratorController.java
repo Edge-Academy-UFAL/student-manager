@@ -22,7 +22,7 @@ public class AdministratorController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")   
     public ResponseEntity<Void> register(@Valid @RequestBody AdministratorCreateDTO requestDTO) {
         this.administratorService.register(requestDTO.getName(), requestDTO.getEmail());
         return new ResponseEntity<>(HttpStatus.CREATED);
