@@ -2,7 +2,7 @@ import numpy
 import re
 import PyPDF2
 from historico_app import historico_para_json
-
+from historico_app.schemas import Historico, Materia
 WARNING = '\033[31m'
 RESET = '\033[0m'
 
@@ -198,7 +198,11 @@ class PDFHistoricoService:
                     print(WARNING + "Erro de frequencia ou formatação" + RESET)
                     frequencia = "frequencia não encontrada"
                     media = "nota não encontrada"
-
+                if media == "-":
+                    media = -1
+                elif "," in media:
+                    media = media.replace(",",".")
+                    
                 try:
                     if len(j) == 2:
                         componente = j[0]
@@ -225,11 +229,11 @@ class PDFHistoricoService:
                     "Componente": componente
                 }
 
-                self.historico["materias"].append(historico_materia)
+                materia_validada = Materia(**historico_materia)
+                self.historico["materias"].append(materia_validada.model_dump())
 
             except:
                 historico_materia = WARNING + ("Erro inesperado ao ler os dados. Dados lidos incorretamente:\n" + str(l[i])) + RESET
-
             print(historico_materia)
 
 
@@ -246,8 +250,8 @@ class PDFHistoricoService:
         l = self.processar_dados_do_pdf(mat)
         self.materias_parser(l)
 
+        # Salva JSON já validado
         historico_para_json.converter_historico(self.historico)
+
         return self.historico
-
-
 
