@@ -106,7 +106,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" className="[&_[data-sidebar=sidebar]]:bg-action-100" >
       <SidebarHeader className="py-6 flex">
         {isCollapsed ? (
           <div className="flex">
