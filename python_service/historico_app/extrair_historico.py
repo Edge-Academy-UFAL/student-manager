@@ -1,8 +1,8 @@
 import numpy
 import re
 import PyPDF2
-from historico_app import historico_para_json
-from historico_app.schemas import Historico, Materia
+from . import historico_para_json
+from .schemas import Historico, Materia
 WARNING = '\033[31m'
 RESET = '\033[0m'
 
@@ -83,6 +83,7 @@ class PDFHistoricoService:
         if nome_index:
             nome = nome_index.group(1)
             nome = nome.removesuffix("Dados Pessoais")
+            nome = nome.strip()
             print("Nome: ", nome)
         else:
             nome = "Erro ao obter nome"
